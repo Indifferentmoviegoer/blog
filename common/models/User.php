@@ -1,10 +1,13 @@
 <?php
 namespace common\models;
 
+use Throwable;
 use Yii;
+use yii\base\Exception;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -28,6 +31,11 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_USER = 'user';
+    public const ROLE_REDACTOR = 'redactor';
+
+    public $roles;
 
     /**
      * {@inheritdoc}
@@ -54,6 +62,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
+            [['roles', 'username', 'email'], 'safe'],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
     }
@@ -209,4 +218,57 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    /**
+     * @throws Exception
+     */
+    public function saveRoles()
+    {
+        Yii::$app->authManager->revokeAll($this->getId());
+        if (is_array($this->roles)) {
+            foreach ($this->roles as $roleName) {
+                if ($role = Yii::$app->authManager->getRole($roleName)) {
+                    try {
+                        Yii::$app->authManager->assign($role, $this->getId());
+                    } catch (Throwable $e) {
+                        throw new Exception();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * User constructor.
+     * @param array $config
+     */
+    public function __construct($config = [])
+    {
+        $this->on(self::EVENT_AFTER_UPDATE, [$this, 'saveRoles']);
+        parent::__construct($config);
+    }
+
+    public function afterFind()
+    {
+        $this->roles = $this->getRoles();
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function getRoles(): array
+    {
+        $roles = Yii::$app->authManager->getRolesByUser($this->getId());
+
+        if (empty($roles)) {
+            $auth = Yii::$app->authManager;
+            $userRole = $auth->getRole('user');
+            $auth->assign($userRole, $this->getId());
+
+            $roles = Yii::$app->authManager->getRolesByUser($this->getId());
+        }
+        return ArrayHelper::getColumn($roles, 'name', false);
+    }
+
 }

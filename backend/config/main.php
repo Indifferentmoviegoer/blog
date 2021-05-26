@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
+    'name' => 'Новостной блог',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
@@ -38,14 +39,17 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '/<page:\d+>/<per-page:\d+>' => '/site/index',
+                '<controller>/<page:\d+>/<per-page:\d+>' => '<controller>/index',
+                '<controller>/<action>/<page:\d+>/<per-page:\d+>' => '<controller>/<action>',
+                '<controller>' => '<controller>/index',
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];

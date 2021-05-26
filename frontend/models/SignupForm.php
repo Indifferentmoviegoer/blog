@@ -1,6 +1,8 @@
 <?php
 namespace frontend\models;
 
+use Exception;
+use Throwable;
 use Yii;
 use yii\base\Model;
 use common\models\User;
@@ -41,22 +43,35 @@ class SignupForm extends Model
      * Signs user up.
      *
      * @return bool whether the creating new account was successful and email was sent
+     * @throws Exception
      */
     public function signup()
     {
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
-        return $user->save() && $this->sendEmail($user);
+        $user->save();
 
+        $auth = Yii::$app->authManager;
+        $userRole = $auth->getRole('user');
+
+        try {
+            $auth->assign($userRole, $user->getId());
+        } catch (Throwable $e) {
+            $auth->revokeAll($user->getId());
+            $auth->assign($userRole, $user->getId());
+        }
+
+        return $this->sendEmail($user);
     }
+
 
     /**
      * Sends confirmation email to user
