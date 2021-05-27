@@ -20,7 +20,7 @@ class m210526_074502_create_news_table extends Migration
                 'name' => $this->string(100)->notNull(),
                 'desc' => $this->string(200)->notNull(),
                 'text' => $this->text()->notNull(),
-                'published_at' => $this->date()->notNull(),
+                'published_at' => $this->dateTime()->notNull(),
             ]
         );
     }

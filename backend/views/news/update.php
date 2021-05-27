@@ -4,6 +4,7 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\News */
+/* @var $upload backend\models\UploadForm */
 
 $this->title = 'Update News: ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'News', 'url' => ['index']];
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'upload' => $upload,
     ]) ?>
 
 </div>

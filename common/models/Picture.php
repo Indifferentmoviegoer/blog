@@ -7,6 +7,9 @@ use yii\db\ActiveRecord;
 /**
  * Class Picture
  * @package common\models
+ *
+* @property int $id
+* @property string $name
  */
 class Picture extends ActiveRecord
 {

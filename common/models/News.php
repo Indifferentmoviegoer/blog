@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -13,9 +14,12 @@ use yii\db\ActiveRecord;
  * @property string name
  * @property string desc
  * @property string text
+ * @property string published_at
  */
 class News extends ActiveRecord
 {
+    public $rel;
+
     /**
      * @return string
      */
@@ -31,7 +35,7 @@ class News extends ActiveRecord
     {
         return [
             [['id', 'picture_id'], 'integer'],
-            [['name', 'desc', 'text'], 'string'],
+            [['name', 'desc', 'text', 'published_at'], 'string'],
         ];
     }
 
@@ -48,5 +52,30 @@ class News extends ActiveRecord
             'text' => 'Текст',
             'published_at' => 'Дата публикации',
         ];
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getPicture(): ActiveQuery
+    {
+        return $this->hasOne(Picture::class, ['id' => 'picture_id']);
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getRel()
+    {
+        return $this->rel;
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getNews(): ActiveQuery
+    {
+        return $this->hasMany(ProductCategories::class, ['news_id' => 'id']);
     }
 }
