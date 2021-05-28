@@ -60,7 +60,7 @@ class Category extends ActiveRecord
      */
     public function getCategoryProducts(): ActiveQuery
     {
-        return $this->hasMany(ProductCategories::class, ['id' => 'category_id']);
+        return $this->hasMany(NewsCategories::class, ['id' => 'category_id']);
     }
 
     /**

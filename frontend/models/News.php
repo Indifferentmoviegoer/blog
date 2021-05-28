@@ -1,12 +1,12 @@
 <?php
 
-namespace backend\models;
+namespace frontend\models;
 
 /**
- * Class ProductCategories
- * @package backend\models
+ * Class News
+ * @package frontend\models
  */
-class ProductCategories extends \common\models\ProductCategories
+class News extends \common\models\News
 {
     /**
      * @return string

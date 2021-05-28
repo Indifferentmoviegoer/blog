@@ -5,7 +5,7 @@ use yii\db\Connection;
 return [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -16,6 +16,23 @@ return [
             'password' => env('DB_PASSWORD'),
             'charset' => 'utf8',
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => false,
+            'messageConfig' => [
+                'charset' => 'UTF-8',
+                'from' => [env('adminEmail') => env('adminName')],
+            ],
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => env('host'),
+                'username' => env('adminEmail'),
+                'password' => env('adminPassword'),
+                'port' => env('port'),
+                'encryption' => env('encryption'),
+            ],
+        ],
+
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

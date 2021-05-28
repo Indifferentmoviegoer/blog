@@ -27,8 +27,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'parent_id',
+            [
+                'attribute' => 'parent_id',
+                'value' => function ($data) {
+                    return !empty($data->category->name) ? $data->category->name : 'Категория без родителя';
+                },
+            ],
             'name',
 
             ['class' => 'yii\grid\ActionColumn'],

@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
+    'language' => 'ru',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
@@ -44,6 +45,22 @@ return [
                 'page-<page:\d+>-<per-page:\d+>' => 'site/index',
                 '/<action>' => 'site/<action>',
 
+            ],
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => false,
+            'messageConfig' => [
+                'charset' => 'UTF-8',
+                'from' => [env('adminEmail') => env('adminName')],
+            ],
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => env('host'),
+                'username' => env('adminEmail'),
+                'password' => env('adminPassword'),
+                'port' => env('port'),
+                'encryption' => env('encryption'),
             ],
         ],
     ],

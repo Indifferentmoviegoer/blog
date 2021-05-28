@@ -7,7 +7,6 @@ use backend\models\UploadForm;
 use Yii;
 use backend\models\News;
 use backend\models\NewsSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -15,7 +14,7 @@ use yii\web\UploadedFile;
 /**
  * NewsController implements the CRUD actions for News model.
  */
-class NewsController extends Controller
+class NewsController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -87,10 +86,12 @@ class NewsController extends Controller
                 $picture->save();
                 $model->picture_id = $picture->id;
                 $model->save();
+                $this->loadCategoryList($model);
             }
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
+        $this->setCategoryList($model);
 
         return $this->render(
             'create',
@@ -124,10 +125,12 @@ class NewsController extends Controller
                 $picture->save();
                 $model->picture_id = $picture->id;
                 $model->save();
+                $this->loadCategoryList($model);
             }
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
+        $this->setCategoryList($model);
 
         return $this->render(
             'update',

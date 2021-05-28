@@ -6,21 +6,21 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
- * Class ProductCategories
+ * Class NewsCategories
  * @package common\models
  *
  * @property int $id
  * @property int $category_id
  * @property int $news_id
  */
-class ProductCategories extends ActiveRecord
+class NewsCategories extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName(): string
     {
-        return 'product_categories';
+        return 'news_categories';
     }
 
     /**

@@ -15,6 +15,7 @@ use yii\db\ActiveRecord;
  * @property string desc
  * @property string text
  * @property string published_at
+ * @property bool $forbidden
  */
 class News extends ActiveRecord
 {
@@ -35,6 +36,7 @@ class News extends ActiveRecord
     {
         return [
             [['id', 'picture_id'], 'integer'],
+            [['forbidden'], 'boolean'],
             [['name', 'desc', 'text', 'published_at'], 'string'],
         ];
     }
@@ -51,6 +53,8 @@ class News extends ActiveRecord
             'desc' => 'Краткое описание',
             'text' => 'Текст',
             'published_at' => 'Дата публикации',
+            'rel' => 'Категория',
+            'forbidden' => 'Доступ',
         ];
     }
 
@@ -76,6 +80,6 @@ class News extends ActiveRecord
      */
     public function getNews(): ActiveQuery
     {
-        return $this->hasMany(ProductCategories::class, ['news_id' => 'id']);
+        return $this->hasMany(NewsCategories::class, ['news_id' => 'id']);
     }
 }

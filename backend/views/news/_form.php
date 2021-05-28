@@ -1,8 +1,10 @@
 <?php
 
+use backend\models\Category;
 use dominus77\tinymce\TinyMce;
 use kartik\datetime\DateTimePicker;
 use kartik\file\FileInput;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,6 +14,8 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 
 $path = env('APP_URL') . "/img/uploads/";
+$param = ['options' => [$model->forbidden => ['Selected' => true]]];
+$dropDownItems = ['0' => 'Разрешен', '1' => 'Запрещен'];
 ?>
 
 <div class="news-form">
@@ -22,6 +26,7 @@ $path = env('APP_URL') . "/img/uploads/";
 
     <?php $form = ActiveForm::begin(); ?>
 
+
     <?php
     echo $form->field($upload, 'imageFile')->widget(
         FileInput::class,
@@ -29,6 +34,21 @@ $path = env('APP_URL') . "/img/uploads/";
             'options' => ['accept' => 'image/*'],
         ]
     ); ?>
+
+    <?php
+    echo $form->field($model, 'rel')->widget(
+        Select2::class,
+        [
+            'data' => Category::getTree(),
+            'language' => 'ru',
+            'options' => ['placeholder' => 'Выберите категорию'],
+            'pluginOptions' => [
+                'allowClear' => true,
+                'multiple' => true
+            ],
+        ]
+    );
+    ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
@@ -63,6 +83,8 @@ $path = env('APP_URL') . "/img/uploads/";
             ]
         ]
     ); ?>
+
+    <?= $form->field($model, 'forbidden')->dropDownList($dropDownItems, ['value' => $model->forbidden]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
