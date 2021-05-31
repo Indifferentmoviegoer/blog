@@ -115,7 +115,7 @@ class NewsController extends BaseController
     {
         $model = $this->findModel($id);
         $upload = new UploadForm();
-        $picture = new Picture();
+        $picture = Picture::findOne(['id' => $model->picture_id]);
 
         if ($model->load(Yii::$app->request->post())) {
             $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
@@ -123,10 +123,10 @@ class NewsController extends BaseController
             if ($upload->upload()) {
                 $picture->name = $upload->imageFile->name;
                 $picture->save();
-                $model->picture_id = $picture->id;
-                $model->save();
-                $this->loadCategoryList($model);
             }
+
+            $model->save();
+            $this->loadCategoryList($model);
 
             return $this->redirect(['view', 'id' => $model->id]);
         }

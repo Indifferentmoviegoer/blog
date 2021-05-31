@@ -13,6 +13,7 @@ class BaseController extends Controller
 {
     /**
      * @param Model $model
+     *
      * @throws StaleObjectException
      * @throws Throwable
      */
@@ -23,8 +24,7 @@ class BaseController extends Controller
 
             $this->deleteCategoryList($model);
 
-            for ($i=0; $i<count($rel); $i++)
-            {
+            for ($i = 0; $i < count($rel); $i++) {
                 $categoryProducts = new NewsCategories();
                 $categoryProducts->category_id = $rel[$i];
                 $categoryProducts->news_id = $model->id;
@@ -35,16 +35,14 @@ class BaseController extends Controller
 
     /**
      * @param Model $model
-     * @throws Throwable
-     * @throws StaleObjectException
      */
     public function deleteCategoryList(Model $model)
     {
-        $products = NewsCategories::findAll(['news_id' => $model->id]);
+        $news = $model->categories;
 
-        if (!empty($products)) {
-            foreach ($products as $product) {
-                $product->delete();
+        if (!empty($news)) {
+            foreach ($news as $item) {
+                $item->delete();
             }
         }
     }
@@ -54,7 +52,7 @@ class BaseController extends Controller
      */
     public function setCategoryList(Model $model)
     {
-        $categories = NewsCategories::find()->where(['news_id' => $model->id])->all();
+        $categories = $model->categories;
 
         if (!empty($categories)) {
             foreach ($categories as $category) {
@@ -62,9 +60,10 @@ class BaseController extends Controller
             }
 
             foreach ($categories as $category) {
-                if($category->category->parent_id!=0){
-                    if (!in_array($category->category->parent_id, $categoryItems)) {
-                        $categoryItems[] = $category->category->parent_id;
+                if ($category->category->parent_id != 0 && !in_array($category->category->parent_id, $categoryItems)) {
+                    $parents = $category->category->getAllParents($category->category->parent_id);
+                    foreach ($parents as $parent) {
+                        $categoryItems[] = $parent->id;
                     }
                 }
             }

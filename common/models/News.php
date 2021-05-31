@@ -78,8 +78,51 @@ class News extends ActiveRecord
     /**
      * @return ActiveQuery
      */
-    public function getNews(): ActiveQuery
+    public function getCategories(): ActiveQuery
     {
         return $this->hasMany(NewsCategories::class, ['news_id' => 'id']);
     }
+
+    /**
+     * @return false|string
+     */
+    public function categoryList()
+    {
+        $categories = $this->categories;
+
+        if (empty($categories)) {
+            return 'Новость без категории';
+        }
+
+        $categoryItems = [];
+        foreach ($categories as $category) {
+            $categoryItems[] = $category->category_id;
+        }
+
+        $index = 0;
+        foreach ($categories as $category) {
+            if ($category->category->parent_id != 0 && !in_array($category->category->parent_id, $categoryItems)) {
+                $parents = $category->category->getAllParents($category->category->parent_id);
+                foreach ($parents as $parent) {
+                    array_splice(
+                        $categoryItems,
+                        $index + $index,
+                        0,
+                        $parent->id
+                    );
+                }
+                $index++;
+            }
+        }
+
+        $categories = '';
+        for ($i = 0; $i < count($categoryItems); $i++) {
+            $category = Category::findOne(['id' => $categoryItems[$i]]);
+            $categories .= $category->name . ' - ';
+        }
+
+        return substr($categories, 0, -3);
+    }
+
+
 }

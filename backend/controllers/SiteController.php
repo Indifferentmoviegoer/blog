@@ -61,11 +61,7 @@ class SiteController extends Controller
         ];
     }
 
-
-    /**
-     * @return Response
-     */
-    public function actionIndex(): Response
+    public function actionIndex()
     {
         return $this->redirect(['/user/index']);
     }

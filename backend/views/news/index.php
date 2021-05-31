@@ -1,7 +1,5 @@
 <?php
 
-use backend\models\Category;
-use backend\models\NewsCategories;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -34,43 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'rel',
                     'value' => function ($data) {
-                        $categories = NewsCategories::find()->where(['news_id' => $data->id])->all();
-
-                        if (empty($categories)) {
-                            return 'Новость без категории';
-                        }
-
-                        $categoryItems = [];
-                        foreach ($categories as $category) {
-                            $categoryItems[] = $category->category->id;
-                        }
-
-                        $index = 0;
-                        foreach ($categories as $category) {
-                            if ($category->category->parent_id != 0) {
-                                if (!in_array($category->category->parent_id, $categoryItems)) {
-                                    array_splice(
-                                        $categoryItems,
-                                        $index + $index,
-                                        0,
-                                        $category->category->parent_id
-                                    );
-                                }
-                            }
-                            $index++;
-                        }
-
-                        for ($i = 0; $i < count($categoryItems); $i++) {
-                            $category = Category::findOne(['id' => $categoryItems[$i]]);
-                            $categoryItems[$i] = $category->name;
-                        }
-
-                        $categories = '';
-                        foreach ($categoryItems as $item) {
-                            $categories .= $item . ' - ';
-                        }
-
-                        return substr($categories, 0, -3);
+                            return $data->categoryList();
                     },
                 ],
                 [

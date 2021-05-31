@@ -1,9 +1,9 @@
-.news{
+.news {
     position: relative;
     text-align: left;
 }
 
-.news-content{
+.news-content {
     position: absolute;
     left: 10%;
     margin-top: 20%;
@@ -20,14 +20,14 @@
     margin-bottom: 8px;
 }
 
-.news h3{
+.news h3 {
     color: #444444;
     font-family: Montserrat, serif;
     font-weight: 600;
     margin-top: 0;
 }
 
-.news a{
+.news a {
     font-size: 14px;
     font-weight: 300;
     font-stretch: normal;
@@ -41,16 +41,34 @@
 }
 
 .news-block {
-margin-top: 5%;
-margin-bottom: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    background-color: #ffffff;
+    border-radius:10px;
+}
+
+.gallery-carousel {
+    margin-bottom: 5%;
+    margin-top: 5%;
 }
 
 .right-news {
-    margin-top: 5%;
-    margin-bottom: 5%;
+    box-shadow: 4px 4px 3px 1px;
+}
+.left-news{
+    box-shadow: -4px 4px 3px 1px;
 }
 
-.gallery-carousel{
-    margin-bottom: 5%;
-    margin-top: 5%;
+.right-news img {
+    border-radius:10px 0 0 10px;
+}
+
+.left-news img {
+    border-radius:0 10px 10px 0;
+}
+
+.news-detail {
+    background-color: #ffffff;
+    border-radius:10px;
+    padding: 10px;
 }

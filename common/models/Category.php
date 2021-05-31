@@ -96,7 +96,6 @@ class Category extends ActiveRecord
     }
 
 
-
     /**
      * Возвращает массив всех категорий каталога для возможности
      * выбора родителя при добавлении или редактировании товара
@@ -120,5 +119,24 @@ class Category extends ActiveRecord
             $tree[$item['id']] = $item['name'];
         }
         return $tree;
+    }
+
+    /**
+     * @param int $parent
+     *
+     * @return array
+     */
+    public static function getAllParents(int $parent): array
+    {
+        $category = self::find()->where(['id' => $parent])->one();
+        $result = [];
+        $result[] = $category;
+        if ($category->parent_id != 0) {
+            $result = array_merge(
+                $result,
+                self::getAllParents($category->parent_id)
+            );
+        }
+        return $result;
     }
 }

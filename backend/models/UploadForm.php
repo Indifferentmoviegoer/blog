@@ -23,7 +23,7 @@ class UploadForm extends Model
     public function rules(): array
     {
         return [
-            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
@@ -43,7 +43,7 @@ class UploadForm extends Model
     public function upload(): bool
     {
         $path = Yii::getAlias("@frontend/web/img/uploads/");
-        if ($this->validate()) {
+        if ($this->validate() && !empty($this->imageFile)) {
             $this->imageFile->saveAs($path . $this->imageFile->baseName . "." . $this->imageFile->extension);
             return true;
         } else {

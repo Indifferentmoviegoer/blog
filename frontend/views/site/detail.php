@@ -11,8 +11,9 @@ if(Yii::$app->user->isGuest && $news->forbidden == 1){
    throw new ForbiddenHttpException();
 }
 ?>
-
-<h1><?= $news->name ?></h1>
-<p><?= $news->published_at ?></p>
-<img src="<?= $path . $news->picture->name ?>" alt="">
-<?= $news->text ?>
+<div class="news-detail">
+    <h1><?= $news->name ?></h1>
+    <p><?= $news->published_at ?></p>
+    <img src="<?= $path . $news->picture->name ?>" alt="">
+    <?= $news->text ?>
+</div>
