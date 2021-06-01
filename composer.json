@@ -23,7 +23,8 @@
         "kartik-v/yii2-widget-fileinput": "@dev",
         "dominus77/yii2-tinymce-widget": "^2.1",
         "kartik-v/yii2-widget-datetimepicker": "*",
-        "kartik-v/yii2-widget-select2": "@dev"
+        "kartik-v/yii2-widget-select2": "@dev",
+        "yii2mod/yii2-comments": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

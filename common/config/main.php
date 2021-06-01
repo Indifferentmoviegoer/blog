@@ -1,6 +1,7 @@
 <?php
 
 use yii\db\Connection;
+use yii2mod\comments\Module;
 
 return [
     'aliases' => [
@@ -8,6 +9,29 @@ return [
         '@npm' => '@vendor/npm-asset',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+    'modules' => [
+        'comment' => [
+            'class' => Module::class,
+            'controllerMap' => [
+                'default' => [
+                    'class' => 'yii2mod\comments\controllers\DefaultController',
+                    'on beforeCreate' => function ($event) {
+                        $event->getCommentModel();
+
+                    },
+                    'on afterCreate' => function ($event) {
+                        $event->getCommentModel();
+                    },
+                    'on beforeDelete' => function ($event) {
+                        $event->getCommentModel();
+                    },
+                    'on afterDelete' => function ($event) {
+                        $event->getCommentModel();
+                    },
+                ]
+            ]
+        ],
+    ],
     'components' => [
         'db' => [
             'class' => Connection::class,
@@ -41,6 +65,14 @@ return [
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
+        ],
+        'i18n' => [
+            'translations' => [
+                'yii2mod.comments' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@yii2mod/comments/messages',
+                ],
+            ],
         ],
     ],
 ];

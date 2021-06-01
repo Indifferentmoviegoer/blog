@@ -1,4 +1,7 @@
 <?php
+
+use yii2mod\comments\Module;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -13,7 +16,29 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'comment' => [
+            'class' => Module::class,
+            'controllerMap' => [
+                'default' => [
+                    'class' => 'yii2mod\comments\controllers\DefaultController',
+                    'on beforeCreate' => function ($event) {
+                        $event->getCommentModel();
+
+                    },
+                    'on afterCreate' => function ($event) {
+                        $event->getCommentModel();
+                    },
+                    'on beforeDelete' => function ($event) {
+                        $event->getCommentModel();
+                    },
+                    'on afterDelete' => function ($event) {
+                        $event->getCommentModel();
+                    },
+                ]
+            ]
+        ],
+    ],
     'components' => [
         'request' => [
             'baseUrl' => '/backend',
@@ -50,7 +75,14 @@ return [
                 '<controller>' => '<controller>/index',
             ],
         ],
-
+        'i18n' => [
+            'translations' => [
+                'yii2mod.comments' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@yii2mod/comments/messages',
+                ],
+            ],
+        ],
     ],
     'params' => $params,
 ];
