@@ -1,7 +1,7 @@
 <?php
 
 use yii\db\Connection;
-use yii2mod\comments\Module;
+use indifferend\comments\Module;
 
 return [
     'aliases' => [
@@ -14,7 +14,7 @@ return [
             'class' => Module::class,
             'controllerMap' => [
                 'default' => [
-                    'class' => 'yii2mod\comments\controllers\DefaultController',
+                    'class' => 'indifferend\comments\controllers\DefaultController',
                     'on beforeCreate' => function ($event) {
                         $event->getCommentModel();
 

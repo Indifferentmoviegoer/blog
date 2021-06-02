@@ -3,7 +3,7 @@
 use frontend\models\News;
 use yii\helpers\Url;
 use yii\web\ForbiddenHttpException;
-use yii2mod\comments\widgets\Comment;
+use indifferend\comments\widgets\Comment;
 
 /* @var $news News */
 
@@ -23,12 +23,10 @@ if (Yii::$app->user->isGuest && $news->forbidden == 1) {
     echo Comment::widget(
         [
             'model' => $news,
-            'relatedTo' => 'Пользователь ' . Yii::$app->user->identity->username . ' оставил комментарий на ' . $news->name . Url::current(
-                ),
-            'maxLevel' => 2,
+            'relatedTo' => 'Пользователь ' . Yii::$app->user->identity->username . ' оставил комментарий на ' . $news->name . Url::current(),
             'dataProviderConfig' => [
                 'pagination' => [
-                    'pageSize' => 10
+                    'pageSize' => 20
                 ],
 
             ],

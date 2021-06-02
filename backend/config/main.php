@@ -1,6 +1,6 @@
 <?php
 
-use yii2mod\comments\Module;
+use indifferend\comments\Module;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -21,7 +21,7 @@ return [
             'class' => Module::class,
             'controllerMap' => [
                 'default' => [
-                    'class' => 'yii2mod\comments\controllers\DefaultController',
+                    'class' => 'indifferend\comments\controllers\DefaultController',
                     'on beforeCreate' => function ($event) {
                         $event->getCommentModel();
 

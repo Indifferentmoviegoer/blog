@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f85b35f9a2b1263f03430ced08514b5b",
+    "content-hash": "5c7308ebff331764b9ae392f131ba385",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -706,6 +706,272 @@
                 "source": "https://github.com/FortAwesome/Font-Awesome/tree/v4.7.0"
             },
             "time": "2016-10-24T15:52:54+00:00"
+        },
+        {
+            "name": "indifferend/yii2-behaviors",
+            "version": "2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/indifferend/yii2-behaviors.git",
+                "reference": "72dfc586f8dadf121623d1e5b80f6448440ffba8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/indifferend/yii2-behaviors/zipball/72dfc586f8dadf121623d1e5b80f6448440ffba8",
+                "reference": "72dfc586f8dadf121623d1e5b80f6448440ffba8",
+                "shasum": ""
+            },
+            "require": {
+                "nesbot/carbon": "^2.16",
+                "php": "^7.1.8",
+                "yiisoft/yii2": "~2.0.10"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.0",
+                "phpunit/phpunit": "^7.3"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "indifferend\\behaviors\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Semenov",
+                    "email": "disemx@gmail.com"
+                },
+                {
+                    "name": "Igor Chepurnoy",
+                    "email": "chepurnoi.igor@gmail.com"
+                }
+            ],
+            "description": "Collection of useful behaviors for Yii Framework 2.0",
+            "keywords": [
+                "yii2",
+                "yii2 behaviors"
+            ],
+            "support": {
+                "issues": "https://github.com/indifferend/yii2-behaviors/issues",
+                "source": "https://github.com/indifferend/yii2-behaviors/tree/2.0"
+            },
+            "time": "2021-06-02T11:32:03+00:00"
+        },
+        {
+            "name": "indifferend/yii2-comments",
+            "version": "2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/indifferend/yii2-comments.git",
+                "reference": "417634b4247a96ed6d1261539df901716e2c9e72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/indifferend/yii2-comments/zipball/417634b4247a96ed6d1261539df901716e2c9e72",
+                "reference": "417634b4247a96ed6d1261539df901716e2c9e72",
+                "shasum": ""
+            },
+            "require": {
+                "asofter/yii2-imperavi-redactor": "*",
+                "indifferend/yii2-behaviors": "*",
+                "indifferend/yii2-editable": "*",
+                "indifferend/yii2-enum": "*",
+                "indifferend/yii2-moderation": "*",
+                "paulzi/yii2-adjacency-list": "^2.0",
+                "php": ">=5.6",
+                "yiisoft/yii2": ">=2.0.8"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.0",
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "indifferend\\comments\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Igor Chepurnoy",
+                    "email": "igorzfort@gmail.com"
+                }
+            ],
+            "description": "Comments module for Yii2",
+            "keywords": [
+                "yii2",
+                "yii2-comments",
+                "yii2-comments-module",
+                "yii2-manage-comments"
+            ],
+            "support": {
+                "issues": "https://github.com/indifferend/yii2-comments/issues",
+                "source": "https://github.com/indifferend/yii2-comments/tree/2.0"
+            },
+            "time": "2021-06-02T11:29:37+00:00"
+        },
+        {
+            "name": "indifferend/yii2-editable",
+            "version": "2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/indifferend/yii2-editable.git",
+                "reference": "8a61a013e868700444dfe1438785a8d884509e4a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/indifferend/yii2-editable/zipball/8a61a013e868700444dfe1438785a8d884509e4a",
+                "reference": "8a61a013e868700444dfe1438785a8d884509e4a",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/x-editable": "*",
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "indifferend\\editable\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Igor Chepurnoi",
+                    "email": "igorzfort@gmail.com"
+                }
+            ],
+            "description": "Yii2 editable field extension",
+            "keywords": [
+                "yii2",
+                "yii2 editable",
+                "yii2 editable column",
+                "yii2 editable field"
+            ],
+            "support": {
+                "issues": "https://github.com/indifferend/yii2-editable/issues",
+                "source": "https://github.com/indifferend/yii2-editable/tree/2.0"
+            },
+            "time": "2021-06-02T11:33:53+00:00"
+        },
+        {
+            "name": "indifferend/yii2-enum",
+            "version": "2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/indifferend/yii2-enum.git",
+                "reference": "a5723a38bbf4f619372f16d25bc4114fb34b930f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/indifferend/yii2-enum/zipball/a5723a38bbf4f619372f16d25bc4114fb34b930f",
+                "reference": "a5723a38bbf4f619372f16d25bc4114fb34b930f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6",
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.0",
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "indifferend\\enum\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Semenov",
+                    "email": "disemx@gmail.com"
+                },
+                {
+                    "name": "Igor Chepurnoi",
+                    "email": "igorzfort@gmail.com"
+                }
+            ],
+            "description": "Yii2 Enumerable helpers",
+            "keywords": [
+                "enumerable helper",
+                "yii2",
+                "yii2 enum"
+            ],
+            "support": {
+                "issues": "https://github.com/indifferend/yii2-enum/issues",
+                "source": "https://github.com/indifferend/yii2-enum/tree/2.0"
+            },
+            "time": "2021-06-02T11:36:08+00:00"
+        },
+        {
+            "name": "indifferend/yii2-moderation",
+            "version": "2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/indifferend/yii2-moderation.git",
+                "reference": "82f58959af9248d4262b8f14e6535ff7499c9966"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/indifferend/yii2-moderation/zipball/82f58959af9248d4262b8f14e6535ff7499c9966",
+                "reference": "82f58959af9248d4262b8f14e6535ff7499c9966",
+                "shasum": ""
+            },
+            "require": {
+                "indifferend/yii2-enum": "*",
+                "php": ">=7.1",
+                "yiisoft/yii2": "~2.0.10"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "indifferend\\moderation\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Igor Chepurnoi",
+                    "email": "chepurnoi.igor@gmail.com"
+                }
+            ],
+            "description": "A simple Content Moderation System for Yii2 that allows you to Approve or Reject resources like posts, comments, etc.",
+            "keywords": [
+                "content-moderation",
+                "moderation",
+                "moderation-system",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/indifferend/yii2-moderation/issues",
+                "source": "https://github.com/indifferend/yii2-moderation/tree/2.0"
+            },
+            "time": "2021-06-02T11:37:28+00:00"
         },
         {
             "name": "kartik-v/bootstrap-fileinput",
@@ -2313,271 +2579,6 @@
                 }
             ],
             "time": "2021-01-20T14:39:13+00:00"
-        },
-        {
-            "name": "yii2mod/yii2-behaviors",
-            "version": "2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yii2mod/yii2-behaviors.git",
-                "reference": "2d35266588f22930d9f87809137536aff510e01a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yii2mod/yii2-behaviors/zipball/2d35266588f22930d9f87809137536aff510e01a",
-                "reference": "2d35266588f22930d9f87809137536aff510e01a",
-                "shasum": ""
-            },
-            "require": {
-                "nesbot/carbon": "^2.16",
-                "php": "^7.1.8",
-                "yiisoft/yii2": "~2.0.10"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "~2.0",
-                "phpunit/phpunit": "^7.3"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "yii2mod\\behaviors\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dmitry Semenov",
-                    "email": "disemx@gmail.com"
-                },
-                {
-                    "name": "Igor Chepurnoy",
-                    "email": "chepurnoi.igor@gmail.com"
-                }
-            ],
-            "description": "Collection of useful behaviors for Yii Framework 2.0",
-            "keywords": [
-                "yii2",
-                "yii2 behaviors"
-            ],
-            "support": {
-                "issues": "https://github.com/yii2mod/yii2-behaviors/issues",
-                "source": "https://github.com/yii2mod/yii2-behaviors/tree/2.0"
-            },
-            "time": "2019-06-13T12:34:56+00:00"
-        },
-        {
-            "name": "yii2mod/yii2-comments",
-            "version": "2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yii2mod/yii2-comments.git",
-                "reference": "30cbeecf45b41ee80e12460c7af1bea7efcfc0ce"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yii2mod/yii2-comments/zipball/30cbeecf45b41ee80e12460c7af1bea7efcfc0ce",
-                "reference": "30cbeecf45b41ee80e12460c7af1bea7efcfc0ce",
-                "shasum": ""
-            },
-            "require": {
-                "asofter/yii2-imperavi-redactor": "*",
-                "paulzi/yii2-adjacency-list": "^2.0",
-                "php": ">=5.6",
-                "yii2mod/yii2-behaviors": "*",
-                "yii2mod/yii2-editable": "*",
-                "yii2mod/yii2-enum": "*",
-                "yii2mod/yii2-moderation": "*",
-                "yiisoft/yii2": ">=2.0.8"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "~2.0",
-                "phpunit/phpunit": "~6.0"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "yii2mod\\comments\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Igor Chepurnoy",
-                    "email": "igorzfort@gmail.com"
-                }
-            ],
-            "description": "Comments module for Yii2",
-            "keywords": [
-                "yii2",
-                "yii2-comments",
-                "yii2-comments-module",
-                "yii2-manage-comments"
-            ],
-            "support": {
-                "issues": "https://github.com/yii2mod/yii2-comments/issues",
-                "source": "https://github.com/yii2mod/yii2-comments/tree/2.0"
-            },
-            "time": "2018-10-29T07:31:27+00:00"
-        },
-        {
-            "name": "yii2mod/yii2-editable",
-            "version": "1.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yii2mod/yii2-editable.git",
-                "reference": "21099a75670b6a406484afadf05ddd415774f4a6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yii2mod/yii2-editable/zipball/21099a75670b6a406484afadf05ddd415774f4a6",
-                "reference": "21099a75670b6a406484afadf05ddd415774f4a6",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/x-editable": "*",
-                "yiisoft/yii2": "*"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "~2.0"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "yii2mod\\editable\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Igor Chepurnoi",
-                    "email": "igorzfort@gmail.com"
-                }
-            ],
-            "description": "Yii2 editable field extension",
-            "keywords": [
-                "yii2",
-                "yii2 editable",
-                "yii2 editable column",
-                "yii2 editable field"
-            ],
-            "support": {
-                "issues": "https://github.com/yii2mod/yii2-editable/issues",
-                "source": "https://github.com/yii2mod/yii2-editable/tree/master"
-            },
-            "time": "2018-01-15T15:00:16+00:00"
-        },
-        {
-            "name": "yii2mod/yii2-enum",
-            "version": "1.7.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yii2mod/yii2-enum.git",
-                "reference": "7af030e19636ece5fd0adb5d6012d2b03fa63895"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yii2mod/yii2-enum/zipball/7af030e19636ece5fd0adb5d6012d2b03fa63895",
-                "reference": "7af030e19636ece5fd0adb5d6012d2b03fa63895",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6",
-                "yiisoft/yii2": "*"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "~2.0"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "yii2mod\\enum\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dmitry Semenov",
-                    "email": "disemx@gmail.com"
-                },
-                {
-                    "name": "Igor Chepurnoi",
-                    "email": "igorzfort@gmail.com"
-                }
-            ],
-            "description": "Yii2 Enumerable helpers",
-            "keywords": [
-                "enumerable helper",
-                "yii2",
-                "yii2 enum"
-            ],
-            "support": {
-                "issues": "https://github.com/yii2mod/yii2-enum/issues",
-                "source": "https://github.com/yii2mod/yii2-enum/tree/master"
-            },
-            "time": "2017-04-19T22:06:46+00:00"
-        },
-        {
-            "name": "yii2mod/yii2-moderation",
-            "version": "1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yii2mod/yii2-moderation.git",
-                "reference": "b4437d2d70fa9f2b17ac960bfec160291f4b2714"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yii2mod/yii2-moderation/zipball/b4437d2d70fa9f2b17ac960bfec160291f4b2714",
-                "reference": "b4437d2d70fa9f2b17ac960bfec160291f4b2714",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5",
-                "yii2mod/yii2-enum": "*",
-                "yiisoft/yii2": ">=2.0.8"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "~2.0"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "yii2mod\\moderation\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Igor Chepurnoy",
-                    "email": "igorzfort@gmail.com"
-                }
-            ],
-            "description": "A simple Content Moderation System for Yii2 that allows you to Approve or Reject resources like posts, comments, etc.",
-            "keywords": [
-                "content-moderation",
-                "moderation",
-                "moderation-system",
-                "yii2"
-            ],
-            "support": {
-                "issues": "https://github.com/yii2mod/yii2-moderation/issues",
-                "source": "https://github.com/yii2mod/yii2-moderation/tree/master"
-            },
-            "time": "2017-02-18T11:54:54+00:00"
         },
         {
             "name": "yiisoft/yii2",

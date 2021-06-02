@@ -24,7 +24,7 @@
         "dominus77/yii2-tinymce-widget": "^2.1",
         "kartik-v/yii2-widget-datetimepicker": "*",
         "kartik-v/yii2-widget-select2": "@dev",
-        "yii2mod/yii2-comments": "*"
+        "indifferend/yii2-comments": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
