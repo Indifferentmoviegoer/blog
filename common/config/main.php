@@ -1,5 +1,6 @@
 <?php
 
+use indifferend\comments\controllers\DefaultController;
 use yii\db\Connection;
 use indifferend\comments\Module;
 
@@ -14,10 +15,9 @@ return [
             'class' => Module::class,
             'controllerMap' => [
                 'default' => [
-                    'class' => 'indifferend\comments\controllers\DefaultController',
+                    'class' => DefaultController::class,
                     'on beforeCreate' => function ($event) {
                         $event->getCommentModel();
-
                     },
                     'on afterCreate' => function ($event) {
                         $event->getCommentModel();
@@ -68,9 +68,9 @@ return [
         ],
         'i18n' => [
             'translations' => [
-                'yii2mod.comments' => [
+                'indifferend.comments' => [
                     'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@yii2mod/comments/messages',
+                    'basePath' => '@indifferend/comments/messages',
                 ],
             ],
         ],
