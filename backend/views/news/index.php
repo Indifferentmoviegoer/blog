@@ -8,16 +8,14 @@ use yii\widgets\Pjax;
 /* @var $searchModel backend\models\NewsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'News';
+$this->title = 'Новости';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="news-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Create News', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать новость', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -32,22 +30,37 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'rel',
                     'value' => function ($data) {
-                            return $data->categoryList();
+                        return $data->categoryList();
                     },
                 ],
                 [
                     'attribute' => 'picture_id',
                     'value' => function ($data) {
                         $path = env('APP_URL') . "/img/uploads/";
-                        return '<img src="' . $path . $data->picture->name . '" alt="">';
+                        return '<img src="' . $path . $data->picture->name . '"  width="240px" alt="">';
                     },
                     'format' => 'raw'
                 ],
                 'name',
                 'desc',
-                'text:html',
+                [
+                    'attribute' => 'text',
+                    'format' => 'html',
+                    'value' => function ($data) {
+                        return $data->getShortText();
+                    },
+                ],
+
                 'published_at',
-                'forbidden',
+                [
+                    'attribute' => 'forbidden',
+                    'value' => function ($data) {
+                        if ($data->forbidden == 1) {
+                            return "Запрещен";
+                        }
+                        return "Разрешен";
+                    },
+                ],
 
                 ['class' => 'yii\grid\ActionColumn'],
             ],

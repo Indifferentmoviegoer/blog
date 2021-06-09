@@ -124,5 +124,22 @@ class News extends ActiveRecord
         return substr($categories, 0, -3);
     }
 
+    /**
+     * @return string
+     */
+    public function getShortText(): string
+    {
+        $text = strip_tags($this->text);
+        $lengthText = mb_strlen($text);
+        $text = mb_substr($text, 0, 220);
+        $prob = mb_strripos($text, ' ');
+        $text = mb_substr($text, 0, $prob);
+
+        if ($lengthText >= 220) {
+            $text = $text . '...';
+        }
+
+        return $text;
+    }
 
 }

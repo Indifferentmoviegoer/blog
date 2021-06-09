@@ -29,6 +29,13 @@ class User extends \common\models\User
      */
     public function attributeLabels(): array
     {
-        return parent::attributeLabels();
+        return [
+            'id' => 'ID',
+            'email' => 'E-mail',
+            'username' => 'Имя пользователя',
+            'password' => 'Пароль',
+            'status' => 'Статус',
+            'roles' => 'Роль',
+        ];
     }
 }
