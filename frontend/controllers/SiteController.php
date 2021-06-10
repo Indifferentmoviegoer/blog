@@ -2,6 +2,9 @@
 
 namespace frontend\controllers;
 
+use common\models\NewsCategories;
+use DateTime;
+use frontend\models\Category;
 use frontend\models\News;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
@@ -78,14 +81,54 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $allNews = News::find()->where('published_at<=NOW()')->orderBy(['published_at' => SORT_DESC]);
+        $weekAgo = (new DateTime())->modify('-7 days');
+        $searchWeek = $weekAgo->format('Y-m-d');
+        $categories = Category::find()->all();
+
+        $allNews = News::find()
+            ->where('published_at<=NOW()')
+            ->andWhere(['>=', 'published_at', $searchWeek])
+            ->orderBy(['published_at' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $allNews->count(), 'pageSize' => 20]);
         $news = $allNews->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('index', ['news' => $news, 'pages' => $pages, 'categories' => $categories]);
+    }
+
+    public function actionCategory($id)
+    {
+        $weekAgo = (new DateTime())->modify('-7 days');
+        $searchWeek = $weekAgo->format('Y-m-d');
+
+        $catIds = NewsCategories::find()->where(['category_id' => $id])->all();
+        $ids = $this->arrayListProduct($catIds);
+
+        $allNews = News::find()
+            ->where('published_at<=NOW()')
+            ->andWhere(['>=', 'published_at', $searchWeek])
+            ->andWhere(['in', 'id', $ids])
+            ->orderBy(['published_at' => SORT_DESC]);
+        $pages = new Pagination(['totalCount' => $allNews->count(), 'pageSize' => 20]);
+        $news = $allNews->offset($pages->offset)->limit($pages->limit)->all();
+
         return $this->render('index', ['news' => $news, 'pages' => $pages]);
+    }
+
+    public function arrayListProduct($items): array
+    {
+        if (!empty($items)) {
+            foreach ($items as $item) {
+                $arrayList[] = $item->news_id;
+            }
+            return $arrayList;
+        } else {
+            return ['message' => 'Ничего не найдено!'];
+        }
     }
 
     /**
      * @param int $id
+     *
      * @return string
      * @throws NotFoundHttpException
      */
@@ -312,5 +355,16 @@ class SiteController extends Controller
                 'model' => $model
             ]
         );
+    }
+
+    public function actionNews()
+    {
+        $allNews = News::find()
+            ->where('published_at<=NOW()')
+            ->orderBy(['published_at' => SORT_DESC]);
+        $pages = new Pagination(['totalCount' => $allNews->count(), 'pageSize' => 20]);
+        $news = $allNews->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('news', ['news' => $news, 'pages' => $pages]);
     }
 }

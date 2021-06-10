@@ -4,6 +4,7 @@ namespace common\models;
 
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 
 /**
  * Class Category
@@ -136,6 +137,36 @@ class Category extends ActiveRecord
                 $result,
                 self::getAllParents($category->parent_id)
             );
+        }
+        return $result;
+    }
+
+    private static function getMenuItems()
+    {
+        $items = array();
+        $resultAll = self::find()->all();
+
+        foreach ($resultAll as $result) {
+            if (empty($items[$result->parent_id])) {
+                $items[$result->parent_id] = array();
+            }
+            $items[$result->parent_id][] = $result->attributes;
+        }
+        return $items;
+    }
+
+    public static function viewMenuItems($parentId = 0)
+    {
+        $arrItems = self::getMenuItems();
+        if (empty($arrItems[$parentId])) {
+            return;
+        }
+        for ($i = 0; $i < count($arrItems[$parentId]); $i++) {
+            $result[] = [
+                'label' => $arrItems[$parentId][$i]['name'],
+                'url' => Url::to(['category', 'id' => $arrItems[$parentId][$i]['id']]),
+                'items' => self::viewMenuItems($arrItems[$parentId][$i]['id']),
+            ];
         }
         return $result;
     }

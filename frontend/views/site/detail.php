@@ -36,3 +36,4 @@ if (Yii::$app->user->isGuest && $news->forbidden == 1) {
         ]
     ); ?>
 </div>
+
