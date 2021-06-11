@@ -4,12 +4,23 @@
 /* @var $news frontend\models\News */
 /* @var $pages LinkPager */
 
+use common\models\Category;
+use kartik\sidenav\SideNav;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
 $this->title = 'Новости';
 $path = env('APP_URL') . "/img/uploads/";
 ?>
+<p>Категории</p>
+<?php
+echo SideNav::widget([
+                         'options' => ['class' => 'clearfix', 'id'=>'main-menu'],
+                         'encodeLabels'=>false,
+                         'activateParents'=>true,
+                         'activeCssClass'=>'current-menu-item',
+                         'items' => Category::viewMenuItems(),
+                     ]);?>
 <div class="body-content">
         <?php for ($i = 0; $i < count($news); $i++): ?>
             <?php if (!(($i % 2) == 0)): ?>
@@ -25,6 +36,7 @@ $path = env('APP_URL') . "/img/uploads/";
                             <div class="news-content">
                                 <p class="publication"><?= $news[$i]->published_at ?></p>
                                 <h3 class="title"><?= $news[$i]->name ?></h3>
+                                <p class="category"><?= $news[$i]->categoryList() ?></p>
                                 <p class="description"><?= $news[$i]->desc ?></p>
                                 <a href="<?= Url::to(['site/detail', 'id' => $news[$i]->id]) ?>">Подробнее...
                                     <svg width="18px" height="7px" viewBox="0 0 27 12" version="1.1"
@@ -58,6 +70,7 @@ $path = env('APP_URL') . "/img/uploads/";
                             <div class="news-content">
                                 <p><?= $news[$i]->published_at ?></p>
                                 <h3><?= $news[$i]->name ?></h3>
+                                <p class="category"><?= $news[$i]->categoryList() ?></p>
                                 <p><?= $news[$i]->desc ?></p>
                                 <a href="<?= Url::to(['site/detail', 'id' => $news[$i]->id]) ?>">Подробнее...
                                     <svg width="18px" height="7px" viewBox="0 0 27 12" version="1.1"

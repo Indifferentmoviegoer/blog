@@ -15,6 +15,7 @@ class m210526_082440_create_gallery_table extends Migration
         $this->createTable('{{%gallery}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
+            'category_id' => $this->integer()->notNull(),
         ]);
     }
 
