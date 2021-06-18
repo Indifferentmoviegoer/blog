@@ -1,7 +1,5 @@
 <?php
 
-use indifferend\comments\Module;
-
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -16,29 +14,7 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [
-        'comment' => [
-            'class' => Module::class,
-            'controllerMap' => [
-                'default' => [
-                    'class' => 'indifferend\comments\controllers\DefaultController',
-                    'on beforeCreate' => function ($event) {
-                        $event->getCommentModel();
-
-                    },
-                    'on afterCreate' => function ($event) {
-                        $event->getCommentModel();
-                    },
-                    'on beforeDelete' => function ($event) {
-                        $event->getCommentModel();
-                    },
-                    'on afterDelete' => function ($event) {
-                        $event->getCommentModel();
-                    },
-                ]
-            ]
-        ],
-    ],
+    'modules' => [],
     'components' => [
         'request' => [
             'baseUrl' => '/backend',

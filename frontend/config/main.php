@@ -45,7 +45,8 @@ return [
                 'detail/<id:\d+>' => 'site/detail',
                 'page-<page:\d+>-<per-page:\d+>' => 'site/index',
                 '/<action>' => 'site/<action>',
-
+                '<controller>/<action>' => '<controller>/<action>',
+//                '<controller>/<action>/<page:\d+>/<per-page:\d+>' => '<controller>/<action>',
             ],
         ],
         'mailer' => [

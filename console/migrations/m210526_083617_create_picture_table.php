@@ -12,10 +12,17 @@ class m210526_083617_create_picture_table extends Migration
      */
     public function safeUp()
     {
-        $this->createTable('{{%picture}}', [
-            'id' => $this->primaryKey(),
-            'name' => $this->string()->notNull(),
-        ]);
+        $tableName = $this->db->tablePrefix . 'picture';
+        if ($this->db->getTableSchema($tableName, true) === null) {
+            $this->createTable(
+                '{{%picture}}',
+                [
+                    'id' => $this->primaryKey(),
+                    'name' => $this->string()->notNull(),
+                ],
+                "IF NOT EXISTS"
+            );
+        }
     }
 
     /**

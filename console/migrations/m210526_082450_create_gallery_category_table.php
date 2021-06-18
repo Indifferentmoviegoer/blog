@@ -12,10 +12,17 @@ class m210526_082450_create_gallery_category_table extends Migration
      */
     public function safeUp()
     {
-        $this->createTable('{{%gallery_category}}', [
-            'id' => $this->primaryKey(),
-            'name' => $this->string()->notNull(),
-        ]);
+        $tableName = $this->db->tablePrefix . 'gallery_category';
+        if ($this->db->getTableSchema($tableName, true) === null) {
+            $this->createTable(
+                '{{%gallery_category}}',
+                [
+                    'id' => $this->primaryKey(),
+                    'name' => $this->string()->notNull(),
+                ],
+                "IF NOT EXISTS"
+            );
+        }
     }
 
     /**

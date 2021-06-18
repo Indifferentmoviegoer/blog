@@ -1,7 +1,7 @@
 <?php
 
-use frontend\models\Gallery;
-use frontend\models\GalleryCategory;
+use common\models\Gallery;
+use common\models\GalleryCategory;
 use kartik\file\FileInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -20,7 +20,7 @@ $path = env('APP_URL') . "/img/uploads/gallery/";
                     <img src=" <?= $path . $picture->name ?>" width="125px" alt="">
                     <div class="dislike" data-id="<?= $picture->id ?>">
                         <img src="<?= env('APP_URL') ?>/img/comment-dislike.svg" alt="">
-                        <span class="counter"><?= $picture->rating->value ?></span>
+<!--                        <span class="counter">--><?//= $picture->rating->value ?><!--</span>-->
                         <img src="<?= env('APP_URL') ?>/img/comment-like.svg" alt="">
                     </div>
                     <div class="like" data-id="<?= $picture->id ?>">

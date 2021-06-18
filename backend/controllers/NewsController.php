@@ -2,10 +2,10 @@
 
 namespace backend\controllers;
 
-use backend\models\Picture;
+use common\models\Picture;
 use backend\models\UploadForm;
 use Yii;
-use backend\models\News;
+use common\models\News;
 use backend\models\NewsSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

@@ -2,14 +2,12 @@
 
 /* @var $this yii\web\View */
 
-/* @var $news frontend\models\News */
-/* @var $categories frontend\models\Category */
+/* @var $news common\models\News */
+/* @var $categories common\models\Category */
 
 /* @var $pages LinkPager */
 
 use common\models\Category;
-use common\widgets\MenuWidget;
-use kartik\sidenav\SideNav;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\widgets\Menu;
@@ -19,63 +17,56 @@ $path = env('APP_URL') . "/img/uploads/";
 ?>
 <div class="site-index">
 
-    <!--    <div class="container">-->
-    <!--        <div class="col-lg-6">-->
-    <!--        <div id="myCarousel" class="carousel slide gallery-carousel" data-ride="carousel">-->
-    <!-- Indicators -->
-    <!--            <ol class="carousel-indicators">-->
-    <!--                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>-->
-    <!--                <li data-target="#myCarousel" data-slide-to="1"></li>-->
-    <!--                <li data-target="#myCarousel" data-slide-to="2"></li>-->
-    <!--            </ol>-->
-    <!---->
-    <!-- Wrapper for slides -->
-    <!--            <div class="carousel-inner">-->
-    <!--                --><?php
-    //foreach ($news as $item): ?>
-    <!--                --><?php
-    //if ($i == 1): ?>
-    <!--                    <div class="item active">-->
-    <!--                        <img src="--><?
-    //= $path . $item->picture->name ?><!--" alt="">-->
-    <!--                    </div>-->
-    <!--                --><?php
-    //endif;?>
-    <!---->
-    <!--                --><?php
-    //if ($i != 1): ?>
-    <!--                <div class="item">-->
-    <!--                    <img src="--><?
-    //= $path . $item->picture->name ?><!--" alt="">-->
-    <!--                </div>-->
-    <!--                    --><?php
-    //endif;?>
-    <!--                    --><?php
-    //                $i++;
-    //                endforeach; ?>
-    <!--            </div>-->
-    <!---->
-    <!-- Left and right controls -->
-    <!--            <a class="left carousel-control" href="#myCarousel" data-slide="prev">-->
-    <!--                <span class="glyphicon glyphicon-chevron-left"></span>-->
-    <!--                <span class="sr-only">Previous</span>-->
-    <!--            </a>-->
-    <!--            <a class="right carousel-control" href="#myCarousel" data-slide="next">-->
-    <!--                <span class="glyphicon glyphicon-chevron-right"></span>-->
-    <!--                <span class="sr-only">Next</span>-->
-    <!--            </a>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!--    </div>-->
-   <p>Категории</p>
+    <div class="container">
+        <div class="col-lg-6">
+            <div id="myCarousel" class="carousel slide gallery-carousel" data-ride="carousel">
+                Indicators
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
+
+                Wrapper for slides
+                <div class="carousel-inner">
+                    <?php for ($i = 0; $i < count($news); $i++): ?>
+                        <?php if ($i == 1): ?>
+                            <div class="item active">
+                                <img src="<?= $path . $news[$i]->picture->name ?>" alt="">
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($i != 1): ?>
+                            <div class="item">
+                                <img src="<?= $path . $news[$i]->picture->name ?>" alt="">
+                            </div>
+                        <?php endif; ?>
+                        <?php endfor; ?>
+                </div>
+
+                Left and right controls
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <p>Категории</p>
     <?php
-    echo SideNav::widget([
-	'options' => ['class' => 'clearfix', 'id'=>'main-menu'],
-	'encodeLabels'=>false,
-	'activateParents'=>true,
-	'activeCssClass'=>'current-menu-item',
-	'items' => Category::viewMenuItems(),
-]);?>
+    echo Menu::widget(
+        [
+            'options' => ['class' => 'clearfix', 'id' => 'main-menu'],
+            'encodeLabels' => false,
+            'activateParents' => true,
+            'activeCssClass' => 'current-menu-item',
+            'items' => Category::viewMenuItems(),
+        ]
+    ); ?>
     <div class="body-content">
         <?php for ($i = 0; $i < count($news); $i++): ?>
             <?php if (!(($i % 2) == 0)): ?>

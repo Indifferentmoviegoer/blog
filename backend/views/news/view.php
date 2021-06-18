@@ -5,7 +5,7 @@ use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\News */
+/* @var $model common\models\News */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'News', 'url' => ['index']];

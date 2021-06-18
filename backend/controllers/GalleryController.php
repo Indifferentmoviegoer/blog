@@ -5,7 +5,7 @@ namespace backend\controllers;
 use backend\models\GalleryCategory;
 use common\models\UploadGalleryForm;
 use Yii;
-use backend\models\Gallery;
+use common\models\Gallery;
 use backend\models\GallerySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

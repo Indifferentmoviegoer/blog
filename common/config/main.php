@@ -1,8 +1,6 @@
 <?php
 
-use indifferend\comments\controllers\DefaultController;
 use yii\db\Connection;
-use indifferend\comments\Module;
 
 return [
     'aliases' => [
@@ -10,28 +8,7 @@ return [
         '@npm' => '@vendor/npm-asset',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
-    'modules' => [
-        'comment' => [
-            'class' => Module::class,
-            'controllerMap' => [
-                'default' => [
-                    'class' => DefaultController::class,
-                    'on beforeCreate' => function ($event) {
-                        $event->getCommentModel();
-                    },
-                    'on afterCreate' => function ($event) {
-                        $event->getCommentModel();
-                    },
-                    'on beforeDelete' => function ($event) {
-                        $event->getCommentModel();
-                    },
-                    'on afterDelete' => function ($event) {
-                        $event->getCommentModel();
-                    },
-                ]
-            ]
-        ],
-    ],
+    'modules' => [],
     'components' => [
         'db' => [
             'class' => Connection::class,

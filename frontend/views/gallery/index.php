@@ -1,6 +1,6 @@
 <?php
 
-use frontend\models\GalleryCategory;
+use common\models\GalleryCategory;
 use yii\helpers\Url;
 
 /* @var $categories GalleryCategory */

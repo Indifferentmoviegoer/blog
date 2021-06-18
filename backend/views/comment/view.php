@@ -5,14 +5,14 @@ use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Gallery */
+/* @var $model common\models\Comment */
 
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Комментарии', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
 ?>
-<div class="gallery-view">
+<div class="comment-view">
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -29,8 +29,12 @@ YiiAsset::register($this);
         'model' => $model,
         'attributes' => [
             'id',
-            'category_id',
-            'name',
+            'user_id',
+            'news_id',
+            'picture_id',
+            'text',
+            'moderation',
+            'created_at',
         ],
     ]) ?>
 

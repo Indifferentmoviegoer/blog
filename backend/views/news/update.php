@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\News */
+/* @var $model common\models\News */
 /* @var $upload backend\models\UploadForm */
 
 $this->title = 'Обновление новости: ' . $model->id;

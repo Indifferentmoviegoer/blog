@@ -10,6 +10,7 @@
                     ['label' => 'Новости', 'icon' => 'newspaper-o', 'url' => ['/news/index']],
                     ['label' => 'Категории изображений', 'icon' => 'file-image-o', 'url' => ['/gallery-category/index']],
                     ['label' => 'Галерея', 'icon' => 'file-image-o', 'url' => ['/gallery/index']],
+                    ['label' => 'Комментарии', 'icon' => 'comments', 'url' => ['/comment/index']],
                 ],
             ]
         ) ?>

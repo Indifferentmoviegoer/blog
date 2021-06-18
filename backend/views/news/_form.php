@@ -1,6 +1,6 @@
 <?php
 
-use backend\models\Category;
+use common\models\Category;
 use dominus77\tinymce\TinyMce;
 use kartik\datetime\DateTimePicker;
 use kartik\file\FileInput;
@@ -9,7 +9,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\News */
+/* @var $model common\models\News */
 /* @var $upload backend\models\UploadForm */
 /* @var $form yii\widgets\ActiveForm */
 

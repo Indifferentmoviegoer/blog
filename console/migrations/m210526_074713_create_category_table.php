@@ -12,11 +12,18 @@ class m210526_074713_create_category_table extends Migration
      */
     public function safeUp()
     {
-        $this->createTable('{{%category}}', [
-            'id' => $this->primaryKey(),
-            'parent_id' => $this->integer()->notNull()->defaultValue(0),
-            'name' => $this->string()->notNull(),
-        ]);
+        $tableName = $this->db->tablePrefix . 'category';
+        if ($this->db->getTableSchema($tableName, true) === null) {
+            $this->createTable(
+                '{{%category}}',
+                [
+                    'id' => $this->primaryKey(),
+                    'parent_id' => $this->integer()->notNull()->defaultValue(0),
+                    'name' => $this->string()->notNull(),
+                ],
+                "IF NOT EXISTS"
+            );
+        }
     }
 
     /**

@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use common\models\UploadGalleryForm;
-use frontend\models\Gallery;
-use frontend\models\GalleryCategory;
+use common\models\Gallery;
+use common\models\GalleryCategory;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
