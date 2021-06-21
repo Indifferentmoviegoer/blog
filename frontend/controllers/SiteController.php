@@ -95,23 +95,24 @@ class SiteController extends Controller
         return $this->render('index', ['news' => $news, 'pages' => $pages, 'categories' => $categories]);
     }
 
-    public function actionCategory($id)
+    /**
+     * @param $id
+     *
+     * @return string
+     */
+    public function actionCategory($id): string
     {
-        $weekAgo = (new DateTime())->modify('-7 days');
-        $searchWeek = $weekAgo->format('Y-m-d');
-
         $catIds = NewsCategories::find()->where(['category_id' => $id])->all();
         $ids = $this->arrayListProduct($catIds);
 
         $allNews = News::find()
             ->where('published_at<=NOW()')
-            ->andWhere(['>=', 'published_at', $searchWeek])
             ->andWhere(['in', 'id', $ids])
             ->orderBy(['published_at' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $allNews->count(), 'pageSize' => 20]);
         $news = $allNews->offset($pages->offset)->limit($pages->limit)->all();
 
-        return $this->render('index', ['news' => $news, 'pages' => $pages]);
+        return $this->render('news', ['news' => $news, 'pages' => $pages]);
     }
 
     public function arrayListProduct($items): array

@@ -21,7 +21,6 @@ class m210528_053812_create_news_categories_table extends Migration
                     'category_id' => $this->integer()->notNull(),
                     'news_id' => $this->integer()->notNull(),
                 ],
-                "IF NOT EXISTS"
             );
         }
     }

@@ -21,7 +21,6 @@ class m210526_074713_create_category_table extends Migration
                     'parent_id' => $this->integer()->notNull()->defaultValue(0),
                     'name' => $this->string()->notNull(),
                 ],
-                "IF NOT EXISTS"
             );
         }
     }

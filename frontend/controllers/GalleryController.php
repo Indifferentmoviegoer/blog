@@ -2,10 +2,12 @@
 
 namespace frontend\controllers;
 
+use common\models\Rating;
 use common\models\UploadGalleryForm;
 use common\models\Gallery;
 use common\models\GalleryCategory;
 use Yii;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -84,6 +86,7 @@ class GalleryController extends Controller
 
         $model = new Gallery();
         $upload = new UploadGalleryForm();
+        $rating = new Rating();
         $pictures = Gallery::find()->where(['category_id' => $id])->all();
 
         if (Yii::$app->request->post()) {
@@ -93,6 +96,10 @@ class GalleryController extends Controller
                 $model->name = $upload->imageFile->name;
                 $model->category_id = $id;
                 $model->save();
+
+                $rating->picture_id= $model->id;
+                $rating->user_id=  Yii::$app->user->identity->getId();
+                $rating->save();
             }
         }
 
@@ -102,4 +109,35 @@ class GalleryController extends Controller
             'pictures' => $pictures,
         ]);
     }
+
+    /**
+     * @throws BadRequestHttpException
+     */
+    public function actionDislike()
+    {
+        $request = Yii::$app->request;
+
+        if (!$request->isPost || !isset(Yii::$app->request->post()['picture_id'])) {
+            throw new BadRequestHttpException();
+        }
+        $rating = Rating::find()->where(['picture_id'=> Yii::$app->request->post()['picture_id']])->one();
+        $rating->value = $rating->value - 1;
+        $rating->save();
+    }
+
+    /**
+     * @throws BadRequestHttpException
+     */
+    public function actionLike()
+    {
+        $request = Yii::$app->request;
+
+        if (!$request->isPost || !isset(Yii::$app->request->post()['picture_id'])) {
+            throw new BadRequestHttpException();
+        }
+        $rating = Rating::find()->where(['picture_id'=> Yii::$app->request->post()['picture_id']])->one();
+        $rating->value = $rating->value + 1;
+        $rating->save();
+    }
+
 }

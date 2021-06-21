@@ -20,7 +20,6 @@ class m210526_082450_create_gallery_category_table extends Migration
                     'id' => $this->primaryKey(),
                     'name' => $this->string()->notNull(),
                 ],
-                "IF NOT EXISTS"
             );
         }
     }

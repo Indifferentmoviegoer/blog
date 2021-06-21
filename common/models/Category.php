@@ -129,13 +129,13 @@ class Category extends ActiveRecord
      */
     public static function getAllParents(int $parent): array
     {
-        $category = self::find()->where(['id' => $parent])->one();
+        $category = static::find()->where(['id' => $parent])->one();
         $result = [];
         $result[] = $category;
         if ($category->parent_id != 0) {
             $result = array_merge(
                 $result,
-                self::getAllParents($category->parent_id)
+                static::getAllParents($category->parent_id)
             );
         }
         return $result;
@@ -144,7 +144,7 @@ class Category extends ActiveRecord
     private static function getMenuItems()
     {
         $items = array();
-        $resultAll = self::find()->all();
+        $resultAll = static::find()->all();
 
         foreach ($resultAll as $result) {
             if (empty($items[$result->parent_id])) {
@@ -157,7 +157,7 @@ class Category extends ActiveRecord
 
     public static function viewMenuItems($parentId = 0)
     {
-        $arrItems = self::getMenuItems();
+        $arrItems = static::getMenuItems();
         if (empty($arrItems[$parentId])) {
             return;
         }
@@ -165,7 +165,7 @@ class Category extends ActiveRecord
             $result[] = [
                 'label' => $arrItems[$parentId][$i]['name'],
                 'url' => Url::to(['category', 'id' => $arrItems[$parentId][$i]['id']]),
-                'items' => self::viewMenuItems($arrItems[$parentId][$i]['id']),
+                'items' => static::viewMenuItems($arrItems[$parentId][$i]['id']),
             ];
         }
         return $result;

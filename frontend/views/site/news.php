@@ -1,20 +1,20 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $news frontend\models\News */
+/* @var $news common\models\News */
 /* @var $pages LinkPager */
 
 use common\models\Category;
-use kartik\sidenav\SideNav;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
+use yii\widgets\Menu;
 
 $this->title = 'Новости';
 $path = env('APP_URL') . "/img/uploads/";
 ?>
 <p>Категории</p>
 <?php
-echo SideNav::widget([
+echo Menu::widget([
                          'options' => ['class' => 'clearfix', 'id'=>'main-menu'],
                          'encodeLabels'=>false,
                          'activateParents'=>true,

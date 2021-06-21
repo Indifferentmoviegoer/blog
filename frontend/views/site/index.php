@@ -7,10 +7,8 @@
 
 /* @var $pages LinkPager */
 
-use common\models\Category;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
-use yii\widgets\Menu;
 
 $this->title = 'Главная';
 $path = env('APP_URL') . "/img/uploads/";
@@ -56,17 +54,6 @@ $path = env('APP_URL') . "/img/uploads/";
             </div>
         </div>
     </div>
-    <p>Категории</p>
-    <?php
-    echo Menu::widget(
-        [
-            'options' => ['class' => 'clearfix', 'id' => 'main-menu'],
-            'encodeLabels' => false,
-            'activateParents' => true,
-            'activeCssClass' => 'current-menu-item',
-            'items' => Category::viewMenuItems(),
-        ]
-    ); ?>
     <div class="body-content">
         <?php for ($i = 0; $i < count($news); $i++): ?>
             <?php if (!(($i % 2) == 0)): ?>

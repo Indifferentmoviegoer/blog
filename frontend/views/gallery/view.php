@@ -5,6 +5,7 @@ use common\models\GalleryCategory;
 use kartik\file\FileInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
 /* @var $pictures Gallery */
 /* @var $upload common\models\UploadGalleryForm */
@@ -18,13 +19,21 @@ $path = env('APP_URL') . "/img/uploads/gallery/";
             <?php foreach ($pictures as $picture): ?>
                 <div class="col-lg-4">
                     <img src=" <?= $path . $picture->name ?>" width="125px" alt="">
-                    <div class="dislike" data-id="<?= $picture->id ?>">
-                        <img src="<?= env('APP_URL') ?>/img/comment-dislike.svg" alt="">
-<!--                        <span class="counter">--><?//= $picture->rating->value ?><!--</span>-->
-                        <img src="<?= env('APP_URL') ?>/img/comment-like.svg" alt="">
+
+                    <?php
+                    Pjax::begin(
+                        [
+                            'id' => 'galleryPjax'
+                        ]
+                    ) ?>
+                    <div>
+<!--                        <img id="dislike" data-picture_id="--><?//= $picture->id ?><!--" src="--><?//= env('APP_URL') ?><!--/img/comment-dislike.svg" alt="">-->
+                        <input type="button" id="dislike" data-picture_id="<?= $picture->id ?>" value="Дизлайк">
+                        <span id="count" class="counter"><?= $picture->rating->value ?></span>
+<!--                        <img id="like" src="--><?//= env('APP_URL') ?><!--/img/comment-like.svg" alt="">-->
+                        <input type="button" id="like" data-picture_id="<?= $picture->id ?>" value="Лайк">
                     </div>
-                    <div class="like" data-id="<?= $picture->id ?>">
-                    </div>
+                    <?php Pjax::end() ?>
                 </div>
 
             <?php endforeach; ?>

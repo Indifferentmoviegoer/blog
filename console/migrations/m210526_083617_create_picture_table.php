@@ -20,7 +20,6 @@ class m210526_083617_create_picture_table extends Migration
                     'id' => $this->primaryKey(),
                     'name' => $this->string()->notNull(),
                 ],
-                "IF NOT EXISTS"
             );
         }
     }
