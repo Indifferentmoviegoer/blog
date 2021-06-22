@@ -2,12 +2,15 @@
 
 namespace backend\controllers;
 
+use Throwable;
 use Yii;
 use common\models\Category;
 use backend\models\CategorySearch;
+use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -17,11 +20,11 @@ class CategoryController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -31,9 +34,9 @@ class CategoryController extends Controller
 
     /**
      * Lists all Category models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new CategorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -46,11 +49,13 @@ class CategoryController extends Controller
 
     /**
      * Displays a single Category model.
+     *
      * @param integer $id
-     * @return mixed
+     *
+     * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView(int $id): string
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -60,7 +65,7 @@ class CategoryController extends Controller
     /**
      * Creates a new Category model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -78,11 +83,13 @@ class CategoryController extends Controller
     /**
      * Updates an existing Category model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param integer $id
-     * @return mixed
+     *
+     * @return Response|string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -98,11 +105,15 @@ class CategoryController extends Controller
     /**
      * Deletes an existing Category model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param integer $id
-     * @return mixed
+     *
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws Throwable
+     * @throws StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
@@ -112,11 +123,13 @@ class CategoryController extends Controller
     /**
      * Finds the Category model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
+     *
      * @return Category the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Category
     {
         if (($model = Category::findOne($id)) !== null) {
             return $model;

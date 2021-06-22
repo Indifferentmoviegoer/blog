@@ -1,9 +1,9 @@
 <?php
 
-use frontend\models\GalleryCategory;
+use common\models\GalleryCategory;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Gallery */
+/* @var $model common\models\Gallery */
 /* @var $upload common\models\UploadGalleryForm */
 /* @var $categories GalleryCategory */
 

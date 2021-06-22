@@ -2,6 +2,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\base\Model;
 use common\models\User;
 
@@ -10,13 +11,13 @@ use common\models\User;
  */
 class PasswordResetRequestForm extends Model
 {
-    public $email;
+    public string $email;
 
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['email', 'trim'],
@@ -34,8 +35,9 @@ class PasswordResetRequestForm extends Model
      * Sends an email with a link, for resetting the password.
      *
      * @return bool whether the email was send
+     * @throws Exception
      */
-    public function sendEmail()
+    public function sendEmail(): bool
     {
         /* @var $user User */
         $user = User::findOne([

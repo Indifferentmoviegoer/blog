@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -54,7 +55,10 @@ class Comment extends ActiveRecord
         ];
     }
 
-    public function getUser()
+    /**
+     * @return ActiveQuery
+     */
+    public function getUser(): ActiveQuery
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }

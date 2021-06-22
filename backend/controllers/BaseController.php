@@ -2,20 +2,16 @@
 
 namespace backend\controllers;
 
-use backend\models\NewsCategories;
-use Throwable;
+use common\models\NewsCategories;
 use Yii;
 use yii\base\Model;
-use yii\db\StaleObjectException;
 use yii\web\Controller;
 
 class BaseController extends Controller
 {
+
     /**
      * @param Model $model
-     *
-     * @throws StaleObjectException
-     * @throws Throwable
      */
     public function loadCategoryList(Model $model)
     {

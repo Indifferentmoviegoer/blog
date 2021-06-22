@@ -11,7 +11,7 @@ class VerifyEmailForm extends Model
     /**
      * @var string
      */
-    public $token;
+    public string $token;
 
     /**
      * @var User

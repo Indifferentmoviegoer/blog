@@ -2,12 +2,15 @@
 
 namespace backend\controllers;
 
+use Throwable;
 use Yii;
-use backend\models\GalleryCategory;
+use common\models\GalleryCategory;
 use backend\models\GalleryCategorySearch;
+use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * GalleryCategoryController implements the CRUD actions for GalleryCategory model.
@@ -17,11 +20,11 @@ class GalleryCategoryController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -31,9 +34,9 @@ class GalleryCategoryController extends Controller
 
     /**
      * Lists all GalleryCategory models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new GalleryCategorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -46,11 +49,13 @@ class GalleryCategoryController extends Controller
 
     /**
      * Displays a single GalleryCategory model.
+     *
      * @param integer $id
-     * @return mixed
+     *
+     * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView(int $id): string
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -60,7 +65,7 @@ class GalleryCategoryController extends Controller
     /**
      * Creates a new GalleryCategory model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -78,11 +83,13 @@ class GalleryCategoryController extends Controller
     /**
      * Updates an existing GalleryCategory model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param integer $id
-     * @return mixed
+     *
+     * @return Response|string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -98,11 +105,15 @@ class GalleryCategoryController extends Controller
     /**
      * Deletes an existing GalleryCategory model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param integer $id
-     * @return mixed
+     *
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws Throwable
+     * @throws StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
@@ -112,11 +123,13 @@ class GalleryCategoryController extends Controller
     /**
      * Finds the GalleryCategory model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
+     *
      * @return GalleryCategory the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): GalleryCategory
     {
         if (($model = GalleryCategory::findOne($id)) !== null) {
             return $model;

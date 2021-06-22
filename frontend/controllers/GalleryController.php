@@ -2,14 +2,11 @@
 
 namespace frontend\controllers;
 
-use common\models\Comment;
-use common\models\Picture;
 use common\models\Rating;
 use common\models\UploadGalleryForm;
 use common\models\Gallery;
 use common\models\GalleryCategory;
 use Yii;
-use yii\base\BaseObject;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -25,11 +22,11 @@ class GalleryController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
@@ -45,7 +42,7 @@ class GalleryController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -56,7 +53,7 @@ class GalleryController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function actions()
+    public function actions(): array
     {
         return [
             'error' => [
@@ -72,9 +69,9 @@ class GalleryController extends Controller
     /**
      * Displays homepage.
      *
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $categories = GalleryCategory::find()->all();
 

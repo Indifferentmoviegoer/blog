@@ -12,13 +12,13 @@ class ResendVerificationEmailForm extends Model
     /**
      * @var string
      */
-    public $email;
+    public string $email;
 
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['email', 'trim'],
@@ -37,7 +37,7 @@ class ResendVerificationEmailForm extends Model
      *
      * @return bool whether the email was sent
      */
-    public function sendEmail()
+    public function sendEmail(): bool
     {
         $user = User::findOne([
             'email' => $this->email,

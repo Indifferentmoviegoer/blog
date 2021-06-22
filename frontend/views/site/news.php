@@ -1,13 +1,13 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $news common\models\News */
-/* @var $pages LinkPager */
-
 use common\models\Category;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\widgets\Menu;
+
+/* @var $this yii\web\View */
+/* @var $news common\models\News */
+/* @var $pages LinkPager */
 
 $this->title = 'Новости';
 $path = env('APP_URL') . "/img/uploads/";

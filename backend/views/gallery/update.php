@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Gallery */
+/* @var $model common\models\Gallery */
 
 $this->title = 'Обновить категорию: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Категории', 'url' => ['index']];

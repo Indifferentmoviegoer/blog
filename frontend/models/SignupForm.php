@@ -12,15 +12,15 @@ use common\models\User;
  */
 class SignupForm extends Model
 {
-    public $username;
-    public $email;
-    public $password;
+    public string $username;
+    public string $email;
+    public string $password;
 
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['username', 'trim'],
@@ -45,7 +45,7 @@ class SignupForm extends Model
      * @return bool whether the creating new account was successful and email was sent
      * @throws Exception
      */
-    public function signup()
+    public function signup(): ?bool
     {
         if (!$this->validate()) {
             return null;
@@ -75,10 +75,12 @@ class SignupForm extends Model
 
     /**
      * Sends confirmation email to user
+     *
      * @param User $user user model to with email should be send
+     *
      * @return bool whether the email was sent
      */
-    protected function sendEmail($user)
+    protected function sendEmail(User $user): bool
     {
         return Yii::$app
             ->mailer

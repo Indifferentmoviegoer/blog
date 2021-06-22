@@ -1,10 +1,11 @@
 <?php
 
-/* @var $this \yii\web\View */
-/* @var $content string */
-
 use backend\assets\AppAsset;
 use yii\helpers\Html;
+use yii\web\View;
+
+/* @var $this View */
+/* @var $content string */
 
 AppAsset::register($this);
 ?>

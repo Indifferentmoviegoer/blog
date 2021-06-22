@@ -2,13 +2,17 @@
 
 namespace backend\controllers;
 
+use Exception;
+use Throwable;
 use Yii;
 use backend\models\User;
 use backend\models\UserForm;
 use backend\models\UserSearch;
+use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -18,11 +22,11 @@ class UserController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -32,9 +36,9 @@ class UserController extends Controller
 
     /**
      * Lists all User models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -53,10 +57,10 @@ class UserController extends Controller
      *
      * @param integer $id
      *
-     * @return mixed
+     * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView(int $id): string
     {
         return $this->render(
             'view',
@@ -69,7 +73,8 @@ class UserController extends Controller
     /**
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|Response
+     * @throws Exception
      */
     public function actionCreate()
     {
@@ -93,10 +98,10 @@ class UserController extends Controller
      *
      * @param integer $id
      *
-     * @return mixed
+     * @return Response|string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = new UserForm();
         $user = $this->findModel($id);
@@ -125,10 +130,12 @@ class UserController extends Controller
      *
      * @param integer $id
      *
-     * @return mixed
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws Throwable
+     * @throws StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
@@ -144,7 +151,7 @@ class UserController extends Controller
      * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): User
     {
         if (($model = User::findOne($id)) !== null) {
             return $model;

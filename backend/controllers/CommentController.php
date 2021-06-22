@@ -2,12 +2,15 @@
 
 namespace backend\controllers;
 
+use Throwable;
 use Yii;
 use common\models\Comment;
 use backend\models\CommentSearch;
+use yii\db\StaleObjectException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * CommentController implements the CRUD actions for Comment model.
@@ -17,11 +20,11 @@ class CommentController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -31,9 +34,9 @@ class CommentController extends Controller
 
     /**
      * Lists all Comment models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new CommentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -46,11 +49,13 @@ class CommentController extends Controller
 
     /**
      * Displays a single Comment model.
+     *
      * @param integer $id
-     * @return mixed
+     *
+     * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView(int $id): string
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -60,7 +65,7 @@ class CommentController extends Controller
     /**
      * Creates a new Comment model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -78,11 +83,13 @@ class CommentController extends Controller
     /**
      * Updates an existing Comment model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param integer $id
-     * @return mixed
+     *
+     * @return Response|string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
 
@@ -98,11 +105,15 @@ class CommentController extends Controller
     /**
      * Deletes an existing Comment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param integer $id
-     * @return mixed
+     *
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws Throwable
+     * @throws StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
@@ -112,11 +123,13 @@ class CommentController extends Controller
     /**
      * Finds the Comment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
+     *
      * @return Comment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): Comment
     {
         if (($model = Comment::findOne($id)) !== null) {
             return $model;

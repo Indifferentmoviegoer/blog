@@ -8,6 +8,7 @@ use yii\widgets\ActiveForm;
 /* @var $this View */
 /* @var $model UserForm */
 /* @var $form ActiveForm */
+
 $param = ['options' => [$model->status => ['Selected' => true]]];
 $checkboxItems = ['admin' => 'Админ', 'redactor' => 'Редактор', 'user' => 'Пользователь'];
 ?>

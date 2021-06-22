@@ -58,14 +58,6 @@ class Gallery extends ActiveRecord
      */
     public function getCategory(): ActiveQuery
     {
-        return $this->hasOne(\backend\models\GalleryCategory::class, ['id' => 'category_id']);
+        return $this->hasOne(GalleryCategory::class, ['id' => 'category_id']);
     }
-
-//    /**
-//     * @return ActiveQuery
-//     */
-//    public function getRating(): ActiveQuery
-//    {
-//        return $this->hasOne(Rating::class, ['picture_id' => 'id']);
-//    }
 }

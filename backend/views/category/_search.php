@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model backend\models\CategorySearch */
 /* @var $form yii\widgets\ActiveForm */
+
 ?>
 
 <div class="category-search">

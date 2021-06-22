@@ -6,6 +6,7 @@ use common\models\NewsCategories;
 use DateTime;
 use common\models\Category;
 use common\models\News;
+use Exception;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -21,6 +22,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * Site controller
@@ -30,7 +32,7 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'access' => [
@@ -61,7 +63,7 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function actions()
+    public function actions(): array
     {
         return [
             'error' => [
@@ -77,9 +79,9 @@ class SiteController extends Controller
     /**
      * Displays homepage.
      *
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $weekAgo = (new DateTime())->modify('-7 days');
         $searchWeek = $weekAgo->format('Y-m-d');
@@ -162,7 +164,7 @@ class SiteController extends Controller
     /**
      * Logs in a user.
      *
-     * @return mixed
+     * @return string|Response
      */
     public function actionLogin()
     {
@@ -188,9 +190,9 @@ class SiteController extends Controller
     /**
      * Logs out the current user.
      *
-     * @return mixed
+     * @return Response
      */
-    public function actionLogout()
+    public function actionLogout(): Response
     {
         Yii::$app->user->logout();
 
@@ -200,7 +202,7 @@ class SiteController extends Controller
     /**
      * Displays contact page.
      *
-     * @return mixed
+     * @return Response|string
      */
     public function actionContact()
     {
@@ -229,9 +231,9 @@ class SiteController extends Controller
     /**
      * Displays about page.
      *
-     * @return mixed
+     * @return string
      */
-    public function actionAbout()
+    public function actionAbout(): string
     {
         return $this->render('about');
     }
@@ -239,7 +241,8 @@ class SiteController extends Controller
     /**
      * Signs user up.
      *
-     * @return mixed
+     * @return Response|string
+     * @throws Exception
      */
     public function actionSignup()
     {
@@ -263,7 +266,7 @@ class SiteController extends Controller
     /**
      * Requests password reset.
      *
-     * @return mixed
+     * @return Response|string
      */
     public function actionRequestPasswordReset()
     {
@@ -294,10 +297,10 @@ class SiteController extends Controller
      *
      * @param string $token
      *
-     * @return mixed
+     * @return Response|string
      * @throws BadRequestHttpException
      */
-    public function actionResetPassword($token)
+    public function actionResetPassword(string $token)
     {
         try {
             $model = new ResetPasswordForm($token);
@@ -324,10 +327,10 @@ class SiteController extends Controller
      *
      * @param string $token
      *
-     * @return yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
      */
-    public function actionVerifyEmail($token)
+    public function actionVerifyEmail(string $token): Response
     {
         try {
             $model = new VerifyEmailForm($token);
@@ -348,7 +351,7 @@ class SiteController extends Controller
     /**
      * Resend verification email
      *
-     * @return mixed
+     * @return Response|string
      */
     public function actionResendVerificationEmail()
     {

@@ -71,7 +71,7 @@ class Category extends ActiveRecord
      *
      * @return array
      */
-    public static function getAllCategories($parent = 0, $level = 0, $exclude = 0): array
+    public static function getAllCategories(int $parent = 0, int $level = 0, int $exclude = 0): array
     {
         $children = self::find()
             ->where(['parent_id' => $parent])
@@ -107,7 +107,7 @@ class Category extends ActiveRecord
      *
      * @return array
      */
-    public static function getTree($exclude = 0, $root = false): array
+    public static function getTree(int $exclude = 0, bool $root = false): array
     {
         $data = self::getAllCategories(0, 0, $exclude);
         $tree = [];
@@ -141,7 +141,10 @@ class Category extends ActiveRecord
         return $result;
     }
 
-    private static function getMenuItems()
+    /**
+     * @return array
+     */
+    private static function getMenuItems(): array
     {
         $items = array();
         $resultAll = static::find()->all();
@@ -155,7 +158,12 @@ class Category extends ActiveRecord
         return $items;
     }
 
-    public static function viewMenuItems($parentId = 0)
+    /**
+     * @param int $parentId
+     *
+     * @return array|void
+     */
+    public static function viewMenuItems(int $parentId = 0)
     {
         $arrItems = static::getMenuItems();
         if (empty($arrItems[$parentId])) {

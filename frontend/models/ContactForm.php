@@ -10,17 +10,17 @@ use yii\base\Model;
  */
 class ContactForm extends Model
 {
-    public $name;
-    public $email;
-    public $subject;
-    public $body;
-    public $verifyCode;
+    public string $name;
+    public string $email;
+    public string $subject;
+    public string $body;
+    public string $verifyCode;
 
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             // name, email, subject and body are required
@@ -35,7 +35,7 @@ class ContactForm extends Model
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'name' => 'Имя',
@@ -50,9 +50,10 @@ class ContactForm extends Model
      * Sends an email to the specified email address using the information collected by this model.
      *
      * @param string $email the target email address
+     *
      * @return bool whether the email was sent
      */
-    public function sendEmail($email)
+    public function sendEmail(string $email): bool
     {
         return Yii::$app->mailer->compose()
             ->setTo($email)

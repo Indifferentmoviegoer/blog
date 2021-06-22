@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\GalleryCategory;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
@@ -24,7 +25,7 @@ class GalleryCategorySearch extends GalleryCategory
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
+    public function scenarios(): array
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
@@ -37,7 +38,7 @@ class GalleryCategorySearch extends GalleryCategory
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search(array $params): ActiveDataProvider
     {
         $query = GalleryCategory::find();
 

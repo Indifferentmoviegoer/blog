@@ -4,11 +4,14 @@ namespace backend\controllers;
 
 use common\models\Picture;
 use backend\models\UploadForm;
+use Throwable;
 use Yii;
 use common\models\News;
 use backend\models\NewsSearch;
+use yii\db\StaleObjectException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 use yii\web\UploadedFile;
 
 /**
@@ -19,11 +22,11 @@ class NewsController extends BaseController
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -33,9 +36,9 @@ class NewsController extends BaseController
 
     /**
      * Lists all News models.
-     * @return mixed
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $searchModel = new NewsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -54,10 +57,10 @@ class NewsController extends BaseController
      *
      * @param integer $id
      *
-     * @return mixed
+     * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView(int $id): string
     {
         return $this->render(
             'view',
@@ -70,7 +73,7 @@ class NewsController extends BaseController
     /**
      * Creates a new News model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|Response
      */
     public function actionCreate()
     {
@@ -108,10 +111,10 @@ class NewsController extends BaseController
      *
      * @param integer $id
      *
-     * @return mixed
+     * @return Response|string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
         $upload = new UploadForm();
@@ -147,10 +150,12 @@ class NewsController extends BaseController
      *
      * @param integer $id
      *
-     * @return mixed
+     * @return Response
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws Throwable
+     * @throws StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete(int $id): Response
     {
         $this->findModel($id)->delete();
 
@@ -166,7 +171,7 @@ class NewsController extends BaseController
      * @return News the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel(int $id): News
     {
         if (($model = News::findOne($id)) !== null) {
             return $model;

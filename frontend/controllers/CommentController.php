@@ -14,7 +14,11 @@ use yii\web\Response;
  */
 class CommentController extends Controller
 {
-    public function actionCreate()
+    /**
+     * @return Comment[]
+     * @throws BadRequestHttpException
+     */
+    public function actionCreate(): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -61,13 +65,8 @@ class CommentController extends Controller
             throw new BadRequestHttpException();
         }
 
-//        $pictureID = null;
-//        $newsID = null;
-//        if (!isset(Yii::$app->request->post()['news_id'])) {
-            $pictureID = Yii::$app->request->post()['picture_id'];
-//        } elseif (!isset(Yii::$app->request->post()['picture_id'])) {
-            $newsID = Yii::$app->request->post()['news_id'];
-//        }
+        $pictureID = Yii::$app->request->post()['picture_id'];
+        $newsID = Yii::$app->request->post()['news_id'];
 
         $length = Yii::$app->request->post()['length'];
         if (!empty($newsID)) {

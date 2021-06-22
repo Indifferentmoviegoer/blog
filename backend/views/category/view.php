@@ -5,7 +5,7 @@ use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Category */
+/* @var $model common\models\Category */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
