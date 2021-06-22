@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
 * @property int $id
 * @property int $user_id
 * @property int $news_id
+* @property int $picture_id
 * @property string $text
 * @property boolean $moderation
 * @property string $created_at
@@ -31,7 +32,7 @@ class Comment extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['id', 'user_id', 'news_id'], 'integer'],
+            [['id', 'user_id', 'news_id', 'picture_id'], 'integer'],
             [['text', 'created_at'], 'string'],
             ['moderation', 'boolean'],
         ];
@@ -46,6 +47,7 @@ class Comment extends ActiveRecord
             'id' => 'ID',
             'user_id' => 'Пользователь',
             'news_id' => 'Новость',
+            'picture_id' => 'Изображение',
             'text' => 'Текст комментария',
             'moderation' => 'Пре-модерация',
             'created_at' => 'Создан',

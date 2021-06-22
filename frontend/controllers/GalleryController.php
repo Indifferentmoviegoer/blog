@@ -2,11 +2,14 @@
 
 namespace frontend\controllers;
 
+use common\models\Comment;
+use common\models\Picture;
 use common\models\Rating;
 use common\models\UploadGalleryForm;
 use common\models\Gallery;
 use common\models\GalleryCategory;
 use Yii;
+use yii\base\BaseObject;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -78,9 +81,15 @@ class GalleryController extends Controller
         return $this->render('index', ['categories' => $categories]);
     }
 
-    public function actionView($id)
+    /**
+     * @param $id
+     *
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView($id): string
     {
-        if (empty($id)){
+        if (empty($id)) {
             throw new NotFoundHttpException('Страница не найдена.');
         }
 
@@ -88,6 +97,10 @@ class GalleryController extends Controller
         $upload = new UploadGalleryForm();
         $rating = new Rating();
         $pictures = Gallery::find()->where(['category_id' => $id])->all();
+        $user = Gallery::find()
+            ->where(['user_id' => Yii::$app->user->identity->getId()])
+            ->andWhere(['moderation' => true])
+            ->count();
 
         if (Yii::$app->request->post()) {
             $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
@@ -95,19 +108,48 @@ class GalleryController extends Controller
             if ($upload->upload()) {
                 $model->name = $upload->imageFile->name;
                 $model->category_id = $id;
+                $model->user_id = Yii::$app->user->identity->getId();
+                if ($user >= 5) {
+                    $model->moderation = true;
+                }
                 $model->save();
 
-                $rating->picture_id= $model->id;
-                $rating->user_id=  Yii::$app->user->identity->getId();
+                $rating->picture_id = $model->id;
+                $rating->user_id = Yii::$app->user->identity->getId();
                 $rating->save();
             }
         }
 
-        return $this->render('view', [
-            'model' => $model,
-            'upload' => $upload,
-            'pictures' => $pictures,
-        ]);
+        return $this->render(
+            'view',
+            [
+                'model' => $model,
+                'upload' => $upload,
+                'pictures' => $pictures,
+            ]
+        );
+    }
+
+    /**
+     * @param $id
+     *
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionDetail($id): string
+    {
+        if (empty($id)) {
+            throw new NotFoundHttpException('Страница не найдена.');
+        }
+
+        $model = Gallery::find()->where(['id' => $id])->one();
+
+        return $this->render(
+            'detail',
+            [
+                'model' => $model,
+            ]
+        );
     }
 
     /**
@@ -120,9 +162,36 @@ class GalleryController extends Controller
         if (!$request->isPost || !isset(Yii::$app->request->post()['picture_id'])) {
             throw new BadRequestHttpException();
         }
-        $rating = Rating::find()->where(['picture_id'=> Yii::$app->request->post()['picture_id']])->one();
-        $rating->value = $rating->value - 1;
-        $rating->save();
+
+        $pictureID = Yii::$app->request->post()['picture_id'];
+
+        $rating = Rating::find()
+            ->where(['picture_id' => $pictureID])
+            ->andWhere(['user_id' => Yii::$app->user->identity->getId()])
+            ->one();
+
+        $picture = Gallery::findOne($pictureID);
+
+        if (!$rating) {
+            $rating = new Rating();
+            $rating->picture_id = $pictureID;
+            $rating->value = -1;
+            $rating->user_id = Yii::$app->user->identity->getId();
+            $rating->save();
+
+            if ($rating->value == -1) {
+                $picture->rating = $picture->rating - 1;
+                $picture->save();
+            }
+        } else {
+            if ($rating->value != -1) {
+                $rating->value = $rating->value - 1;
+                $rating->save();
+
+                $picture->rating = $picture->rating - 1;
+                $picture->save();
+            }
+        }
     }
 
     /**
@@ -135,9 +204,36 @@ class GalleryController extends Controller
         if (!$request->isPost || !isset(Yii::$app->request->post()['picture_id'])) {
             throw new BadRequestHttpException();
         }
-        $rating = Rating::find()->where(['picture_id'=> Yii::$app->request->post()['picture_id']])->one();
-        $rating->value = $rating->value + 1;
-        $rating->save();
+
+        $pictureID = Yii::$app->request->post()['picture_id'];
+
+        $rating = Rating::find()
+            ->where(['picture_id' => $pictureID])
+            ->andWhere(['user_id' => Yii::$app->user->identity->getId()])
+            ->one();
+
+        $picture = Gallery::findOne($pictureID);
+
+        if (!$rating) {
+            $rating = new Rating();
+            $rating->picture_id = $pictureID;
+            $rating->value = 1;
+            $rating->user_id = Yii::$app->user->identity->getId();
+            $rating->save();
+
+            if ($rating->value == 1) {
+                $picture->rating = $picture->rating + 1;
+                $picture->save();
+            }
+        } else {
+            if ($rating->value != 1) {
+                $rating->value = $rating->value + 1;
+                $rating->save();
+
+                $picture->rating = $picture->rating + 1;
+                $picture->save();
+            }
+        }
     }
 
 }

@@ -18,5 +18,5 @@ if (Yii::$app->user->isGuest && $news->forbidden == 1) {
     <img src="<?= $path . $news->picture->name ?>" alt="">
     <?= $news->text ?>
 </div>
-<?= CommentWidget::widget(['id' => $news->id]) ?>
+<?= CommentWidget::widget(['id' => $news->id, 'type' => 1]) ?>
 

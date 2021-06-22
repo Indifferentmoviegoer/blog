@@ -20,6 +20,9 @@ class m210526_082440_create_gallery_table extends Migration
                     'id' => $this->primaryKey(),
                     'name' => $this->string()->notNull(),
                     'category_id' => $this->integer()->notNull(),
+                    'created_at' => $this->dateTime()->notNull(),
+                    'rating' => $this->integer()->notNull()->defaultValue(0),
+                    'moderation' => $this->integer()->notNull()->defaultValue(0),
                 ],
             );
         }

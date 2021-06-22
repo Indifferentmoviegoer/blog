@@ -12,6 +12,9 @@ use yii\db\ActiveRecord;
 * @property int $id
 * @property string $name
 * @property string $category_id
+* @property int $user_id
+* @property int $rating
+* @property boolean $moderation
  */
 class Gallery extends ActiveRecord
 {
@@ -29,9 +32,9 @@ class Gallery extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'rating', 'category_id', 'user_id'], 'integer'],
             ['name', 'string'],
-            ['category_id', 'string'],
+            ['moderation', 'boolean'],
         ];
     }
 
@@ -44,6 +47,9 @@ class Gallery extends ActiveRecord
             'id' => 'ID',
             'name' => 'Наименование',
             'category_id' => 'Категория',
+            'user_id' => 'Пользователь',
+            'rating' => 'Рейтинг',
+            'moderation' => 'Пре-модерация',
         ];
     }
 
@@ -55,11 +61,11 @@ class Gallery extends ActiveRecord
         return $this->hasOne(\backend\models\GalleryCategory::class, ['id' => 'category_id']);
     }
 
-    /**
-     * @return ActiveQuery
-     */
-    public function getRating(): ActiveQuery
-    {
-        return $this->hasOne(Rating::class, ['picture_id' => 'id']);
-    }
+//    /**
+//     * @return ActiveQuery
+//     */
+//    public function getRating(): ActiveQuery
+//    {
+//        return $this->hasOne(Rating::class, ['picture_id' => 'id']);
+//    }
 }
