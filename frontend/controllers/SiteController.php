@@ -144,6 +144,20 @@ class SiteController extends Controller
         return $this->render('detail', ['news' => $news]);
     }
 
+    /**
+     * @return string
+     */
+    public function actionNews(): string
+    {
+        $allNews = News::find()
+            ->where('published_at<=NOW()')
+            ->orderBy(['published_at' => SORT_DESC]);
+
+        $pages = new Pagination(['totalCount' => $allNews->count(), 'pageSize' => 20]);
+        $news = $allNews->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('news', ['news' => $news, 'pages' => $pages]);
+    }
 
     /**
      * Logs in a user.
@@ -356,16 +370,5 @@ class SiteController extends Controller
                 'model' => $model
             ]
         );
-    }
-
-    public function actionNews()
-    {
-        $allNews = News::find()
-            ->where('published_at<=NOW()')
-            ->orderBy(['published_at' => SORT_DESC]);
-        $pages = new Pagination(['totalCount' => $allNews->count(), 'pageSize' => 20]);
-        $news = $allNews->offset($pages->offset)->limit($pages->limit)->all();
-
-        return $this->render('news', ['news' => $news, 'pages' => $pages]);
     }
 }

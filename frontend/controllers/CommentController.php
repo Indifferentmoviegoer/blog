@@ -16,6 +16,8 @@ class CommentController extends Controller
 {
     public function actionCreate()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
         $request = Yii::$app->request;
 
         if (!$request->isPost) {
@@ -26,16 +28,23 @@ class CommentController extends Controller
 
         $user = Comment::find()
             ->where(['user_id' => Yii::$app->user->identity->getId()])
-            ->andWhere(['moderation'=> true])
+            ->andWhere(['moderation' => true])
             ->count();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->identity->getId();
-            if($user>=5){
+            if ($user >= 5) {
                 $model->moderation = true;
             }
             $model->save();
         }
+
+        $model->user_id = $model->user->username;
+        $model->created_at = date("Y-m-d") . " " . date("H:i:s");
+
+        return [
+            "data" => $model
+        ];
     }
 
     /**
@@ -48,23 +57,39 @@ class CommentController extends Controller
 
         $request = Yii::$app->request;
 
-        if (!$request->isPost) {
+        if (!$request->isPost || !isset(Yii::$app->request->post()['length'])) {
             throw new BadRequestHttpException();
         }
 
-        if (isset(Yii::$app->request->post()['news_id'])) {
+//        $pictureID = null;
+//        $newsID = null;
+//        if (!isset(Yii::$app->request->post()['news_id'])) {
+            $pictureID = Yii::$app->request->post()['picture_id'];
+//        } elseif (!isset(Yii::$app->request->post()['picture_id'])) {
+            $newsID = Yii::$app->request->post()['news_id'];
+//        }
+
+        $length = Yii::$app->request->post()['length'];
+        if (!empty($newsID)) {
             $comments = Comment::find()
-                ->where(['news_id' => Yii::$app->request->post()['news_id']])
+                ->where(['news_id' => $newsID])
+                ->andWhere(['moderation' => true])
+                ->orderBy('created_at desc')
+                ->all();
+        } elseif (!empty($pictureID)) {
+            $comments = Comment::find()
+                ->where(['picture_id' => $pictureID])
                 ->andWhere(['moderation' => true])
                 ->orderBy('created_at desc')
                 ->all();
         }
 
-        foreach ($comments as $comment){
+
+        foreach ($comments as $comment) {
             $comment->user_id = $comment->user->username;
         }
 
-        $comments = array_slice($comments, 5);
+        $comments = array_slice($comments, $length);
 
         return [
             "data" => $comments

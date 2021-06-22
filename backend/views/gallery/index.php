@@ -42,6 +42,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $data->category->name;
                     },
                 ],
+                'user_id',
+                'moderation',
+                'created_at',
 
                 ['class' => 'yii\grid\ActionColumn'],
             ],
