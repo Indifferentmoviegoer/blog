@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  *
  * @property int id
  * @property int picture_id
+ * @property int count_views
  * @property string name
  * @property string desc
  * @property string text
@@ -35,7 +36,7 @@ class News extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['id', 'picture_id'], 'integer'],
+            [['id', 'picture_id', 'count_views'], 'integer'],
             [['forbidden'], 'boolean'],
             [['name', 'desc', 'text', 'published_at'], 'string'],
         ];
@@ -55,6 +56,7 @@ class News extends ActiveRecord
             'published_at' => 'Дата публикации',
             'rel' => 'Категория',
             'forbidden' => 'Доступ',
+            'count_views' => 'Кол-во просмотров',
         ];
     }
 
@@ -83,63 +85,6 @@ class News extends ActiveRecord
         return $this->hasMany(NewsCategories::class, ['news_id' => 'id']);
     }
 
-    /**
-     * @return false|string
-     */
-    public function categoryList()
-    {
-        $categories = $this->categories;
 
-        if (empty($categories)) {
-            return 'Новость без категории';
-        }
-
-        $categoryItems = [];
-        foreach ($categories as $category) {
-            $categoryItems[] = $category->category_id;
-        }
-
-        $index = 0;
-        foreach ($categories as $category) {
-            if ($category->category->parent_id != 0 && !in_array($category->category->parent_id, $categoryItems)) {
-                $parents = $category->category->getAllParents($category->category->parent_id);
-                foreach ($parents as $parent) {
-                    array_splice(
-                        $categoryItems,
-                        $index + $index,
-                        0,
-                        $parent->id
-                    );
-                }
-                $index++;
-            }
-        }
-
-        $categories = '';
-        for ($i = 0; $i < count($categoryItems); $i++) {
-            $category = Category::findOne(['id' => $categoryItems[$i]]);
-            $categories .= $category->name . ' - ';
-        }
-
-        return substr($categories, 0, -3);
-    }
-
-    /**
-     * @return string
-     */
-    public function getShortText(): string
-    {
-        $text = strip_tags($this->text);
-        $lengthText = mb_strlen($text);
-        $text = mb_substr($text, 0, 220);
-        $prob = mb_strripos($text, ' ');
-        $text = mb_substr($text, 0, $prob);
-
-        if ($lengthText >= 220) {
-            $text = $text . '...';
-        }
-
-        return $text;
-    }
 
 }

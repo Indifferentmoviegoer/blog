@@ -48,6 +48,7 @@ return [
                 '/<page:\d+>/<per-page:\d+>' => '/site/index',
                 '<controller>/<page:\d+>/<per-page:\d+>' => '<controller>/index',
                 '<controller>/<action>/<page:\d+>/<per-page:\d+>' => '<controller>/<action>',
+                '<controller>/<action>/<id:\d+>' => '<controller>/<action>',
                 '<controller>' => '<controller>/index',
             ],
         ],

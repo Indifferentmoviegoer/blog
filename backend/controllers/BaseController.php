@@ -5,17 +5,45 @@ namespace backend\controllers;
 use common\models\NewsCategories;
 use Yii;
 use yii\base\Model;
+use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class BaseController extends Controller
 {
+    /**
+     * @param Query $query
+     *
+     * @return ActiveDataProvider
+     */
+    public function createDataProvider(Query $query): ActiveDataProvider
+    {
+        return new ActiveDataProvider(
+            [
+                'query' => $query,
+            ]
+        );
+    }
+
+    /**
+     * @param Model|string $value
+     *
+     * @throws NotFoundHttpException
+     */
+    public function checkEmpty($value)
+    {
+        if (empty($value)) {
+            throw new NotFoundHttpException('Страница не найдена.');
+        }
+    }
 
     /**
      * @param Model $model
      */
     public function loadCategoryList(Model $model)
     {
-        if (Yii::$app->request->post()['News']['rel']) {
+        if (isset(Yii::$app->request->post()['News']['rel'])) {
             $rel = Yii::$app->request->post()['News']['rel'];
 
             $this->deleteCategoryList($model);

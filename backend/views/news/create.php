@@ -3,6 +3,7 @@
 /* @var $this yii\web\View */
 /* @var $model common\models\News */
 /* @var $upload backend\models\UploadForm */
+/* @var $tree array */
 
 $this->title = 'Создание новости';
 $this->params['breadcrumbs'][] = ['label' => 'Новости', 'url' => ['index']];
@@ -13,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
         'model' => $model,
         'upload' => $upload,
+        'tree' => $tree,
     ]) ?>
 
 </div>

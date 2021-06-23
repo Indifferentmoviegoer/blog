@@ -14,10 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         Если у вас есть деловые запросы или другие вопросы, заполните следующую форму, чтобы связаться с нами. Спасибо.
     </p>
+
+
 
     <div class="row">
         <div class="col-lg-5">
@@ -42,5 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php ActiveForm::end(); ?>
         </div>
     </div>
+<h1>Также вы можете связаться с нами через:</h1>
+    <h3>Контактный телефон:</h3>
+    <p><?= Yii::$app->settings->get('phone')->value ?></p>
+    <h3>E-mail:</h3>
+    <p><?= Yii::$app->settings->get('email')->value ?></p>
 
 </div>

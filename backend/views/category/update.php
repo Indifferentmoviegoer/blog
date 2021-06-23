@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Category */
+/* @var $parents array */
 
 $this->title = 'Обновить категорию: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Категории', 'url' => ['index']];
@@ -12,6 +13,7 @@ $this->params['breadcrumbs'][] = 'Обновление';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'parents' => $parents,
     ]) ?>
 
 </div>

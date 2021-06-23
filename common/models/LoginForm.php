@@ -9,11 +9,11 @@ use yii\base\Model;
  */
 class LoginForm extends Model
 {
-    public string $username;
-    public string $password;
-    public bool $rememberMe = true;
+    public $username;
+    public $password;
+    public $rememberMe = true;
 
-    private ?User $_user;
+    private $_user;
 
 
     /**
@@ -32,13 +32,25 @@ class LoginForm extends Model
     }
 
     /**
+     * @return array
+     */
+    public function attributeLabels(): array
+    {
+        return [
+            'username' => 'Логин',
+            'password' => 'Пароль',
+            'rememberMe' => 'Запомнить меня',
+        ];
+    }
+
+    /**
      * Validates the password.
      * This method serves as the inline validation for password.
      *
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
      */
-    public function validatePassword(string $attribute, array $params)
+    public function validatePassword(string $attribute, $params)
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();

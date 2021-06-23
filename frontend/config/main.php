@@ -43,10 +43,13 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'detail/<id:\d+>' => 'site/detail',
-                'page-<page:\d+>-<per-page:\d+>' => 'site/index',
+                'gallery/detail/<id:\d+>' => 'gallery/detail',
+                'gallery/' => 'gallery/index',
+                '/page-<page:\d+>-<per-page:\d+>' => 'site/index',
+                'category/<id:\d+>' => 'site/category',
+                'gallery/view/id/<id:\d+>' => 'gallery/view',
                 '/<action>' => 'site/<action>',
-                '<controller>/<action>' => '<controller>/<action>',
-//                '<controller>/<action>/<page:\d+>/<per-page:\d+>' => '<controller>/<action>',
+
             ],
         ],
         'mailer' => [

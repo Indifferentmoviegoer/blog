@@ -13,7 +13,7 @@ use yii\db\ActiveRecord;
 * @property string $name
 * @property string $category_id
 * @property int $user_id
-* @property int $rating
+* @property double $rating
 * @property boolean $moderation
  */
 class Gallery extends ActiveRecord
@@ -32,9 +32,10 @@ class Gallery extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['id', 'rating', 'category_id', 'user_id'], 'integer'],
+            [['id', 'category_id', 'user_id'], 'integer'],
             ['name', 'string'],
             ['moderation', 'boolean'],
+            ['rating', 'double'],
         ];
     }
 

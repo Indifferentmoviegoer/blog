@@ -37,10 +37,10 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Главная', 'url' => ['/site/index']],
-        ['label' => 'Новости', 'url' => ['/site/news']],
+        ['label' => 'Главная', 'url' => ['/']],
+        ['label' => 'Новости', 'url' => ['/news']],
         ['label' => 'Галерея', 'url' => ['/gallery/index']],
-        ['label' => 'Контакты', 'url' => ['/site/contact']],
+        ['label' => 'Контакты', 'url' => ['/contact']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];

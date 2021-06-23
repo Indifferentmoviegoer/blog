@@ -2,7 +2,7 @@
 
 namespace common\widgets;
 
-use common\models\Gallery;
+use common\repositories\GalleryRepository;
 use yii\base\Widget;
 
 /**
@@ -25,15 +25,8 @@ class SliderWidget extends Widget
      */
     public function run(): string
     {
-        $start = date("Y-m-01 H:i:s", strtotime("-1 month"));
-        $end = date("Y-m-t H:i:s", strtotime("-1 month"));
-        $max = Gallery::find()->where(['between', 'created_at', $start, $end])->max('rating');
-
-        $slider = Gallery::find()
-            ->where(['rating' => $max])
-            ->andWhere(['between', 'created_at', $start, $end])
-            ->limit(5)
-            ->all();
+        $galleryRepository = new GalleryRepository();
+        $slider = $galleryRepository->mostPopularMonth();
 
         return $this->render('slider', ['slider' => $slider]);
     }

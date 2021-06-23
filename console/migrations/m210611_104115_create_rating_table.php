@@ -19,7 +19,7 @@ class m210611_104115_create_rating_table extends Migration
                 [
                     'id' => $this->primaryKey(),
                     'picture_id' => $this->integer()->notNull(),
-                    'user_id' => $this->integer()->notNull(),
+                    'ip' => $this->string()->notNull(),
                     'value' => $this->integer()->notNull()->defaultValue(0),
                 ],
             );

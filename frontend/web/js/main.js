@@ -11,10 +11,6 @@ function getComments(item) {
     return result;
 }
 
-// const a = document.getElementById("button");
-//
-// if(a){
-//     a.addEventListener('click', function() {
 $(function () {
     $(".show-comment").on("click", function () {
         let news_id = $(this).data('news_id');
@@ -45,12 +41,6 @@ $(function () {
     });
 });
 
-
-// const dis = document.getElementById("dislike");
-// const dis = document.querySelector('.dislike');
-//
-// if(dis) {
-//     dis.addEventListener('click', function () {
 $(function () {
     $(".dislike").on("click", function () {
         let picture_id = $(this).data('picture_id');
@@ -70,12 +60,6 @@ $(function () {
     });
 });
 
-// const like = document.getElementById("like");
-
-// const like = document.querySelector('.like');
-//
-// if(like) {
-//     like.addEventListener('click', function () {
 $(function () {
     $(".like").on("click", function () {
         let picture_id = $(this).data('picture_id');
@@ -84,8 +68,6 @@ $(function () {
             type: 'POST',
             data: {picture_id: picture_id},
             success: function () {
-                // let number = document.getElementById("count").textContent;
-                // document.getElementById("count").innerHTML = number + 1;
                 $.pjax.reload({container: "#galleryPjax-"+picture_id});
             },
             error: function () {

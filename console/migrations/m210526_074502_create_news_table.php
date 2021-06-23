@@ -24,6 +24,7 @@ class m210526_074502_create_news_table extends Migration
                     'text' => $this->text()->notNull(),
                     'published_at' => $this->dateTime()->notNull(),
                     'forbidden' => $this->boolean()->notNull(),
+                    'count_views' => $this->integer()->notNull()->defaultValue(0),
                 ]
             );
         }

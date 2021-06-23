@@ -29,28 +29,28 @@ $path = env('APP_URL') . "/img/";
 
 <?php if ($type == 1): ?>
     <input type="button" class="show-comment" data-news_id="<?= $id ?>" value="Показать все ответы">
-<?php endif; ?>
-<?php if ($type == 2): ?>
+<?php elseif ($type == 2): ?>
     <input type="button" class="show-comment" data-picture_id="<?= $id ?>" value="Показать все ответы">
 <?php endif; ?>
-    <div id="main"></div>
 
+    <div id="main"></div>
+    <br>
 <?php if (!Yii::$app->user->isGuest): ?>
     <?php
     $form = ActiveForm::begin(
         [
+            'id' => 'commentForm',
             'action' => false,
         ]
     ); ?>
     <?= $form->field($model, 'text')->textarea() ?>
     <?php if ($type == 1): ?>
         <?= $form->field($model, 'news_id')->hiddenInput(['value' => $id])->label(false) ?>
-    <?php endif; ?>
-    <?php if ($type == 2): ?>
+    <?php elseif ($type == 2): ?>
         <?= $form->field($model, 'picture_id')->hiddenInput(['value' => $id])->label(false) ?>
     <?php endif; ?>
     <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Отправить', ['class' => 'btn btn-success']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 <?php endif; ?>
@@ -58,27 +58,31 @@ $path = env('APP_URL') . "/img/";
 
 <?php
 $js = <<<JS
-    $('form').on('beforeSubmit', function () {
-let data;
-data = $(this).serialize();
-$.ajax({
-url: '/comment/create',
-type: 'POST',
-data: data,
-success: function (res) {
-     let list = document.getElementById('main2');
-                    let div = getComments(res.data);
-                    list.prepend(div);
-                
-alert('Комментарий успешно добавлен!');
-document.getElementById('comment-text').value = '';
-},
-error: function () {
-alert('Error!');
-}
-});
+    $('#commentForm').on('beforeSubmit', function () {
+    let data;
+    data = $(this).serialize();
+    $.ajax({
+        url: '/comment/create',
+        type: 'POST',
+        data: data,
+        success: function (res) {
+            if (res.moderation) {
+                alert('Комментарий отправлен на премодерацию!');
+            } else {
+                let list = document.getElementById('main2');
+                let div = getComments(res.data);
+                list.prepend(div);
+                alert('Комментарий успешно добавлен!');
+            }
 
-return false;
+            document.getElementById('comment-text').value = '';
+        },
+        error: function () {
+            alert('Error!');
+        }
+    });
+
+    return false;
 });
 JS;
 

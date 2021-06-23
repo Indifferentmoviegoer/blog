@@ -1,15 +1,15 @@
 <?php
 
-/* @var $this yii\web\View */
-
-/* @var $news common\models\News */
-/* @var $categories common\models\Category */
-
-/* @var $pages LinkPager */
-
+use common\repositories\NewsRepository;
 use common\widgets\SliderWidget;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
+
+/* @var $this yii\web\View */
+/* @var $news common\models\News */
+/* @var $categories common\models\Category */
+/* @var $pages LinkPager */
+/* @var $newsRepository NewsRepository */
 
 $this->title = 'Главная';
 $path = env('APP_URL') . "/img/uploads/";
@@ -31,7 +31,7 @@ $path = env('APP_URL') . "/img/uploads/";
                             <div class="news-content">
                                 <p class="publication"><?= $news[$i]->published_at ?></p>
                                 <h3 class="title"><?= $news[$i]->name ?></h3>
-                                <p class="category"><?= $news[$i]->categoryList() ?></p>
+                                <p class="category"><?= $newsRepository->categoryList($news[$i]) ?></p>
                                 <p class="description"><?= $news[$i]->desc ?></p>
                                 <a href="<?= Url::to(['site/detail', 'id' => $news[$i]->id]) ?>">Подробнее...
                                     <svg width="18px" height="7px" viewBox="0 0 27 12" version="1.1"
@@ -65,7 +65,7 @@ $path = env('APP_URL') . "/img/uploads/";
                             <div class="news-content">
                                 <p class="publication"><?= $news[$i]->published_at ?></p>
                                 <h3 class="title"><?= $news[$i]->name ?></h3>
-                                <p class="category"><?= $news[$i]->categoryList() ?></p>
+                                <p class="category"><?= $newsRepository->categoryList($news[$i]) ?></p>
                                 <p class="description"><?= $news[$i]->desc ?></p>
                                 <a href="<?= Url::to(['site/detail', 'id' => $news[$i]->id]) ?>">Подробнее...
                                     <svg width="18px" height="7px" viewBox="0 0 27 12" version="1.1"

@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use common\models\Picture;
 use backend\models\UploadForm;
+use common\repositories\CategoryRepository;
+use common\repositories\NewsRepository;
 use Throwable;
 use Yii;
 use common\models\News;
@@ -42,12 +44,14 @@ class NewsController extends BaseController
     {
         $searchModel = new NewsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $newsRepository = new NewsRepository();
 
         return $this->render(
             'index',
             [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'newsRepository' => $newsRepository,
             ]
         );
     }
@@ -80,6 +84,8 @@ class NewsController extends BaseController
         $model = new News();
         $upload = new UploadForm();
         $picture = new Picture();
+        $categoryRepository = new CategoryRepository();
+        $tree = $categoryRepository::getTree();
 
         if ($model->load(Yii::$app->request->post())) {
             $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
@@ -101,6 +107,7 @@ class NewsController extends BaseController
             [
                 'model' => $model,
                 'upload' => $upload,
+                'tree' => $tree,
             ]
         );
     }
@@ -119,6 +126,8 @@ class NewsController extends BaseController
         $model = $this->findModel($id);
         $upload = new UploadForm();
         $picture = Picture::findOne(['id' => $model->picture_id]);
+        $categoryRepository = new CategoryRepository();
+        $tree = $categoryRepository::getTree();
 
         if ($model->load(Yii::$app->request->post())) {
             $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
@@ -140,6 +149,7 @@ class NewsController extends BaseController
             [
                 'model' => $model,
                 'upload' => $upload,
+                'tree' => $tree,
             ]
         );
     }

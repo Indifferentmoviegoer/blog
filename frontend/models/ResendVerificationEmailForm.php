@@ -12,7 +12,7 @@ class ResendVerificationEmailForm extends Model
     /**
      * @var string
      */
-    public string $email;
+    public $email;
 
 
     /**

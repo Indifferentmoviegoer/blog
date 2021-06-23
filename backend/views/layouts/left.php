@@ -11,6 +11,7 @@
                     ['label' => 'Категории изображений', 'icon' => 'file-image-o', 'url' => ['/gallery-category/index']],
                     ['label' => 'Галерея', 'icon' => 'file-image-o', 'url' => ['/gallery/index']],
                     ['label' => 'Комментарии', 'icon' => 'comments', 'url' => ['/comment/index']],
+                    ['label' => 'Настройки', 'icon' => 'comments', 'url' => ['/setting/index']],
                 ],
             ]
         ) ?>

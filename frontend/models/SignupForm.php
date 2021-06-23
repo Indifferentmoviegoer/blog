@@ -12,9 +12,9 @@ use common\models\User;
  */
 class SignupForm extends Model
 {
-    public string $username;
-    public string $email;
-    public string $password;
+    public $username;
+    public $email;
+    public $password;
 
 
     /**
@@ -38,6 +38,19 @@ class SignupForm extends Model
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels(): array
+    {
+        return [
+            'username' => 'Логин',
+            'email' => 'Электронная почта',
+            'password' => 'Пароль'
+        ];
+    }
+
 
     /**
      * Signs user up.

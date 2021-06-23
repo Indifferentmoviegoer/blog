@@ -1,5 +1,6 @@
 <?php
 
+use common\repositories\NewsRepository;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -7,6 +8,7 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\NewsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $newsRepository NewsRepository */
 
 $this->title = 'Новости';
 $this->params['breadcrumbs'][] = $this->title;
@@ -29,8 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'yii\grid\SerialColumn'],
                 [
                     'attribute' => 'rel',
-                    'value' => function ($data) {
-                        return $data->categoryList();
+                    'value' => function ($data) use ($newsRepository) {
+                        return $newsRepository->categoryList($data);
                     },
                 ],
                 [
@@ -46,8 +48,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'text',
                     'format' => 'html',
-                    'value' => function ($data) {
-                        return $data->getShortText();
+                    'value' => function ($data) use ($newsRepository) {
+                        return $newsRepository->getShortText($data);
                     },
                 ],
 

@@ -6,7 +6,10 @@ use common\models\Rating;
 use common\models\UploadGalleryForm;
 use common\models\Gallery;
 use common\models\GalleryCategory;
+use common\repositories\GalleryRepository;
+use Throwable;
 use Yii;
+use yii\db\StaleObjectException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -92,12 +95,7 @@ class GalleryController extends Controller
 
         $model = new Gallery();
         $upload = new UploadGalleryForm();
-        $rating = new Rating();
-        $pictures = Gallery::find()->where(['category_id' => $id])->all();
-        $user = Gallery::find()
-            ->where(['user_id' => Yii::$app->user->identity->getId()])
-            ->andWhere(['moderation' => true])
-            ->count();
+        $galleryRepository = new GalleryRepository();
 
         if (Yii::$app->request->post()) {
             $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
@@ -106,23 +104,32 @@ class GalleryController extends Controller
                 $model->name = $upload->imageFile->name;
                 $model->category_id = $id;
                 $model->user_id = Yii::$app->user->identity->getId();
-                if ($user >= 5) {
+
+                if ($galleryRepository->checkModeration()) {
                     $model->moderation = true;
                 }
-                $model->save();
 
-                $rating->picture_id = $model->id;
-                $rating->user_id = Yii::$app->user->identity->getId();
-                $rating->save();
+                if($model->save()){
+                    if ($galleryRepository->checkModeration()){
+                        Yii::$app->session->setFlash('success', 'Изображение успешно загружено!');
+                    } else{
+                        Yii::$app->session->setFlash('success', 'Изображение отправлено на пре-модерацию!');
+                    }
+
+                }
             }
         }
+
+        $popularPictures = $galleryRepository->mostPopular();
+        $lastPictures = $galleryRepository->lastPictures();
 
         return $this->render(
             'view',
             [
                 'model' => $model,
                 'upload' => $upload,
-                'pictures' => $pictures,
+                'popularPictures' => $popularPictures,
+                'lastPictures' => $lastPictures,
             ]
         );
     }
@@ -132,6 +139,8 @@ class GalleryController extends Controller
      *
      * @return string
      * @throws NotFoundHttpException
+     * @throws Throwable
+     * @throws StaleObjectException
      */
     public function actionDetail($id): string
     {
@@ -139,12 +148,37 @@ class GalleryController extends Controller
             throw new NotFoundHttpException('Страница не найдена.');
         }
 
-        $model = Gallery::find()->where(['id' => $id])->one();
+        $picture = Gallery::find()->where(['id' => $id])->one();
+
+        $model = new Rating();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $oldRating = Rating::find()
+                ->where(['ip' => Yii::$app->request->userIP])
+                ->andWhere(['picture_id' => $id])
+                ->one();
+
+            if ($oldRating) {
+                $oldRating->delete();
+            }
+
+            $model->ip = Yii::$app->request->userIP;
+            $model->picture_id = $id;
+
+            if ($model->save()) {
+                $rating = Rating::find()->where(['picture_id' => $id])->average('value');
+                $picture->rating = $rating;
+                if ($picture->save()) {
+                    Yii::$app->session->setFlash('success', 'Спасибо за оценку изображения!');
+                }
+            }
+        }
 
         return $this->render(
             'detail',
             [
                 'model' => $model,
+                'picture' => $picture,
             ]
         );
     }

@@ -12,12 +12,12 @@ use common\models\User;
  */
 class UserForm extends Model
 {
-    public int $id;
-    public string $username;
-    public string $email;
-    public string $password;
-    public int  $status;
-    public int $roles;
+    public $id;
+    public $username;
+    public $email;
+    public $password;
+    public $status;
+    public $roles;
 
 
     /**
@@ -87,6 +87,7 @@ class UserForm extends Model
      * @param $id
      *
      * @return bool
+     * @throws \yii\base\Exception
      */
     public function update($id): bool
     {

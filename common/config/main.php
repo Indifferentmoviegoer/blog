@@ -43,13 +43,8 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
-        'i18n' => [
-            'translations' => [
-                'indifferend.comments' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@indifferend/comments/messages',
-                ],
-            ],
+        'settings'=>[
+            'class'=> common\components\SettingsComponent::class
         ],
     ],
 ];

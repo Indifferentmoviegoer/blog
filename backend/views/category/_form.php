@@ -6,12 +6,8 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model common\models\Category */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $parents array */
 
-$exclude = 0;
-if (!empty($model->id)) {
-    $exclude = $model->id;
-}
-$parents = $model::getTree($exclude, true);
 ?>
 
 <div class="category-form">

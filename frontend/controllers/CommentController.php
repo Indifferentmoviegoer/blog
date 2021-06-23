@@ -29,6 +29,7 @@ class CommentController extends Controller
         }
 
         $model = new Comment();
+        $preModeration = true;
 
         $user = Comment::find()
             ->where(['user_id' => Yii::$app->user->identity->getId()])
@@ -39,6 +40,7 @@ class CommentController extends Controller
             $model->user_id = Yii::$app->user->identity->getId();
             if ($user >= 5) {
                 $model->moderation = true;
+                $preModeration = false;
             }
             $model->save();
         }
@@ -47,7 +49,8 @@ class CommentController extends Controller
         $model->created_at = date("Y-m-d") . " " . date("H:i:s");
 
         return [
-            "data" => $model
+            "data" => $model,
+            "moderation" => $preModeration,
         ];
     }
 

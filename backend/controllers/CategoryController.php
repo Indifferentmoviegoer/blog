@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\repositories\CategoryRepository;
 use Throwable;
 use Yii;
 use common\models\Category;
@@ -71,12 +72,16 @@ class CategoryController extends Controller
     {
         $model = new Category();
 
+        $repository = new CategoryRepository();
+        $parents = $repository::getTree(0, true);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'parents' => $parents,
         ]);
     }
 
@@ -93,12 +98,16 @@ class CategoryController extends Controller
     {
         $model = $this->findModel($id);
 
+        $repository = new CategoryRepository();
+        $parents = $repository::getTree($id, true);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'parents' => $parents,
         ]);
     }
 

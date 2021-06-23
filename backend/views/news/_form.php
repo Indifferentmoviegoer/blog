@@ -1,6 +1,5 @@
 <?php
 
-use common\models\Category;
 use dominus77\tinymce\TinyMce;
 use kartik\datetime\DateTimePicker;
 use kartik\file\FileInput;
@@ -12,6 +11,7 @@ use yii\widgets\ActiveForm;
 /* @var $model common\models\News */
 /* @var $upload backend\models\UploadForm */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $tree array */
 
 $path = env('APP_URL') . "/img/uploads/";
 $param = ['options' => [$model->forbidden => ['Selected' => true]]];
@@ -39,7 +39,7 @@ $dropDownItems = ['0' => 'Разрешен', '1' => 'Запрещен'];
     echo $form->field($model, 'rel')->widget(
         Select2::class,
         [
-            'data' => Category::getTree(),
+            'data' => $tree,
             'language' => 'ru',
             'options' => ['placeholder' => 'Выберите категорию'],
             'pluginOptions' => [

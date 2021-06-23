@@ -1,6 +1,6 @@
 <?php
 
-use common\models\Category;
+use common\repositories\NewsRepository;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\widgets\Menu;
@@ -8,6 +8,8 @@ use yii\widgets\Menu;
 /* @var $this yii\web\View */
 /* @var $news common\models\News */
 /* @var $pages LinkPager */
+/* @var $newsRepository NewsRepository */
+/* @var $menu array */
 
 $this->title = 'Новости';
 $path = env('APP_URL') . "/img/uploads/";
@@ -19,7 +21,7 @@ echo Menu::widget([
                          'encodeLabels'=>false,
                          'activateParents'=>true,
                          'activeCssClass'=>'current-menu-item',
-                         'items' => Category::viewMenuItems(),
+                         'items' => $menu,
                      ]);?>
 <div class="body-content">
         <?php for ($i = 0; $i < count($news); $i++): ?>
@@ -36,7 +38,7 @@ echo Menu::widget([
                             <div class="news-content">
                                 <p class="publication"><?= $news[$i]->published_at ?></p>
                                 <h3 class="title"><?= $news[$i]->name ?></h3>
-                                <p class="category"><?= $news[$i]->categoryList() ?></p>
+                                <p class="category"><?= $newsRepository->categoryList($news[$i]) ?></p>
                                 <p class="description"><?= $news[$i]->desc ?></p>
                                 <a href="<?= Url::to(['site/detail', 'id' => $news[$i]->id]) ?>">Подробнее...
                                     <svg width="18px" height="7px" viewBox="0 0 27 12" version="1.1"
@@ -70,7 +72,7 @@ echo Menu::widget([
                             <div class="news-content">
                                 <p><?= $news[$i]->published_at ?></p>
                                 <h3><?= $news[$i]->name ?></h3>
-                                <p class="category"><?= $news[$i]->categoryList() ?></p>
+                                <p class="category"><?= $newsRepository->categoryList($news[$i]) ?></p>
                                 <p><?= $news[$i]->desc ?></p>
                                 <a href="<?= Url::to(['site/detail', 'id' => $news[$i]->id]) ?>">Подробнее...
                                     <svg width="18px" height="7px" viewBox="0 0 27 12" version="1.1"

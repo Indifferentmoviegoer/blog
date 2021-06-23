@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
  *
  * @property int id
  * @property int picture_id
- * @property int user_id
+ * @property string ip
  * @property int value
  */
 class Rating extends ActiveRecord
@@ -31,7 +31,8 @@ class Rating extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['id', 'picture_id', 'user_id', 'value'], 'integer'],
+            [['id', 'picture_id', 'value'], 'integer'],
+            [['ip'], 'string'],
         ];
     }
 
@@ -43,7 +44,7 @@ class Rating extends ActiveRecord
         return [
             'id' => 'ID',
             'picture_id' => 'Изображение',
-            'user_id' => 'Пользователь',
+            'ip' => 'Пользователь',
             'value' => 'Значение',
         ];
     }

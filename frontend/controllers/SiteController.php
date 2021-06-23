@@ -3,7 +3,8 @@
 namespace frontend\controllers;
 
 use common\models\NewsCategories;
-use DateTime;
+use common\repositories\CategoryRepository;
+use common\repositories\NewsRepository;
 use common\models\Category;
 use common\models\News;
 use Exception;
@@ -83,18 +84,22 @@ class SiteController extends Controller
      */
     public function actionIndex(): string
     {
-        $weekAgo = (new DateTime())->modify('-7 days');
-        $searchWeek = $weekAgo->format('Y-m-d');
         $categories = Category::find()->all();
+        $newsRepository = new NewsRepository();
 
-        $allNews = News::find()
-            ->where('published_at<=NOW()')
-            ->andWhere(['>=', 'published_at', $searchWeek])
-            ->orderBy(['published_at' => SORT_DESC]);
+        $allNews = $newsRepository->getWeekNews();
         $pages = new Pagination(['totalCount' => $allNews->count(), 'pageSize' => 20]);
         $news = $allNews->offset($pages->offset)->limit($pages->limit)->all();
 
-        return $this->render('index', ['news' => $news, 'pages' => $pages, 'categories' => $categories]);
+        return $this->render(
+            'index',
+            [
+                'news' => $news,
+                'pages' => $pages,
+                'categories' => $categories,
+                'newsRepository' => $newsRepository
+            ]
+        );
     }
 
     /**
@@ -107,16 +112,23 @@ class SiteController extends Controller
         $catIds = NewsCategories::find()->where(['category_id' => $id])->all();
         $ids = $this->arrayListProduct($catIds);
 
-        $allNews = News::find()
-            ->where('published_at<=NOW()')
-            ->andWhere(['in', 'id', $ids])
-            ->orderBy(['published_at' => SORT_DESC]);
+        $categoryRepository = new CategoryRepository();
+        $newsRepository = new NewsRepository();
+
+        $menu = $categoryRepository::viewMenuItems();
+
+        $allNews = $newsRepository->getCategoryNews($ids);
         $pages = new Pagination(['totalCount' => $allNews->count(), 'pageSize' => 20]);
         $news = $allNews->offset($pages->offset)->limit($pages->limit)->all();
 
-        return $this->render('news', ['news' => $news, 'pages' => $pages]);
+        return $this->render('news', ['news' => $news, 'pages' => $pages, 'menu' => $menu, 'newsRepository' => $newsRepository]);
     }
 
+    /**
+     * @param $items
+     *
+     * @return array|string[]
+     */
     public function arrayListProduct($items): array
     {
         if (!empty($items)) {
@@ -143,6 +155,9 @@ class SiteController extends Controller
             throw new NotFoundHttpException('Страница не найдена.');
         }
 
+        $news->count_views = $news->count_views+1;
+        $news->save();
+
         return $this->render('detail', ['news' => $news]);
     }
 
@@ -151,14 +166,18 @@ class SiteController extends Controller
      */
     public function actionNews(): string
     {
-        $allNews = News::find()
-            ->where('published_at<=NOW()')
-            ->orderBy(['published_at' => SORT_DESC]);
+        $newsRepository = new NewsRepository();
+        $allNews = $newsRepository->getNews();
+        $categoryRepository = new CategoryRepository();
+        $menu = $categoryRepository::viewMenuItems();
 
         $pages = new Pagination(['totalCount' => $allNews->count(), 'pageSize' => 20]);
         $news = $allNews->offset($pages->offset)->limit($pages->limit)->all();
 
-        return $this->render('news', ['news' => $news, 'pages' => $pages]);
+        return $this->render(
+            'news',
+            ['news' => $news, 'pages' => $pages, 'newsRepository' => $newsRepository, 'menu' => $menu]
+        );
     }
 
     /**
@@ -211,10 +230,10 @@ class SiteController extends Controller
             if ($model->sendEmail($model->email)) {
                 Yii::$app->session->setFlash(
                     'success',
-                    'Thank you for contacting us. We will respond to you as soon as possible.'
+                    'Спасибо, что связались с нами. Мы ответим вам как можно скорее.'
                 );
             } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
+                Yii::$app->session->setFlash('error', 'Произошла ошибка при отправке вашего сообщения.');
             }
 
             return $this->refresh();
@@ -250,7 +269,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             Yii::$app->session->setFlash(
                 'success',
-                'Thank you for registration. Please check your inbox for verification email.'
+                'Спасибо за регистрацию. Пожалуйста, проверьте свой почтовый ящик на наличие электронной почты.'
             );
             return $this->goHome();
         }
@@ -267,19 +286,20 @@ class SiteController extends Controller
      * Requests password reset.
      *
      * @return Response|string
+     * @throws \yii\base\Exception
      */
     public function actionRequestPasswordReset()
     {
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->session->setFlash('success', 'Проверьте свою электронную почту для получения дальнейших инструкций.');
 
                 return $this->goHome();
             } else {
                 Yii::$app->session->setFlash(
                     'error',
-                    'Sorry, we are unable to reset password for the provided email address.'
+                    'К сожалению, мы не можем сбросить пароль для указанного адреса электронной почты.'
                 );
             }
         }
@@ -299,6 +319,7 @@ class SiteController extends Controller
      *
      * @return Response|string
      * @throws BadRequestHttpException
+     * @throws \yii\base\Exception
      */
     public function actionResetPassword(string $token)
     {
@@ -309,7 +330,7 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
+            Yii::$app->session->setFlash('success', 'Сохранен новый пароль.');
 
             return $this->goHome();
         }
@@ -339,12 +360,12 @@ class SiteController extends Controller
         }
         if ($user = $model->verifyEmail()) {
             if (Yii::$app->user->login($user)) {
-                Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
+                Yii::$app->session->setFlash('success', 'Ваша электронная почта подтверждена!');
                 return $this->goHome();
             }
         }
 
-        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
+        Yii::$app->session->setFlash('error', 'К сожалению, мы не можем подтвердить вашу учетную запись с помощью предоставленного токена.');
         return $this->goHome();
     }
 
@@ -358,12 +379,12 @@ class SiteController extends Controller
         $model = new ResendVerificationEmailForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->session->setFlash('success', 'Проверьте свою электронную почту для получения дальнейших инструкций.');
                 return $this->goHome();
             }
             Yii::$app->session->setFlash(
                 'error',
-                'Sorry, we are unable to resend verification email for the provided email address.'
+                'К сожалению, мы не можем повторно отправить письмо с подтверждением на указанный адрес электронной почты.'
             );
         }
 
