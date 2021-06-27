@@ -33,6 +33,7 @@ class Rating extends ActiveRecord
         return [
             [['id', 'picture_id', 'value'], 'integer'],
             [['ip'], 'string'],
+            [['value'], 'required'],
         ];
     }
 
@@ -45,7 +46,7 @@ class Rating extends ActiveRecord
             'id' => 'ID',
             'picture_id' => 'Изображение',
             'ip' => 'Пользователь',
-            'value' => 'Значение',
+            'value' => 'Оценка',
         ];
     }
 

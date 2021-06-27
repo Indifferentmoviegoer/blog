@@ -17,6 +17,9 @@ return [
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
+        'assetManager' => [
+            'appendTimestamp' => true,
+            ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,

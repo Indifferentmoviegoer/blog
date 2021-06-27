@@ -17,11 +17,13 @@ $path = env('APP_URL') . "/img/";
     <div id="main2"></div>
     <div>
         <?php foreach ($comments as $comment): ?>
-            <div class="comment" style="background-color: white">
-                <img src=" <?= $path ?>profile.jpeg" width="50px" alt="">
-                <p><?= $comment->user->username ?></p>
-                <p><?= $comment->text ?></p>
-                <p><?= $comment->created_at ?></p>
+            <div class="news-detail">
+                <div class="container">
+                        <img src=" <?= $path ?>profile.jpeg" width="50px" alt="">
+                        <p><?= $comment->user->username ?></p>
+                        <p><?= $comment->text ?></p>
+                        <p><?= $comment->created_at ?></p>
+                </div>
             </div>
             <br>
         <?php endforeach; ?>
@@ -35,6 +37,7 @@ $path = env('APP_URL') . "/img/";
 
     <div id="main"></div>
     <br>
+
 <?php if (!Yii::$app->user->isGuest): ?>
     <?php
     $form = ActiveForm::begin(

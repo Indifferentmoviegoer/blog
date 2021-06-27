@@ -11,9 +11,15 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 /* @var $upload common\models\UploadGalleryForm */
 /* @var $categories GalleryCategory */
+
+$path = env('APP_URL') . "/img/uploads/gallery/";
 ?>
 
 <div class="gallery-form">
+
+    <?php if (!$model->isNewRecord): ?>
+        <img src="<?= $path . $model->name ?>" alt="" width="400px" height="300px">
+    <?php endif; ?>
 
     <?php $form = ActiveForm::begin(); ?>
 

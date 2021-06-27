@@ -106,13 +106,24 @@ class GalleryController extends Controller
     public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
+        $upload = new UploadGalleryForm();
+        $categories = GalleryCategory::find()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+
+            if ($upload->upload()) {
+                $model->name = $upload->imageFile->name;
+            }
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'upload' => $upload,
+            'categories' => $categories,
         ]);
     }
 

@@ -7,10 +7,11 @@ use common\models\UploadGalleryForm;
 use common\models\Gallery;
 use common\models\GalleryCategory;
 use common\repositories\GalleryRepository;
+use common\repositories\RatingRepository;
 use Throwable;
 use Yii;
+use yii\data\Pagination;
 use yii\db\StaleObjectException;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -121,7 +122,9 @@ class GalleryController extends Controller
         }
 
         $popularPictures = $galleryRepository->mostPopular();
-        $lastPictures = $galleryRepository->lastPictures();
+        $allLastPictures = $galleryRepository->lastPictures();
+        $pages = new Pagination(['totalCount' => $allLastPictures->count(), 'pageSize' => 5]);
+        $lastPictures = $allLastPictures->offset($pages->offset)->limit($pages->limit)->all();
 
         return $this->render(
             'view',
@@ -130,6 +133,7 @@ class GalleryController extends Controller
                 'upload' => $upload,
                 'popularPictures' => $popularPictures,
                 'lastPictures' => $lastPictures,
+                'pages' => $pages,
             ]
         );
     }
@@ -151,12 +155,10 @@ class GalleryController extends Controller
         $picture = Gallery::find()->where(['id' => $id])->one();
 
         $model = new Rating();
+        $ratingRepository = new RatingRepository();
 
         if ($model->load(Yii::$app->request->post())) {
-            $oldRating = Rating::find()
-                ->where(['ip' => Yii::$app->request->userIP])
-                ->andWhere(['picture_id' => $id])
-                ->one();
+            $oldRating = $ratingRepository->oldRating($id);
 
             if ($oldRating) {
                 $oldRating->delete();
@@ -166,8 +168,8 @@ class GalleryController extends Controller
             $model->picture_id = $id;
 
             if ($model->save()) {
-                $rating = Rating::find()->where(['picture_id' => $id])->average('value');
-                $picture->rating = $rating;
+                $avgRating = $ratingRepository->avgRating($id);
+                $picture->rating = $avgRating;
                 if ($picture->save()) {
                     Yii::$app->session->setFlash('success', 'Спасибо за оценку изображения!');
                 }
@@ -182,89 +184,4 @@ class GalleryController extends Controller
             ]
         );
     }
-
-    /**
-     * @throws BadRequestHttpException
-     */
-    public function actionDislike()
-    {
-        $request = Yii::$app->request;
-
-        if (!$request->isPost || !isset(Yii::$app->request->post()['picture_id'])) {
-            throw new BadRequestHttpException();
-        }
-
-        $pictureID = Yii::$app->request->post()['picture_id'];
-
-        $rating = Rating::find()
-            ->where(['picture_id' => $pictureID])
-            ->andWhere(['user_id' => Yii::$app->user->identity->getId()])
-            ->one();
-
-        $picture = Gallery::findOne($pictureID);
-
-        if (!$rating) {
-            $rating = new Rating();
-            $rating->picture_id = $pictureID;
-            $rating->value = -1;
-            $rating->user_id = Yii::$app->user->identity->getId();
-            $rating->save();
-
-            if ($rating->value == -1) {
-                $picture->rating = $picture->rating - 1;
-                $picture->save();
-            }
-        } else {
-            if ($rating->value != -1) {
-                $rating->value = $rating->value - 1;
-                $rating->save();
-
-                $picture->rating = $picture->rating - 1;
-                $picture->save();
-            }
-        }
-    }
-
-    /**
-     * @throws BadRequestHttpException
-     */
-    public function actionLike()
-    {
-        $request = Yii::$app->request;
-
-        if (!$request->isPost || !isset(Yii::$app->request->post()['picture_id'])) {
-            throw new BadRequestHttpException();
-        }
-
-        $pictureID = Yii::$app->request->post()['picture_id'];
-
-        $rating = Rating::find()
-            ->where(['picture_id' => $pictureID])
-            ->andWhere(['user_id' => Yii::$app->user->identity->getId()])
-            ->one();
-
-        $picture = Gallery::findOne($pictureID);
-
-        if (!$rating) {
-            $rating = new Rating();
-            $rating->picture_id = $pictureID;
-            $rating->value = 1;
-            $rating->user_id = Yii::$app->user->identity->getId();
-            $rating->save();
-
-            if ($rating->value == 1) {
-                $picture->rating = $picture->rating + 1;
-                $picture->save();
-            }
-        } else {
-            if ($rating->value != 1) {
-                $rating->value = $rating->value + 1;
-                $rating->save();
-
-                $picture->rating = $picture->rating + 1;
-                $picture->save();
-            }
-        }
-    }
-
 }

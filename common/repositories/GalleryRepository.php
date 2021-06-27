@@ -4,6 +4,7 @@ namespace common\repositories;
 
 use common\models\Gallery;
 use Yii;
+use yii\db\ActiveQuery;
 
 class GalleryRepository
 {
@@ -18,6 +19,7 @@ class GalleryRepository
 
         return Gallery::find()
             ->where(['rating' => $max])
+            ->andWhere(['moderation' => true])
             ->andWhere(['between', 'created_at', $start, $end])
             ->limit(5)
             ->all();
@@ -31,20 +33,22 @@ class GalleryRepository
         $max = Gallery::find()->max('rating');
 
         return Gallery::find()
-            ->where(['rating' => $max])
+            ->where(['moderation' => true])
+            ->andWhere(['rating' => $max])
             ->limit(5)
             ->all();
     }
 
+
     /**
-     * @return array
+     * @return ActiveQuery
      */
-    public function lastPictures(): array
+    public function lastPictures(): ActiveQuery
     {
         return Gallery::find()
+            ->where(['moderation' => true])
             ->orderBy(['created_at' => SORT_DESC])
-            ->limit(20)
-            ->all();
+            ->limit(20);
     }
 
     /**

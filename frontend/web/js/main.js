@@ -1,11 +1,13 @@
 function getComments(item) {
     let result = document.createElement('div');
     result.innerHTML = '\
-<div class="comment" style="background-color: white">\
+<div class="news-detail">\
+<div class="container">\
 <img src="/img/profile.jpeg" width="50px" alt="">\
 <p>' + item.user_id + '</p>\
 <p>' + item.text + '</p>\
 <p>' + item.created_at + '</p>\
+</div>\
 </div>\
 <br>';
     return result;
@@ -34,44 +36,6 @@ $(function () {
             },
             error: function () {
                 alert('Комментариев не найдено!');
-            }
-        });
-
-        return false;
-    });
-});
-
-$(function () {
-    $(".dislike").on("click", function () {
-        let picture_id = $(this).data('picture_id');
-        $.ajax({
-            url: '/gallery/dislike',
-            type: 'POST',
-            data: {picture_id: picture_id},
-            success: function () {
-                $.pjax.reload({container: "#galleryPjax-"+picture_id});
-            },
-            error: function () {
-                alert('Авторизуйтесь для оценки изображения!');
-            }
-        });
-
-        return false;
-    });
-});
-
-$(function () {
-    $(".like").on("click", function () {
-        let picture_id = $(this).data('picture_id');
-        $.ajax({
-            url: '/gallery/like',
-            type: 'POST',
-            data: {picture_id: picture_id},
-            success: function () {
-                $.pjax.reload({container: "#galleryPjax-"+picture_id});
-            },
-            error: function () {
-                alert('Авторизуйтесь для оценки изображения!');
             }
         });
 
