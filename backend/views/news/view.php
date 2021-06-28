@@ -13,28 +13,38 @@ $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
 ?>
 <div class="news-view">
+    <div class="box">
+        <div class="box-body">
+            <p>
+                <?= Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a(
+                    'Удалить',
+                    ['delete', 'id' => $model->id],
+                    [
+                        'class' => 'btn btn-danger',
+                        'data' => [
+                            'confirm' => 'Are you sure you want to delete this item?',
+                            'method' => 'post',
+                        ],
+                    ]
+                ) ?>
+            </p>
 
-    <p>
-        <?= Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+            <?php
+            echo DetailView::widget(
+                [
+                    'model' => $model,
+                    'attributes' => [
+                        'id',
+                        'picture_id',
+                        'name',
+                        'desc',
+                        'text:ntext',
+                        'published_at',
+                    ],
+                ]
+            ); ?>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'picture_id',
-            'name',
-            'desc',
-            'text:ntext',
-            'published_at',
-        ],
-    ]) ?>
-
+        </div>
+    </div>
 </div>

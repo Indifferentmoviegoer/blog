@@ -10,11 +10,11 @@ use yii\widgets\LinkPager;
 
 /* @var $popularPictures Gallery */
 /* @var $lastPictures Gallery */
-/* @var $upload common\models\UploadGalleryForm */
 /* @var $categories GalleryCategory */
 /* @var $pages LinkPager */
+/* @var $model Gallery */
 
-$path = env('APP_URL') . "/img/uploads/gallery/";
+$path = env('APP_URL');
 ?>
 <div class="news-detail">
     <div class="container">
@@ -56,7 +56,7 @@ $path = env('APP_URL') . "/img/uploads/gallery/";
 
     <?php $form = ActiveForm::begin(); ?>
     <?php
-    echo $form->field($upload, 'imageFile')->widget(
+    echo $form->field($model, 'name')->widget(
         FileInput::class,
         [
             'options' => ['accept' => 'image/*'],

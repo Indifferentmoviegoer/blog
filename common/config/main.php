@@ -46,5 +46,9 @@ return [
         'settings'=>[
             'class'=> common\components\SettingsComponent::class
         ],
+        'image'=>[
+            'class'=> common\components\UploadImageComponent::class
+        ],
+
     ],
 ];

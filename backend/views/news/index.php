@@ -14,61 +14,64 @@ $this->title = 'Новости';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+
 <div class="news-index">
+    <div class="box">
+        <div class="box-body">
+            <p>
+                <?= Html::a('Создать новость', ['create'], ['class' => 'btn btn-success']) ?>
+            </p>
 
-    <p>
-        <?= Html::a('Создать новость', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+            <?php Pjax::begin(); ?>
 
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget(
-        [
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+            <?php
+            echo GridView::widget(
                 [
-                    'attribute' => 'rel',
-                    'value' => function ($data) use ($newsRepository) {
-                        return $newsRepository->categoryList($data);
-                    },
-                ],
-                [
-                    'attribute' => 'picture_id',
-                    'value' => function ($data) {
-                        $path = env('APP_URL') . "/img/uploads/";
-                        return '<img src="' . $path . $data->picture->name . '"  width="240px" alt="">';
-                    },
-                    'format' => 'raw'
-                ],
-                'name',
-                'desc',
-                [
-                    'attribute' => 'text',
-                    'format' => 'html',
-                    'value' => function ($data) use ($newsRepository) {
-                        return $newsRepository->getShortText($data);
-                    },
-                ],
+                    'dataProvider' => $dataProvider,
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        [
+                            'attribute' => 'rel',
+                            'value' => function ($data) use ($newsRepository) {
+                                return $newsRepository->categoryList($data);
+                            },
+                        ],
+                        [
+                            'attribute' => 'picture_id',
+                            'value' => function ($data) {
+                                $path = env('APP_URL');
+                                return '<img src="' . $path . $data->picture->name . '"  width="240px" alt="">';
+                            },
+                            'format' => 'raw'
+                        ],
+                        'name',
+                        'desc',
+                        [
+                            'attribute' => 'text',
+                            'format' => 'html',
+                            'value' => function ($data) use ($newsRepository) {
+                                return $newsRepository->getShortText($data);
+                            },
+                        ],
 
-                'published_at',
-                [
-                    'attribute' => 'forbidden',
-                    'value' => function ($data) {
-                        if ($data->forbidden == 1) {
-                            return "Запрещен";
-                        }
-                        return "Разрешен";
-                    },
-                ],
+                        'published_at',
+                        [
+                            'attribute' => 'forbidden',
+                            'value' => function ($data) {
+                                if ($data->forbidden == 1) {
+                                    return "Запрещен";
+                                }
+                                return "Разрешен";
+                            },
+                        ],
 
-                ['class' => 'yii\grid\ActionColumn'],
-            ],
-        ]
-    ); ?>
+                        ['class' => 'yii\grid\ActionColumn'],
+                    ],
+                ]
+            ); ?>
 
-    <?php Pjax::end(); ?>
+            <?php Pjax::end(); ?>
 
+        </div>
+    </div>
 </div>

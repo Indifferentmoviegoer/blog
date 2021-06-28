@@ -3,7 +3,6 @@
 namespace backend\controllers;
 
 use common\models\Picture;
-use backend\models\UploadForm;
 use common\repositories\CategoryRepository;
 use common\repositories\NewsRepository;
 use Throwable;
@@ -82,21 +81,31 @@ class NewsController extends BaseController
     public function actionCreate()
     {
         $model = new News();
-        $upload = new UploadForm();
         $picture = new Picture();
         $categoryRepository = new CategoryRepository();
         $tree = $categoryRepository::getTree();
 
         if ($model->load(Yii::$app->request->post())) {
-            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+            $file = UploadedFile::getInstance($picture, 'name');
+            if(!$file){
+                Yii::$app->session->setFlash('error', 'Изображение не загружено!');
 
-            if ($upload->upload()) {
-                $picture->name = $upload->imageFile->name;
-                $picture->save();
-                $model->picture_id = $picture->id;
-                $model->save();
-                $this->loadCategoryList($model);
+                return $this->render(
+                    'create',
+                    [
+                        'model' => $model,
+                        'picture' => $picture,
+                        'tree' => $tree,
+                    ]
+                );
             }
+
+            $picture->name = Yii::$app->image->uploadFile($file, 'uploads');
+            $picture->save();
+
+            $model->picture_id = $picture->id;
+            $model->save();
+            $this->loadCategoryList($model);
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -106,7 +115,7 @@ class NewsController extends BaseController
             'create',
             [
                 'model' => $model,
-                'upload' => $upload,
+                'picture' => $picture,
                 'tree' => $tree,
             ]
         );
@@ -124,16 +133,14 @@ class NewsController extends BaseController
     public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
-        $upload = new UploadForm();
         $picture = Picture::findOne(['id' => $model->picture_id]);
         $categoryRepository = new CategoryRepository();
         $tree = $categoryRepository::getTree();
 
         if ($model->load(Yii::$app->request->post())) {
-            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
-
-            if ($upload->upload()) {
-                $picture->name = $upload->imageFile->name;
+            $file = UploadedFile::getInstance($picture, 'name');
+            if($file){
+                $picture->name = Yii::$app->image->uploadFile($file, 'uploads');
                 $picture->save();
             }
 
@@ -148,7 +155,7 @@ class NewsController extends BaseController
             'update',
             [
                 'model' => $model,
-                'upload' => $upload,
+                'picture' => $picture,
                 'tree' => $tree,
             ]
         );
@@ -167,7 +174,9 @@ class NewsController extends BaseController
      */
     public function actionDelete(int $id): Response
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        Yii::$app->image->deleteFile($model->name);
+        $model->delete();
 
         return $this->redirect(['index']);
     }

@@ -19,11 +19,11 @@ use common\models\Gallery;
                 <?php for ($i = 0; $i < count($slider); $i++): ?>
                     <?php if ($i == 0): ?>
                         <div class="item active">
-                            <img src="/img/uploads/gallery/<?= $slider[$i]->name ?>" alt="">
+                            <img src="<?= $slider[$i]->name ?>" alt="">
                         </div>
                     <?php else: ?>
                         <div class="item">
-                            <img src="/img/uploads/gallery/<?= $slider[$i]->name ?>" alt="">
+                            <img src="<?= $slider[$i]->name ?>" alt="">
                         </div>
                     <?php endif; ?>
                 <?php endfor; ?>

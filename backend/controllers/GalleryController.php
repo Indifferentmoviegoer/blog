@@ -3,7 +3,6 @@
 namespace backend\controllers;
 
 use common\models\GalleryCategory;
-use common\models\UploadGalleryForm;
 use Throwable;
 use Yii;
 use common\models\Gallery;
@@ -44,10 +43,13 @@ class GalleryController extends Controller
         $searchModel = new GallerySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->render(
+            'index',
+            [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]
+        );
     }
 
     /**
@@ -60,9 +62,12 @@ class GalleryController extends Controller
      */
     public function actionView(int $id): string
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        return $this->render(
+            'view',
+            [
+                'model' => $this->findModel($id),
+            ]
+        );
     }
 
     /**
@@ -73,25 +78,35 @@ class GalleryController extends Controller
     public function actionCreate()
     {
         $model = new Gallery();
-        $upload = new UploadGalleryForm();
         $categories = GalleryCategory::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
-            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+            $file = UploadedFile::getInstance($model, 'name');
+            if(!$file){
+                Yii::$app->session->setFlash('error', 'Изображение не загружено!');
 
-            if ($upload->upload()) {
-                $model->name = $upload->imageFile->name;
-                $model->save();
+                return $this->render(
+                    'create',
+                    [
+                        'model' => $model,
+                        'categories' => $categories,
+                    ]
+                );
             }
+
+            $model->name = Yii::$app->image->uploadFile($file, 'gallery');
+            $model->save();
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-            'upload' => $upload,
-            'categories' => $categories,
-        ]);
+        return $this->render(
+            'create',
+            [
+                'model' => $model,
+                'categories' => $categories,
+            ]
+        );
     }
 
     /**
@@ -106,25 +121,25 @@ class GalleryController extends Controller
     public function actionUpdate(int $id)
     {
         $model = $this->findModel($id);
-        $upload = new UploadGalleryForm();
         $categories = GalleryCategory::find()->all();
 
         if ($model->load(Yii::$app->request->post())) {
-            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
-
-            if ($upload->upload()) {
-                $model->name = $upload->imageFile->name;
+            $file = UploadedFile::getInstance($model, 'name');
+            if($file) {
+                $model->name = Yii::$app->image->uploadFile($file, 'gallery');
             }
             $model->save();
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
-            'model' => $model,
-            'upload' => $upload,
-            'categories' => $categories,
-        ]);
+        return $this->render(
+            'update',
+            [
+                'model' => $model,
+                'categories' => $categories,
+            ]
+        );
     }
 
     /**
@@ -140,7 +155,9 @@ class GalleryController extends Controller
      */
     public function actionDelete(int $id): Response
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        Yii::$app->image->deleteFile($model->name);
+        $model->delete();
 
         return $this->redirect(['index']);
     }

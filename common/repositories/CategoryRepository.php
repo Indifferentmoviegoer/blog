@@ -21,13 +21,16 @@ class CategoryRepository
             ->asArray()
             ->all();
         $result = [];
+
         foreach ($children as $category) {
             if ($category['id'] == $exclude) {
                 continue;
             }
+
             if ($level) {
                 $category['name'] = str_repeat('— ', $level) . $category['name'];
             }
+
             $result[] = $category;
             $result = array_merge(
                 $result,

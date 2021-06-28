@@ -15,12 +15,11 @@ class GalleryRepository
     {
         $start = date("Y-m-01 H:i:s", strtotime("-1 month"));
         $end = date("Y-m-t H:i:s", strtotime("-1 month"));
-        $max = Gallery::find()->where(['between', 'created_at', $start, $end])->max('rating');
 
         return Gallery::find()
-            ->where(['rating' => $max])
-            ->andWhere(['moderation' => true])
+            ->where(['moderation' => true])
             ->andWhere(['between', 'created_at', $start, $end])
+            ->orderBy(['rating' => SORT_DESC])
             ->limit(5)
             ->all();
     }
@@ -30,11 +29,9 @@ class GalleryRepository
      */
     public function mostPopular(): array
     {
-        $max = Gallery::find()->max('rating');
-
         return Gallery::find()
             ->where(['moderation' => true])
-            ->andWhere(['rating' => $max])
+            ->orderBy(['rating' => SORT_DESC])
             ->limit(5)
             ->all();
     }

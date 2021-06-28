@@ -12,27 +12,38 @@ $this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' =
 $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
 ?>
+
 <div class="user-view">
+    <div class="box">
+        <div class="box-body">
+            <p>
+                <?= Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a(
+                    'Удалить',
+                    ['delete', 'id' => $model->id],
+                    [
+                        'class' => 'btn btn-danger',
+                        'data' => [
+                            'confirm' => 'Are you sure you want to delete this item?',
+                            'method' => 'post',
+                        ],
+                    ]
+                ) ?>
+            </p>
 
-    <p>
-        <?= Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+            <?php
+            echo DetailView::widget(
+                [
+                    'model' => $model,
+                    'attributes' => [
+                        'id',
+                        'username',
+                        'email:email',
+                        'status',
+                    ],
+                ]
+            ); ?>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'username',
-            'email:email',
-            'status',
-        ],
-    ]) ?>
-
+        </div>
+    </div>
 </div>

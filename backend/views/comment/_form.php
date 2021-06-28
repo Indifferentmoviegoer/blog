@@ -8,20 +8,24 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="gallery-form">
+<div class="comment-form">
+    <div class="box">
+        <div class="box-body">
 
-    <?php $form = ActiveForm::begin(); ?>
+            <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
-    <?= $form->field($model, 'picture_id')->textInput() ?>
-    <?= $form->field($model, 'news_id')->textInput() ?>
-    <?= $form->field($model, 'text')->textInput() ?>
-    <?= $form->field($model, 'moderation')->dropDownList(['0' => 'Да', '1' => 'Нет']) ?>
+            <?= $form->field($model, 'user_id')->textInput() ?>
+            <?= $form->field($model, 'picture_id')->textInput() ?>
+            <?= $form->field($model, 'news_id')->textInput() ?>
+            <?= $form->field($model, 'text')->textInput() ?>
+            <?= $form->field($model, 'moderation')->dropDownList(['0' => 'Да', '1' => 'Нет']) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+            <div class="form-group">
+                <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+            </div>
+
+            <?php ActiveForm::end(); ?>
+
+        </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>

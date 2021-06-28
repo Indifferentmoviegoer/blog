@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
 * @property int $id
 * @property string $name
 * @property string $category_id
+* @property string $created_at
 * @property int $user_id
 * @property double $rating
 * @property boolean $moderation
@@ -33,7 +34,8 @@ class Gallery extends ActiveRecord
     {
         return [
             [['id', 'category_id', 'user_id'], 'integer'],
-            ['name', 'string'],
+            [['name', 'created_at'], 'string'],
+            ['name', 'file', 'extensions' => 'jpg, png, jpeg'],
             ['moderation', 'boolean'],
             ['rating', 'double'],
         ];
@@ -46,11 +48,12 @@ class Gallery extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Наименование',
+            'name' => 'Изображение',
             'category_id' => 'Категория',
             'user_id' => 'Пользователь',
             'rating' => 'Рейтинг',
             'moderation' => 'Пре-модерация',
+            'created_at' => 'Загружено',
         ];
     }
 

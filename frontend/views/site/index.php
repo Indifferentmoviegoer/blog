@@ -12,7 +12,7 @@ use yii\widgets\LinkPager;
 /* @var $newsRepository NewsRepository */
 
 $this->title = 'Главная';
-$path = env('APP_URL') . "/img/uploads/";
+$path = env('APP_URL');
 ?>
 <div class="site-index">
     <?= SliderWidget::widget() ?>

@@ -4,7 +4,6 @@ use common\models\GalleryCategory;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Gallery */
-/* @var $upload common\models\UploadGalleryForm */
 /* @var $categories GalleryCategory */
 
 $this->title = 'Загрузка изображения';
@@ -15,7 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
-        'upload' => $upload,
         'categories' => $categories,
     ]) ?>
 

@@ -42,5 +42,9 @@ phpunit.phar
 /backend/web/index-test.php
 /backend/web/robots.txt
 
+# Конфиденциальные данные
 .env
+
+# Загруженные изображения
 /frontend/web/img/uploads
+/frontend/web/img/gallery

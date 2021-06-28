@@ -12,52 +12,55 @@ $this->title = 'Пользователи';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
+    <div class="box">
+        <div class="box-body">
+            <p><?= Html::a('Создать пользователя', ['create'], ['class' => 'btn btn-success']) ?></p>
 
-    <p><?= Html::a('Создать пользователя', ['create'], ['class' => 'btn btn-success']) ?></p>
+            <?php Pjax::begin(); ?>
+            <?= $this->render('_search', ['model' => $searchModel]) ?>
 
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?php
-    echo GridView::widget(
-        [
-            'dataProvider' => $dataProvider,
-            'summary' => false,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-                'username:text',
-                'email:text',
+            <?php
+            echo GridView::widget(
                 [
-                    'attribute' => 'role',
-                    'label' => 'Роль',
-                    'format' => 'text',
-                    'value' => function ($data) {
-                        if (mb_strpos($data->roles[0], 'admin') !== false) {
-                            return 'Админ';
-                        } elseif (mb_strpos($data->roles[0], 'redactor') !== false) {
-                            return 'Редактор';
-                        }
-                        return 'Пользователь';
-                    }
-                ],
-                [
-                    'attribute' => 'status',
-                    'format' => 'text',
-                    'value' => function ($data) {
-                        if ($data->status == 10) {
-                            return 'Активный';
-                        }
-                        return 'Неактивный';
-                    }
-                ],
-                [
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{update} {delete}',
-                ],
-            ]
-        ]
-    ); ?>
+                    'dataProvider' => $dataProvider,
+                    'summary' => false,
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        'username:text',
+                        'email:text',
+                        [
+                            'attribute' => 'role',
+                            'label' => 'Роль',
+                            'format' => 'text',
+                            'value' => function ($data) {
+                                if (mb_strpos($data->roles[0], 'admin') !== false) {
+                                    return 'Админ';
+                                } elseif (mb_strpos($data->roles[0], 'redactor') !== false) {
+                                    return 'Редактор';
+                                }
+                                return 'Пользователь';
+                            }
+                        ],
+                        [
+                            'attribute' => 'status',
+                            'format' => 'text',
+                            'value' => function ($data) {
+                                if ($data->status == 10) {
+                                    return 'Активный';
+                                }
+                                return 'Неактивный';
+                            }
+                        ],
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'template' => '{update} {delete}',
+                        ],
+                    ]
+                ]
+            ); ?>
 
-    <?php Pjax::end(); ?>
+            <?php Pjax::end(); ?>
 
+        </div>
+    </div>
 </div>

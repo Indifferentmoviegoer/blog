@@ -12,28 +12,37 @@ $this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
 ?>
+
 <div class="gallery-category-view">
+    <div class="box">
+        <div class="box-body">
+            <p>
+                <?= Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a(
+                    'Удалить',
+                    ['delete', 'id' => $model->id],
+                    [
+                        'class' => 'btn btn-danger',
+                        'data' => [
+                            'confirm' => 'Are you sure you want to delete this item?',
+                            'method' => 'post',
+                        ],
+                    ]
+                ) ?>
+            </p>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+            <?php
+            echo DetailView::widget(
+                [
+                    'model' => $model,
+                    'attributes' => [
+                        'id',
+                        'parent_id',
+                        'name',
+                    ],
+                ]
+            ); ?>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'parent_id',
-            'name',
-        ],
-    ]) ?>
-
+        </div>
+    </div>
 </div>

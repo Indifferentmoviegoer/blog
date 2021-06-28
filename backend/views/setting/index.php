@@ -11,37 +11,40 @@ use yii\helpers\Url;
 
 $this->title = 'Настройки';
 ?>
-
-<?php
-echo GridView::widget(
-    [
-        'dataProvider' => $dataProvider,
-        'summary' => false,
-        'columns' => [
-            'id',
+<div class="box">
+    <div class="box-body">
+        <?php
+        echo GridView::widget(
             [
-                'attribute' => 'label',
-                'label' => 'Наименование',
-                'format' => 'text',
-                'value' => function ($data) {
-                    return Yii::$app->settings->get($data['name'])->label;
-                }
-            ],
-            [
-                'attribute' => 'value',
-                'label' => 'Значение',
-                'format' => 'text',
-                'value' => function ($data) {
-                    return Yii::$app->settings->get($data['name'])->value;
-                }
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}',
-                'urlCreator' => function ($action, $model) {
-                    return Url::to(['setting/'.$action, 'name' => $model['name']]);
-                },
+                'dataProvider' => $dataProvider,
+                'summary' => false,
+                'columns' => [
+                    'id',
+                    [
+                        'attribute' => 'label',
+                        'label' => 'Наименование',
+                        'format' => 'text',
+                        'value' => function ($data) {
+                            return Yii::$app->settings->get($data['name'])->label;
+                        }
+                    ],
+                    [
+                        'attribute' => 'value',
+                        'label' => 'Значение',
+                        'format' => 'text',
+                        'value' => function ($data) {
+                            return Yii::$app->settings->get($data['name'])->value;
+                        }
+                    ],
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'template' => '{update}',
+                        'urlCreator' => function ($action, $model) {
+                            return Url::to(['setting/' . $action, 'name' => $model['name']]);
+                        },
+                    ]
+                ]
             ]
-        ]
-    ]
-); ?>
+        ); ?>
+    </div>
+</div>

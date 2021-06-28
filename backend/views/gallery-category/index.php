@@ -11,26 +11,31 @@ use yii\widgets\Pjax;
 $this->title = 'Категории';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="gallery-category-index">
+    <div class="box">
+        <div class="box-body">
+            <p>
+                <?= Html::a('Создать категорию', ['create'], ['class' => 'btn btn-success']) ?>
+            </p>
 
-    <p>
-        <?= Html::a('Создать категорию', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+            <?php Pjax::begin(); ?>
 
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+            <?php
+            echo GridView::widget(
+                [
+                    'dataProvider' => $dataProvider,
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        'name',
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'name',
+                        ['class' => 'yii\grid\ActionColumn'],
+                    ],
+                ]
+            ); ?>
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+            <?php Pjax::end(); ?>
 
-    <?php Pjax::end(); ?>
-
+        </div>
+    </div>
 </div>

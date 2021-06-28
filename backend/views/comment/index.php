@@ -12,32 +12,39 @@ $this->title = 'Комментарии';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="gallery-index">
+    <div class="box">
+        <div class="box-body">
+            <p>
+                <?= Html::a('Создать комментарий', ['create'], ['class' => 'btn btn-success']) ?>
+            </p>
 
-    <p>
-        <?= Html::a('Создать комментарий', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+            <?php Pjax::begin(); ?>
 
-    <?php Pjax::begin(); ?>
-    <?php
-    // echo $this->render('_search', ['model' => $searchModel]); ?>
+            <?= GridView::widget(
+                [
+                    'dataProvider' => $dataProvider,
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        'user_id',
+                        'news_id',
+                        'text',
+                        [
+                            'attribute' => 'moderation',
+                            'value' => function ($data) {
+                                if ($data->moderation == 1) {
+                                    return "Нет";
+                                }
+                                return "Да";
+                            },
+                        ],
+                        'created_at',
 
-    <?= GridView::widget(
-        [
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-                'user_id',
-                'news_id',
-                'text',
-                'moderation',
-                'created_at',
+                        ['class' => 'yii\grid\ActionColumn'],
+                    ],
+                ]
+            ); ?>
 
-                ['class' => 'yii\grid\ActionColumn'],
-            ],
-        ]
-    ); ?>
-
-    <?php Pjax::end(); ?>
-
+            <?php Pjax::end(); ?>
+        </div>
+    </div>
 </div>

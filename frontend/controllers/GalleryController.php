@@ -3,7 +3,6 @@
 namespace frontend\controllers;
 
 use common\models\Rating;
-use common\models\UploadGalleryForm;
 use common\models\Gallery;
 use common\models\GalleryCategory;
 use common\repositories\GalleryRepository;
@@ -95,14 +94,12 @@ class GalleryController extends Controller
         }
 
         $model = new Gallery();
-        $upload = new UploadGalleryForm();
         $galleryRepository = new GalleryRepository();
 
         if (Yii::$app->request->post()) {
-            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+            $file = UploadedFile::getInstance($model, 'name');
+            $model->name = Yii::$app->image->uploadFile($file, 'gallery');
 
-            if ($upload->upload()) {
-                $model->name = $upload->imageFile->name;
                 $model->category_id = $id;
                 $model->user_id = Yii::$app->user->identity->getId();
 
@@ -118,7 +115,6 @@ class GalleryController extends Controller
                     }
 
                 }
-            }
         }
 
         $popularPictures = $galleryRepository->mostPopular();
@@ -130,7 +126,6 @@ class GalleryController extends Controller
             'view',
             [
                 'model' => $model,
-                'upload' => $upload,
                 'popularPictures' => $popularPictures,
                 'lastPictures' => $lastPictures,
                 'pages' => $pages,

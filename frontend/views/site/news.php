@@ -12,7 +12,7 @@ use yii\widgets\Menu;
 /* @var $menu array */
 
 $this->title = 'Новости';
-$path = env('APP_URL') . "/img/uploads/";
+$path = env('APP_URL');
 ?>
 <p>Категории</p>
 <?php

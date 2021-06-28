@@ -1,8 +1,10 @@
 <?php
 
+use common\models\Picture;
+
 /* @var $this yii\web\View */
 /* @var $model common\models\News */
-/* @var $upload backend\models\UploadForm */
+/* @var $picture Picture */
 /* @var $tree array */
 
 $this->title = 'Создание новости';
@@ -13,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
-        'upload' => $upload,
+        'picture' => $picture,
         'tree' => $tree,
     ]) ?>
 
