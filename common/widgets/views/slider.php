@@ -7,7 +7,7 @@ use common\models\Gallery;
 ?>
 
 <div class="container">
-    <div class="col-lg-6">
+    <div class="col-lg-5">
         <div id="myCarousel" class="carousel slide gallery-carousel" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#myCarousel" data-slide-to="0" class="active"></li>

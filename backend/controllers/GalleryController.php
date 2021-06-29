@@ -8,6 +8,7 @@ use Yii;
 use common\models\Gallery;
 use backend\models\GallerySearch;
 use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -25,6 +26,19 @@ class GalleryController extends Controller
     public function behaviors(): array
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['user', 'redactor']
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
@@ -94,7 +108,8 @@ class GalleryController extends Controller
                 );
             }
 
-            $model->name = Yii::$app->image->uploadFile($file, 'gallery');
+            $model->name = Yii::$app->image->uploadFile($file, "gallery");
+            $model->user_id = Yii::$app->user->identity->getId();
             $model->save();
 
             return $this->redirect(['view', 'id' => $model->id]);
@@ -125,9 +140,13 @@ class GalleryController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($model, 'name');
+
             if($file) {
-                $model->name = Yii::$app->image->uploadFile($file, 'gallery');
+                $model->name = Yii::$app->image->uploadFile($file, "gallery");
+            } else {
+                $model->name = $model->getOldAttribute("name");
             }
+
             $model->save();
 
             return $this->redirect(['view', 'id' => $model->id]);

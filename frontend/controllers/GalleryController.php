@@ -76,9 +76,11 @@ class GalleryController extends Controller
      */
     public function actionIndex(): string
     {
+        $galleryRepository = new GalleryRepository();
+        $popularWeek = $galleryRepository->mostPopularWeek();
         $categories = GalleryCategory::find()->all();
 
-        return $this->render('index', ['categories' => $categories]);
+        return $this->render('index', ['categories' => $categories, 'popularWeek' => $popularWeek]);
     }
 
     /**
@@ -117,8 +119,8 @@ class GalleryController extends Controller
                 }
         }
 
-        $popularPictures = $galleryRepository->mostPopular();
-        $allLastPictures = $galleryRepository->lastPictures();
+        $popularPictures = $galleryRepository->mostPopular($id);
+        $allLastPictures = $galleryRepository->lastPictures($id);
         $pages = new Pagination(['totalCount' => $allLastPictures->count(), 'pageSize' => 5]);
         $lastPictures = $allLastPictures->offset($pages->offset)->limit($pages->limit)->all();
 

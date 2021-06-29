@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
@@ -37,8 +38,54 @@ YiiAsset::register($this);
                     'model' => $model,
                     'attributes' => [
                         'id',
-                        'category_id',
-                        'name',
+                        [
+                            'attribute' => 'name',
+                            'value' => function ($data) {
+                                return '<img src="' . $data->name . '"  width="240px" alt="">';
+                            },
+                            'format' => 'raw'
+                        ],
+
+                        [
+                            'attribute' => 'category_id',
+                            'value' => function ($data) {
+                                if (empty($data->category->name)) {
+                                    return "Категория удалена";
+                                }
+
+                                return $data->category->name . ' ' .
+                                    Html::a(
+                                        '<span class="small glyphicon glyphicon-pencil"></span>',
+                                        Url::toRoute(['/gallery-category/update', 'id' => $data->category->id])
+                                    );
+                            },
+                            'format' => 'raw',
+                        ],
+                        [
+                            'attribute' => 'user_id',
+                            'value' => static function ($data) {
+                                if (empty($data->user->username)) {
+                                    return "Пользователь удален";
+                                }
+
+                                return $data->user->username . ' ' .
+                                    Html::a(
+                                        '<span class="small glyphicon glyphicon-pencil"></span>',
+                                        Url::toRoute(['/user/update', 'id' => $data->user->id])
+                                    );
+                            },
+                            'format' => 'raw',
+                        ],
+                        [
+                            'attribute' => 'moderation',
+                            'value' => function ($data) {
+                                if ($data->moderation == 1) {
+                                    return "Нет";
+                                }
+                                return "Да";
+                            },
+                        ],
+                        'created_at',
                     ],
                 ]
             ); ?>

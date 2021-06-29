@@ -6,6 +6,7 @@ use common\models\Category;
 use common\models\News;
 use DateTime;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 class NewsRepository
 {
@@ -109,5 +110,13 @@ class NewsRepository
             ->where('published_at<=NOW()')
             ->andWhere(['>=', 'published_at', $searchWeek])
             ->orderBy(['published_at' => SORT_DESC]);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getList(): array
+    {
+        return ArrayHelper::map(News::find()->all(), 'id', 'name');
     }
 }

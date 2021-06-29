@@ -8,8 +8,6 @@ use yii\widgets\ActiveForm;
 /* @var $model Comment */
 /* @var $id integer */
 /* @var $type integer */
-
-$path = env('APP_URL') . "/img/";
 ?>
 
     <h1>Комментарии</h1>
@@ -19,7 +17,7 @@ $path = env('APP_URL') . "/img/";
         <?php foreach ($comments as $comment): ?>
             <div class="news-detail">
                 <div class="container">
-                        <img src=" <?= $path ?>profile.jpeg" width="50px" alt="">
+                        <img src="/img/profile.jpeg" width="50px" alt="">
                         <p><?= $comment->user->username ?></p>
                         <p><?= $comment->text ?></p>
                         <p><?= $comment->created_at ?></p>
@@ -81,7 +79,7 @@ $js = <<<JS
             document.getElementById('comment-text').value = '';
         },
         error: function () {
-            alert('Error!');
+            alert('Произошла ошибка при добавлении комментария!');
         }
     });
 

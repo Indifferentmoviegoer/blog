@@ -6,7 +6,7 @@ use yii\web\ForbiddenHttpException;
 
 /* @var $news News */
 $this->title = $news->name;
-$path = env('APP_URL') . "/img/uploads/";
+$path = env('APP_URL');
 
 if (Yii::$app->user->isGuest && $news->forbidden == 1) {
     throw new ForbiddenHttpException();

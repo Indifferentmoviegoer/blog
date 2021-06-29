@@ -9,13 +9,13 @@ use yii\db\ActiveRecord;
  * Class Gallery
  * @package common\models
  *
-* @property int $id
-* @property string $name
-* @property string $category_id
-* @property string $created_at
-* @property int $user_id
-* @property double $rating
-* @property boolean $moderation
+ * @property int $id
+ * @property string $name
+ * @property string $category_id
+ * @property string $created_at
+ * @property int $user_id
+ * @property double $rating
+ * @property boolean $moderation
  */
 class Gallery extends ActiveRecord
 {
@@ -35,7 +35,7 @@ class Gallery extends ActiveRecord
         return [
             [['id', 'category_id', 'user_id'], 'integer'],
             [['name', 'created_at'], 'string'],
-            ['name', 'file', 'extensions' => 'jpg, png, jpeg'],
+            ['name', 'image', 'extensions' => 'jpg, png, jpeg', 'minWidth' => 450, 'minHeight' => 450],
             ['moderation', 'boolean'],
             ['rating', 'double'],
         ];
@@ -63,5 +63,13 @@ class Gallery extends ActiveRecord
     public function getCategory(): ActiveQuery
     {
         return $this->hasOne(GalleryCategory::class, ['id' => 'category_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getUser(): ActiveQuery
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

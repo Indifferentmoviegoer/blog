@@ -23,19 +23,8 @@ class SiteController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'allow' => false,
-                        'roles' => ['user'],
-                        'matchCallback' => function () {
-                            Yii::$app->user->logout();
-                        }
-                    ],
-                    [
                         'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'allow' => true,
-                        'roles' => ['redactor'],
+                        'roles' => ['admin', 'redactor'],
                     ],
                     [
                         'actions' => ['login', 'error'],

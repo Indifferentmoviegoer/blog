@@ -7,6 +7,7 @@ use Yii;
 use common\models\GalleryCategory;
 use backend\models\GalleryCategorySearch;
 use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,6 +24,19 @@ class GalleryCategoryController extends Controller
     public function behaviors(): array
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['user', 'redactor']
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [

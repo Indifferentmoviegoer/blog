@@ -20,7 +20,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'username') ?>
 
-    <?php  echo $form->field($model, 'email') ?>
+    <?= $form->field($model, 'email') ?>
+    <?= $form->field($model, 'role_user') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary']) ?>

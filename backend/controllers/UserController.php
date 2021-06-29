@@ -9,6 +9,7 @@ use backend\models\User;
 use backend\models\UserForm;
 use backend\models\UserSearch;
 use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -25,6 +26,19 @@ class UserController extends Controller
     public function behaviors(): array
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['user', 'redactor']
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
@@ -80,7 +94,20 @@ class UserController extends Controller
     {
         $model = new UserForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+        if ($model->load(Yii::$app->request->post())) {
+            if(!$model->password){
+                Yii::$app->session->setFlash('error', 'Пароль не может быть пустым!');
+
+                return $this->render(
+                    'create',
+                    [
+                        'model' => $model,
+                    ]
+                );
+            }
+
+            $model->signup();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

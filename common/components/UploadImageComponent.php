@@ -2,11 +2,10 @@
 
 namespace common\components;
 
+use yii\imagine\Image;
 use yii\web\UploadedFile;
 use Yii;
 use yii\base\Component;
-use yii\base\Exception;
-use yii\helpers\FileHelper;
 
 /**
  * Class UploadImageComponent
@@ -23,22 +22,33 @@ class UploadImageComponent extends Component
      * @param UploadedFile $file
      * @param string $directory
      *
-     * @return string|null
-     *
-     * @throws Exception
+     * @return false|string
      */
     public function uploadFile(UploadedFile $file, string $directory)
     {
         $path = Yii::getAlias(sprintf("@frontend/web/img/%s/", $directory));
 
         if (!empty($file)) {
-            if (FileHelper::createDirectory($path, $mode = 0775, $recursive = true)) {
-                $file->saveAs($path . $file->baseName . '.' . $file->extension);
+            $filePath = $path . $file->baseName . '.' . $file->extension;
+            $file->saveAs($filePath);
 
-                return sprintf("/img/%s/%s.%s", $directory, $file->baseName, $file->extension);
+            if ($directory == "gallery") {
+//                $sizeImage = getimagesize($filePath);
+//                $imageWidth = $sizeImage[0];
+//                $imageHeight = $sizeImage[1];
+//                $minValue = min($imageWidth, $imageHeight);
+
+//                if ($minValue < 600) {
+//                    Image::thumbnail($filePath, $minValue, $minValue)->save($filePath);
+//                } else {
+                    Image::thumbnail($filePath, 450, 450)->save($filePath);
+//                }
             }
+
+            return sprintf("/img/%s/%s.%s", $directory, $file->baseName, $file->extension);
         }
-        return null;
+
+        return false;
     }
 
     /**

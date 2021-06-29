@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
 /* @var $model common\models\GalleryCategory */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Категории изображений', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
 ?>
@@ -37,7 +37,6 @@ YiiAsset::register($this);
                     'model' => $model,
                     'attributes' => [
                         'id',
-                        'parent_id',
                         'name',
                     ],
                 ]

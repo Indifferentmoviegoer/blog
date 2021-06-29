@@ -13,8 +13,6 @@ use yii\widgets\LinkPager;
 /* @var $categories GalleryCategory */
 /* @var $pages LinkPager */
 /* @var $model Gallery */
-
-$path = env('APP_URL');
 ?>
 <div class="news-detail">
     <div class="container">
@@ -24,7 +22,7 @@ $path = env('APP_URL');
                 <?php foreach ($popularPictures as $picture): ?>
                     <div class="col-lg-4">
                         <a href="<?= Url::toRoute(['gallery/detail', 'id' => $picture->id]) ?>">
-                            <img src=" <?= $path . $picture->name ?>" width="125px" alt="">
+                            <img src=" <?= $picture->name ?>" width="125px" alt="">
                         </a>
                     </div>
                 <?php endforeach; ?>
@@ -41,7 +39,7 @@ $path = env('APP_URL');
                 <?php foreach ($lastPictures as $picture): ?>
                     <div class="col-lg-4">
                         <a href="<?= Url::toRoute(['gallery/detail', 'id' => $picture->id]) ?>">
-                            <img src=" <?= $path . $picture->name ?>" width="125px" alt="">
+                            <img src=" <?= $picture->name ?>" width="125px" alt="">
                         </a>
                     </div>
                 <?php endforeach; ?>
@@ -63,7 +61,7 @@ $path = env('APP_URL');
         ]
     ); ?>
     <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Загрузить', ['class' => 'btn btn-success']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 

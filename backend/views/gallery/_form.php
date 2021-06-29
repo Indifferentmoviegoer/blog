@@ -18,7 +18,7 @@ $path = env('APP_URL');
     <div class="box">
         <div class="box-body">
             <?php if (!$model->isNewRecord): ?>
-                <img src="<?= $path . $model->name ?>" alt="" width="400px" height="300px">
+                <img src="<?= $model->name ?>" alt="" width="450px" height="450px">
             <?php endif; ?>
 
             <?php $form = ActiveForm::begin(); ?>
@@ -31,7 +31,6 @@ $path = env('APP_URL');
                 ]
             ); ?>
 
-            <?= $form->field($model, 'user_id')->textInput() ?>
             <?= $form->field($model, 'category_id')->dropDownList(ArrayHelper::map($categories, 'id', 'name')) ?>
             <?= $form->field($model, 'moderation')->dropDownList(['0' => 'Да', '1' => 'Нет']) ?>
 

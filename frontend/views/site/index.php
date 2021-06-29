@@ -12,17 +12,21 @@ use yii\widgets\LinkPager;
 /* @var $newsRepository NewsRepository */
 
 $this->title = 'Главная';
-$path = env('APP_URL');
 ?>
 <div class="site-index">
-    <?= SliderWidget::widget() ?>
+    <div class="center">
+        <h1 class="center">Популярные изображения</h1>
+        <?= SliderWidget::widget() ?>
+    </div>
+
+    <h1>Новости за неделю:</h1>
     <div class="body-content">
         <?php for ($i = 0; $i < count($news); $i++): ?>
             <?php if (!(($i % 2) == 0)): ?>
                 <div class="news news-block right-news">
                     <div class="row">
                         <div class="col-lg-6">
-                            <img src="<?= $path . $news[$i]->picture->name ?>"
+                            <img src="<?= $news[$i]->picture->name ?>"
                                  width="100%"
                                  height="400px"
                                  alt="">
@@ -86,7 +90,7 @@ $path = env('APP_URL');
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <img src="<?= $path . $news[$i]->picture->name ?>"
+                            <img src="<?= $news[$i]->picture->name ?>"
                                  width="100%"
                                  height="400px"
                                  alt="">

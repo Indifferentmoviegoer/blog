@@ -26,16 +26,14 @@ class UserForm extends Model
     public function rules(): array
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Это имя пользователя уже занято.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
-            ['email', 'trim'],
-            ['email', 'required'],
+            [['email', 'username'], 'trim'],
+            [['email', 'username'], 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Этот адрес электронной почты уже занят.'],
 
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
             [['roles', 'status', 'id'], 'safe'],
@@ -74,6 +72,7 @@ class UserForm extends Model
         $user->email = $this->email;
         $user->status = $this->status;
         $user->roles = $this->roles;
+        $this->setRole($user);
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
@@ -91,12 +90,12 @@ class UserForm extends Model
      */
     public function update($id): bool
     {
-
         $user = User::findOne([$id]);
         $user->username = $this->username;
         $user->email = $this->email;
         $user->status = $this->status;
         $user->roles = $this->roles;
+        $this->setRole($user);
 
         if(!empty($this->password)){
             $user->setPassword($this->password);
@@ -111,6 +110,23 @@ class UserForm extends Model
         return false;
     }
 
+    /**
+     * @param $user
+     */
+    public function setRole($user)
+    {
+        switch ($this->roles) {
+            case "user":
+                $user->role_user = "Пользователь";
+                break;
+            case "redactor":
+                $user->role_user = "Редактор";
+                break;
+            case "admin":
+                $user->role_user = "Админ";
+                break;
+        }
+    }
 
     /**
      * Sends confirmation email to user

@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use Throwable;
@@ -23,6 +24,7 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $role_user
  * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -64,6 +66,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             [['roles', 'username', 'email'], 'safe'],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['role_user', 'string'],
         ];
     }
 
@@ -109,10 +112,12 @@ class User extends ActiveRecord implements IdentityInterface
             return null;
         }
 
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
-        ]);
+        return static::findOne(
+            [
+                'password_reset_token' => $token,
+                'status' => self::STATUS_ACTIVE,
+            ]
+        );
     }
 
     /**
@@ -122,11 +127,14 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @return static|null
      */
-    public static function findByVerificationToken(string $token) {
-        return static::findOne([
-            'verification_token' => $token,
-            'status' => self::STATUS_INACTIVE
-        ]);
+    public static function findByVerificationToken(string $token)
+    {
+        return static::findOne(
+            [
+                'verification_token' => $token,
+                'status' => self::STATUS_INACTIVE
+            ]
+        );
     }
 
     /**
@@ -142,7 +150,7 @@ class User extends ActiveRecord implements IdentityInterface
             return false;
         }
 
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $timestamp = (int)substr($token, strrpos($token, '_') + 1);
         $expire = Yii::$app->params['user.passwordResetTokenExpire'];
         return $timestamp + $expire >= time();
     }
@@ -236,21 +244,18 @@ class User extends ActiveRecord implements IdentityInterface
     public function saveRoles()
     {
         Yii::$app->authManager->revokeAll($this->getId());
-        if (is_array($this->roles)) {
-            foreach ($this->roles as $roleName) {
-                if ($role = Yii::$app->authManager->getRole($roleName)) {
-                    try {
-                        Yii::$app->authManager->assign($role, $this->getId());
-                    } catch (Throwable $e) {
-                        throw new Exception();
-                    }
-                }
+        if ($role = Yii::$app->authManager->getRole($this->roles)) {
+            try {
+                Yii::$app->authManager->assign($role, $this->getId());
+            } catch (Throwable $e) {
+                throw new Exception();
             }
         }
     }
 
     /**
      * User constructor.
+     *
      * @param array $config
      */
     public function __construct($config = [])

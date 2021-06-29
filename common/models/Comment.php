@@ -62,4 +62,12 @@ class Comment extends ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getNews(): ActiveQuery
+    {
+        return $this->hasOne(News::class, ['id' => 'news_id']);
+    }
 }

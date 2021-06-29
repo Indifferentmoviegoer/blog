@@ -3,6 +3,7 @@
 namespace common\repositories;
 
 use common\models\Gallery;
+use DateTime;
 use Yii;
 use yii\db\ActiveQuery;
 
@@ -27,23 +28,43 @@ class GalleryRepository
     /**
      * @return array
      */
-    public function mostPopular(): array
+    public function mostPopularWeek(): array
     {
+        $weekAgo = (new DateTime())->modify('-7 days');
+        $searchWeek = $weekAgo->format('Y-m-d');
+
         return Gallery::find()
             ->where(['moderation' => true])
+            ->andWhere('created_at<=NOW()')
+            ->andWhere(['>=', 'created_at', $searchWeek])
+            ->all();
+    }
+
+    /**
+     * @param $id
+     *
+     * @return array
+     */
+    public function mostPopular($id): array
+    {
+        return Gallery::find()
+            ->where(['category_id' => $id])
+            ->andWhere(['moderation' => true])
             ->orderBy(['rating' => SORT_DESC])
             ->limit(5)
             ->all();
     }
 
-
     /**
+     * @param $id
+     *
      * @return ActiveQuery
      */
-    public function lastPictures(): ActiveQuery
+    public function lastPictures($id): ActiveQuery
     {
         return Gallery::find()
-            ->where(['moderation' => true])
+            ->where(['category_id' => $id])
+            ->andWhere(['moderation' => true])
             ->orderBy(['created_at' => SORT_DESC])
             ->limit(20);
     }

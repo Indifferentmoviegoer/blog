@@ -1,11 +1,13 @@
 <?php
 
+use common\repositories\NewsRepository;
 use yii\helpers\Html;
 use yii\web\YiiAsset;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\News */
+/* @var $newsRepository NewsRepository */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'News', 'url' => ['index']];
@@ -36,10 +38,23 @@ YiiAsset::register($this);
                     'model' => $model,
                     'attributes' => [
                         'id',
-                        'picture_id',
+                        [
+                            'attribute' => 'rel',
+                            'value' => function ($data) use ($newsRepository) {
+                                return $newsRepository->categoryList($data);
+                            },
+                        ],
+                        [
+                            'attribute' => 'picture_id',
+                            'value' => function ($data) {
+                                $path = env('APP_URL');
+                                return '<img src="' . $path . $data->picture->name . '"  width="240px" alt="">';
+                            },
+                            'format' => 'raw'
+                        ],
                         'name',
                         'desc',
-                        'text:ntext',
+                        'text:html',
                         'published_at',
                     ],
                 ]

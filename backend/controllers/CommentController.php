@@ -2,11 +2,13 @@
 
 namespace backend\controllers;
 
+use common\repositories\NewsRepository;
 use Throwable;
 use Yii;
 use common\models\Comment;
 use backend\models\CommentSearch;
 use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,6 +25,19 @@ class CommentController extends Controller
     public function behaviors(): array
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['user', 'redactor']
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
@@ -70,13 +85,17 @@ class CommentController extends Controller
     public function actionCreate()
     {
         $model = new Comment();
+        $news = NewsRepository::getList();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->user_id = Yii::$app->user->identity->getId();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'news' => $news,
         ]);
     }
 

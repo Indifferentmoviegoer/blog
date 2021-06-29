@@ -36,6 +36,7 @@ class User extends \common\models\User
             'password' => 'Пароль',
             'status' => 'Статус',
             'roles' => 'Роль',
+            'role_user' => 'Роль',
         ];
     }
 }

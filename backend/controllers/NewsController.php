@@ -10,6 +10,7 @@ use Yii;
 use common\models\News;
 use backend\models\NewsSearch;
 use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
@@ -26,6 +27,19 @@ class NewsController extends BaseController
     public function behaviors(): array
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['user']
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['admin', 'redactor'],
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
@@ -65,10 +79,13 @@ class NewsController extends BaseController
      */
     public function actionView(int $id): string
     {
+        $newsRepository = new NewsRepository();
+
         return $this->render(
             'view',
             [
                 'model' => $this->findModel($id),
+                'newsRepository' => $newsRepository,
             ]
         );
     }
@@ -100,7 +117,7 @@ class NewsController extends BaseController
                 );
             }
 
-            $picture->name = Yii::$app->image->uploadFile($file, 'uploads');
+            $picture->name = Yii::$app->image->uploadFile($file, "uploads");
             $picture->save();
 
             $model->picture_id = $picture->id;
@@ -139,10 +156,13 @@ class NewsController extends BaseController
 
         if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($picture, 'name');
-            if($file){
-                $picture->name = Yii::$app->image->uploadFile($file, 'uploads');
-                $picture->save();
+
+            if($file) {
+                $picture->name = Yii::$app->image->uploadFile($file, "uploads");
+            } else {
+                $picture->name = $picture->getOldAttribute("name");
             }
+            $picture->save();
 
             $model->save();
             $this->loadCategoryList($model);

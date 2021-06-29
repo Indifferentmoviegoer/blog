@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 /* @var $form ActiveForm */
 
 $param = ['options' => [$model->status => ['Selected' => true]]];
-$checkboxItems = ['admin' => 'Админ', 'redactor' => 'Редактор', 'user' => 'Пользователь'];
+$dropdownItems = ['user' => 'Пользователь', 'redactor' => 'Редактор', 'admin' => 'Админ'];
 ?>
 
 <div class="user-form">
@@ -23,7 +23,6 @@ $checkboxItems = ['admin' => 'Админ', 'redactor' => 'Редактор', 'us
                         <?= $form->field($model, 'username')->textInput() ?>
                         <?= $form->field($model, 'email')->textInput() ?>
                         <?= $form->field($model, 'password')->textInput() ?>
-
                         <?php
                         echo $form->field($model, 'status')->dropDownList(
                             [
@@ -33,8 +32,8 @@ $checkboxItems = ['admin' => 'Админ', 'redactor' => 'Редактор', 'us
                             $param
                         ); ?>
                         <?php
-                        echo $form->field($model, 'roles')->checkboxList(
-                            $checkboxItems,
+                        echo $form->field($model, 'roles')->dropDownList(
+                            $dropdownItems,
                             ['value' => $model->roles]
                         ); ?>
                     </div>

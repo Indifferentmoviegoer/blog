@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel backend\models\GalleryCategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Категории';
+$this->title = 'Категории изображений';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
