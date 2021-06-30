@@ -100,48 +100,34 @@ class NewsController extends BaseController
         $model = new News();
         $picture = new Picture();
         $categoryRepository = new CategoryRepository();
+        $newsRepository = new NewsRepository();
         $tree = $categoryRepository::getTree();
 
         if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($picture, 'name');
-            if(!$file){
+
+            if (!$file) {
                 Yii::$app->session->setFlash('error', 'Изображение не загружено!');
-
-                return $this->render(
-                    'create',
-                    [
-                        'model' => $model,
-                        'picture' => $picture,
-                        'tree' => $tree,
-                    ]
-                );
             }
 
-            if(empty(Yii::$app->request->post()['News']['rel'])){
+            if (empty(Yii::$app->request->post()['News']['rel'])) {
                 Yii::$app->session->setFlash('error', 'Категория не выбрана!');
-
-                return $this->render(
-                    'create',
-                    [
-                        'model' => $model,
-                        'picture' => $picture,
-                        'tree' => $tree,
-                    ]
-                );
             }
 
-            $picture->name = Yii::$app->image->uploadFile($file, "uploads");
+            if ($file && !empty(Yii::$app->request->post()['News']['rel'])) {
+                $picture->name = Yii::$app->image->uploadFile($file, "uploads");
 
-            if($picture->save()){
-                $model->picture_id = $picture->id;
-                if($model->save()){
-                    $this->loadCategoryList($model);
+                if ($picture->save()) {
+                    $model->picture_id = $picture->id;
+                    if ($model->save()) {
+                        $newsRepository->loadCategoryList($model);
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
                 }
             }
-
-            return $this->redirect(['view', 'id' => $model->id]);
         }
-        $this->setCategoryList($model);
+
+        $newsRepository->setCategoryList($model);
 
         return $this->render(
             'create',
@@ -166,38 +152,30 @@ class NewsController extends BaseController
     {
         $model = $this->findModel($id);
         $picture = Picture::findOne(['id' => $model->picture_id]);
+        $newsRepository = new NewsRepository();
         $categoryRepository = new CategoryRepository();
         $tree = $categoryRepository::getTree();
 
         if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($picture, 'name');
 
-            if($file) {
+            if ($file) {
                 $picture->name = Yii::$app->image->uploadFile($file, "uploads");
             } else {
                 $picture->name = $picture->getOldAttribute("name");
             }
 
-            if(empty(Yii::$app->request->post()['News']['rel'])){
+            if (empty(Yii::$app->request->post()['News']['rel'])) {
                 Yii::$app->session->setFlash('error', 'Категория не выбрана!');
-
-                return $this->render(
-                    'update',
-                    [
-                        'model' => $model,
-                        'picture' => $picture,
-                        'tree' => $tree,
-                    ]
-                );
             }
 
-            if($picture->save() && $model->save()){
-                $this->loadCategoryList($model);
+            if (!empty(Yii::$app->request->post()['News']['rel']) && $picture->save() && $model->save()) {
+                $newsRepository->loadCategoryList($model);
+                return $this->redirect(['view', 'id' => $model->id]);
             }
-
-            return $this->redirect(['view', 'id' => $model->id]);
         }
-        $this->setCategoryList($model);
+
+        $newsRepository->setCategoryList($model);
 
         return $this->render(
             'update',

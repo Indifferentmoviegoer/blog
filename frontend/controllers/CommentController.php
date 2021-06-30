@@ -25,31 +25,24 @@ class CommentController extends Controller
 
         $request = Yii::$app->request;
         $commentRepository = new CommentRepository();
+        $model = new Comment();
 
         if (!$request->isPost) {
             throw new BadRequestHttpException();
         }
 
-        $model = new Comment();
-        $preModeration = true;
-
-        $user = $commentRepository->checkModeration();
-
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->identity->getId();
-            if ($user >= 5) {
-                $model->moderation = true;
-                $preModeration = false;
-            }
+            $model->moderation = $commentRepository->checkModeration();
             $model->save();
         }
 
         $model->user_id = $model->user->username;
-        $model->created_at = date("Y-m-d") . " " . date("H:i:s");
+        $model->created_at = date("Y-m-d H:i:s");
 
         return [
             "data" => $model,
-            "moderation" => $preModeration,
+            "moderation" => $commentRepository->checkModeration(),
         ];
     }
 
@@ -68,8 +61,8 @@ class CommentController extends Controller
             throw new BadRequestHttpException();
         }
 
-        $pictureID = isset(Yii::$app->request->post()['picture_id']) ? Yii::$app->request->post()['picture_id'] : null;
-        $newsID = isset(Yii::$app->request->post()['news_id']) ? Yii::$app->request->post()['news_id'] : null;
+        $pictureID = empty(Yii::$app->request->post()['picture_id']) ? null : Yii::$app->request->post()['picture_id'];
+        $newsID = empty(Yii::$app->request->post()['news_id']) ? null : Yii::$app->request->post()['news_id'];
 
         $length = Yii::$app->request->post()['length'];
         if (!empty($newsID)) {

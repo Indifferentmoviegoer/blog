@@ -101,22 +101,17 @@ class GalleryController extends Controller
         if (Yii::$app->request->post()) {
             $file = UploadedFile::getInstance($model, 'name');
             $model->name = Yii::$app->image->uploadFile($file, 'gallery');
+            $model->category_id = $id;
+            $model->user_id = Yii::$app->user->identity->getId();
+            $model->moderation = $galleryRepository->checkModeration();
 
-                $model->category_id = $id;
-                $model->user_id = Yii::$app->user->identity->getId();
-
+            if ($model->save()) {
                 if ($galleryRepository->checkModeration()) {
-                    $model->moderation = true;
+                    Yii::$app->session->setFlash('success', 'Изображение успешно загружено!');
+                } else {
+                    Yii::$app->session->setFlash('success', 'Изображение отправлено на пре-модерацию!');
                 }
-
-                if($model->save()){
-                    if ($galleryRepository->checkModeration()){
-                        Yii::$app->session->setFlash('success', 'Изображение успешно загружено!');
-                    } else{
-                        Yii::$app->session->setFlash('success', 'Изображение отправлено на пре-модерацию!');
-                    }
-
-                }
+            }
         }
 
         $popularPictures = $galleryRepository->mostPopular($id);

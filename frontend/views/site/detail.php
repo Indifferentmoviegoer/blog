@@ -2,14 +2,10 @@
 
 use common\models\News;
 use common\widgets\CommentWidget;
-use yii\web\ForbiddenHttpException;
 
 /* @var $news News */
-$this->title = $news->name;
 
-if (Yii::$app->user->isGuest && $news->forbidden == 1) {
-    throw new ForbiddenHttpException();
-}
+$this->title = $news->name;
 ?>
 <div class="news-detail">
     <h1><?= $news->name ?></h1>

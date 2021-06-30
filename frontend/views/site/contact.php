@@ -21,8 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
         <div class="col-lg-5">
-            <?php
-            $form = ActiveForm::begin(['id' => 'contact-form']); ?>
+            <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
             <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
 
@@ -43,8 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
             </div>
 
-            <?php
-            ActiveForm::end(); ?>
+            <?php ActiveForm::end(); ?>
         </div>
     </div>
     <div class="news-detail">

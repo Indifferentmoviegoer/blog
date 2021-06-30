@@ -52,14 +52,6 @@ return [
                 '<controller>' => '<controller>/index',
             ],
         ],
-        'i18n' => [
-            'translations' => [
-                'yii2mod.comments' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@yii2mod/comments/messages',
-                ],
-            ],
-        ],
     ],
     'params' => $params,
 ];

@@ -5,6 +5,10 @@ namespace common\repositories;
 use common\models\Category;
 use yii\helpers\Url;
 
+/**
+ * Class CategoryRepository
+ * @package common\repositories
+ */
 class CategoryRepository
 {
     /**

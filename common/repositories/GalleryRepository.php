@@ -8,6 +8,10 @@ use Yii;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class GalleryRepository
+ * @package common\repositories
+ */
 class GalleryRepository
 {
     /**

@@ -95,20 +95,11 @@ class UserController extends Controller
         $model = new UserForm();
 
         if ($model->load(Yii::$app->request->post())) {
-            if(!$model->password){
+            if (!$model->password) {
                 Yii::$app->session->setFlash('error', 'Пароль не может быть пустым!');
-
-                return $this->render(
-                    'create',
-                    [
-                        'model' => $model,
-                    ]
-                );
+            } elseif ($model->signup()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
-
-            $model->signup();
-
-            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render(
@@ -127,6 +118,7 @@ class UserController extends Controller
      *
      * @return Response|string
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \yii\base\Exception
      */
     public function actionUpdate(int $id)
     {

@@ -33,7 +33,7 @@ $('#commentForm').on('beforeSubmit', function () {
         type: 'POST',
         data: data,
         success: function (res) {
-            if (res.moderation) {
+            if (!res.moderation) {
                 alert('Комментарий отправлен на премодерацию!');
             } else {
                 let list = document.getElementById('new-comment');

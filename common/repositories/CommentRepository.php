@@ -40,13 +40,49 @@ class CommentRepository
     }
 
     /**
-     * @return bool|int|string|null
+     * @return bool
      */
-    public function checkModeration()
+    public function checkModeration(): bool
     {
-        return Comment::find()
+        $count = Comment::find()
             ->where(['user_id' => Yii::$app->user->identity->getId()])
             ->andWhere(['moderation' => true])
             ->count();
+
+        if($count >= 5){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return array
+     */
+    public function getLastNewsComments($id): array
+    {
+        return Comment::find()
+            ->where(['news_id'=>$id])
+            ->andWhere(['moderation'=> true])
+            ->orderBy('created_at desc')
+            ->limit(20)
+            ->all();
+    }
+
+    /**
+     * @param $id
+     *
+     * @return array
+     */
+    public function getLastGalleryComments($id): array
+    {
+        return Comment::find()
+            ->where(['picture_id'=>$id])
+            ->andWhere(['moderation'=> true])
+            ->orderBy('created_at desc')
+            ->limit(20)
+            ->all();
     }
 }

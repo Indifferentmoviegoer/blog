@@ -6,6 +6,10 @@ use common\models\Rating;
 use Yii;
 use yii\db\ActiveRecord;
 
+/**
+ * Class RatingRepository
+ * @package common\repositories
+ */
 class RatingRepository
 {
     /**

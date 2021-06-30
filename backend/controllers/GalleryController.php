@@ -96,23 +96,16 @@ class GalleryController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($model, 'name');
-            if(!$file){
+
+            if ($file) {
+                $model->name = Yii::$app->image->uploadFile($file, "gallery");
+                $model->user_id = Yii::$app->user->identity->getId();
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } else {
                 Yii::$app->session->setFlash('error', 'Изображение не загружено!');
-
-                return $this->render(
-                    'create',
-                    [
-                        'model' => $model,
-                        'categories' => $categories,
-                    ]
-                );
             }
-
-            $model->name = Yii::$app->image->uploadFile($file, "gallery");
-            $model->user_id = Yii::$app->user->identity->getId();
-            $model->save();
-
-            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render(
@@ -141,15 +134,15 @@ class GalleryController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $file = UploadedFile::getInstance($model, 'name');
 
-            if($file) {
+            if ($file) {
                 $model->name = Yii::$app->image->uploadFile($file, "gallery");
             } else {
                 $model->name = $model->getOldAttribute("name");
             }
 
-            $model->save();
-
-            return $this->redirect(['view', 'id' => $model->id]);
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render(

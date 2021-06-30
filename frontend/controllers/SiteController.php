@@ -22,6 +22,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -110,7 +111,7 @@ class SiteController extends Controller
     public function actionCategory($id): string
     {
         $catIds = NewsCategories::find()->where(['category_id' => $id])->all();
-        $ids = $this->arrayListProduct($catIds);
+        $ids = $this->arrayListNews($catIds);
 
         $categoryRepository = new CategoryRepository();
         $newsRepository = new NewsRepository();
@@ -129,7 +130,7 @@ class SiteController extends Controller
      *
      * @return array|string[]
      */
-    public function arrayListProduct($items): array
+    public function arrayListNews($items): array
     {
         if (!empty($items)) {
             foreach ($items as $item) {
@@ -155,7 +156,11 @@ class SiteController extends Controller
             throw new NotFoundHttpException('Страница не найдена.');
         }
 
-        $news->count_views = $news->count_views+1;
+        if (Yii::$app->user->isGuest && $news->forbidden == 1) {
+            throw new ForbiddenHttpException();
+        }
+
+        $news->count_views = $news->count_views + 1;
         $news->save();
 
         return $this->render('detail', ['news' => $news]);

@@ -4,10 +4,16 @@ namespace common\repositories;
 
 use common\models\Category;
 use common\models\News;
+use common\models\NewsCategories;
 use DateTime;
+use Yii;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class NewsRepository
+ * @package common\repositories
+ */
 class NewsRepository
 {
 
@@ -118,5 +124,62 @@ class NewsRepository
     public static function getList(): array
     {
         return ArrayHelper::map(News::find()->all(), 'id', 'name');
+    }
+
+    /**
+     * @param News $model
+     */
+    public function loadCategoryList(News $model)
+    {
+        if (!empty($rel = Yii::$app->request->post()['News']['rel'])) {
+            $this->deleteCategoryList($model);
+
+            for ($i = 0; $i < count($rel); $i++) {
+                $categoryProducts = new NewsCategories();
+                $categoryProducts->category_id = $rel[$i];
+                $categoryProducts->news_id = $model->id;
+                $categoryProducts->save();
+            }
+        }
+    }
+
+    /**
+     * @param News $model
+     */
+    public function deleteCategoryList(News $model)
+    {
+        $news = $model->categories;
+
+        if (!empty($news)) {
+            foreach ($news as $item) {
+                $item->delete();
+            }
+        }
+    }
+
+    /**
+     * @param News $model
+     */
+    public function setCategoryList(News $model)
+    {
+        $categories = $model->categories;
+        $categoryRepository = new CategoryRepository();
+
+        if (!empty($categories)) {
+            foreach ($categories as $category) {
+                $categoryItems[] = $category->category_id;
+            }
+
+            foreach ($categories as $category) {
+                if ($category->category->parent_id != 0 && !in_array($category->category->parent_id, $categoryItems)) {
+                    $parents = $categoryRepository->getAllParents($category->category->parent_id);
+                    foreach ($parents as $parent) {
+                        $categoryItems[] = $parent->id;
+                    }
+                }
+            }
+
+            $model->rel = $categoryItems;
+        }
     }
 }

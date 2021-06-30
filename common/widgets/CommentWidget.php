@@ -2,6 +2,7 @@
 
 namespace common\widgets;
 
+use common\repositories\CommentRepository;
 use yii\base\Widget;
 use common\models\Comment;
 
@@ -27,24 +28,23 @@ class CommentWidget extends Widget
      */
     public function run(): string
     {
-        if($this->type == 1){
-            $comments = Comment::find()
-                ->where(['news_id'=>$this->id])
-                ->andWhere(['moderation'=> true])
-                ->orderBy('created_at desc')
-                ->limit(20)
-                ->all();
-        } elseif ($this->type == 2){
-            $comments = Comment::find()
-                ->where(['picture_id'=>$this->id])
-                ->andWhere(['moderation'=> true])
-                ->orderBy('created_at desc')
-                ->limit(20)
-                ->all();
+        $model = new Comment();
+        $commentRepository = new CommentRepository();
+
+        if ($this->type == 1) {
+            $comments = $commentRepository->getLastNewsComments($this->id);
+        } elseif ($this->type == 2) {
+            $comments = $commentRepository->getLastGalleryComments($this->id);
         }
 
-        $model = new Comment();
-
-        return $this->render('comments', ['comments' => $comments, 'model' => $model, 'id' => $this->id, 'type' => $this->type]);
+        return $this->render(
+            'comments',
+            [
+                'comments' => $comments,
+                'model' => $model,
+                'id' => $this->id,
+                'type' => $this->type
+            ]
+        );
     }
 }
