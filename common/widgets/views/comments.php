@@ -12,15 +12,17 @@ use yii\widgets\ActiveForm;
 
     <h1>Комментарии</h1>
     <br>
-    <div id="main2"></div>
+    <div id="new-comment"></div>
     <div>
         <?php foreach ($comments as $comment): ?>
             <div class="news-detail">
                 <div class="container">
+                    <div class="comment-item">
                         <img src="/img/profile.jpeg" width="50px" alt="">
-                        <p><?= $comment->user->username ?></p>
+                        <p><?= empty($comment->user->username) ? "Пользователь удален" : $comment->user->username ?></p>
                         <p><?= $comment->text ?></p>
                         <p><?= $comment->created_at ?></p>
+                    </div>
                 </div>
             </div>
             <br>
@@ -33,7 +35,7 @@ use yii\widgets\ActiveForm;
     <input type="button" class="show-comment" data-picture_id="<?= $id ?>" value="Показать все ответы">
 <?php endif; ?>
 
-    <div id="main"></div>
+    <div id="more-comment"></div>
     <br>
 
 <?php if (!Yii::$app->user->isGuest): ?>
@@ -42,6 +44,7 @@ use yii\widgets\ActiveForm;
         [
             'id' => 'commentForm',
             'action' => false,
+            'validateOnSubmit' => true,
         ]
     ); ?>
     <?= $form->field($model, 'text')->textarea() ?>
@@ -55,37 +58,3 @@ use yii\widgets\ActiveForm;
     </div>
     <?php ActiveForm::end(); ?>
 <?php endif; ?>
-
-
-<?php
-$js = <<<JS
-    $('#commentForm').on('beforeSubmit', function () {
-    let data;
-    data = $(this).serialize();
-    $.ajax({
-        url: '/comment/create',
-        type: 'POST',
-        data: data,
-        success: function (res) {
-            if (res.moderation) {
-                alert('Комментарий отправлен на премодерацию!');
-            } else {
-                let list = document.getElementById('main2');
-                let div = getComments(res.data);
-                list.prepend(div);
-                alert('Комментарий успешно добавлен!');
-            }
-
-            document.getElementById('comment-text').value = '';
-        },
-        error: function () {
-            alert('Произошла ошибка при добавлении комментария!');
-        }
-    });
-
-    return false;
-});
-JS;
-
-$this->registerJs($js);
-?>

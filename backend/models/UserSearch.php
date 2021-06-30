@@ -43,9 +43,14 @@ class UserSearch extends User
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        $dataProvider = new ActiveDataProvider(
+            [
+                'query' => $query,
+                'pagination' => [
+                    'pageSize' => 100,
+                ],
+            ]
+        );
 
         $this->load($params);
 

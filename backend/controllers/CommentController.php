@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\repositories\GalleryRepository;
 use common\repositories\NewsRepository;
 use Throwable;
 use Yii;
@@ -86,9 +87,11 @@ class CommentController extends Controller
     {
         $model = new Comment();
         $news = NewsRepository::getList();
+        $gallery = GalleryRepository::getList();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->identity->getId();
+            $model->save();
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -96,6 +99,7 @@ class CommentController extends Controller
         return $this->render('create', [
             'model' => $model,
             'news' => $news,
+            'gallery' => $gallery,
         ]);
     }
 

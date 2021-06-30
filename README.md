@@ -58,3 +58,13 @@ frontend
 vendor/                  contains dependent 3rd-party packages
 environments/            contains environment-based overrides
 ```
+Дополнительные настройки
+============
+Запустить команды в следующем порядке:
+
+1) Для создания таблиц, предназначенных для работы с ролями пользователей
+- yii migrate/up --migrationPath=@yii/rbac/migrations
+2) Для создания таблиц для работы с базой данных
+- yii migrate
+3) Для создания ролей и тестовых пользователей:
+- yii rbac/init

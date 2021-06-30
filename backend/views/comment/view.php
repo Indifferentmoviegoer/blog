@@ -46,25 +46,38 @@ YiiAsset::register($this);
                                 }
 
                                 return $data->user->username . ' ' .
-                                    Html::a('<span class="small glyphicon glyphicon-pencil"></span>',
-                                            Url::toRoute(['/user/update', 'id' => $data->user->id])
+                                    Html::a(
+                                        '<span class="small glyphicon glyphicon-pencil"></span>',
+                                        Url::toRoute(['/user/update', 'id' => $data->user->id])
                                     );
                             },
-                            'format'=>'raw',
+                            'format' => 'raw',
+                        ],
+                        [
+                            'attribute' => 'picture_id',
+                            'value' => function ($data) {
+                                if (empty($data->picture->name)) {
+                                    return "Изображения не существует";
+                                }
+
+                                return '<img src="' . $data->picture->name . '"  width="240px" alt="">';
+                            },
+                            'format' => 'raw'
                         ],
                         [
                             'attribute' => 'news_id',
                             'value' => function ($data) {
                                 if (empty($data->news->name)) {
-                                    return "Новость удалена";
+                                    return "Новости не существует";
                                 }
 
                                 return $data->news->name . ' ' .
-                                    Html::a('<span class="small glyphicon glyphicon-pencil"></span>',
-                                            Url::toRoute(['/news/update', 'id' => $data->news->id])
+                                    Html::a(
+                                        '<span class="small glyphicon glyphicon-pencil"></span>',
+                                        Url::toRoute(['/news/update', 'id' => $data->news->id])
                                     );
                             },
-                            'format'=>'raw',
+                            'format' => 'raw',
                         ],
                         'text',
                         [

@@ -117,12 +117,27 @@ class NewsController extends BaseController
                 );
             }
 
-            $picture->name = Yii::$app->image->uploadFile($file, "uploads");
-            $picture->save();
+            if(empty(Yii::$app->request->post()['News']['rel'])){
+                Yii::$app->session->setFlash('error', 'Категория не выбрана!');
 
-            $model->picture_id = $picture->id;
-            $model->save();
-            $this->loadCategoryList($model);
+                return $this->render(
+                    'create',
+                    [
+                        'model' => $model,
+                        'picture' => $picture,
+                        'tree' => $tree,
+                    ]
+                );
+            }
+
+            $picture->name = Yii::$app->image->uploadFile($file, "uploads");
+
+            if($picture->save()){
+                $model->picture_id = $picture->id;
+                if($model->save()){
+                    $this->loadCategoryList($model);
+                }
+            }
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -162,10 +177,23 @@ class NewsController extends BaseController
             } else {
                 $picture->name = $picture->getOldAttribute("name");
             }
-            $picture->save();
 
-            $model->save();
-            $this->loadCategoryList($model);
+            if(empty(Yii::$app->request->post()['News']['rel'])){
+                Yii::$app->session->setFlash('error', 'Категория не выбрана!');
+
+                return $this->render(
+                    'update',
+                    [
+                        'model' => $model,
+                        'picture' => $picture,
+                        'tree' => $tree,
+                    ]
+                );
+            }
+
+            if($picture->save() && $model->save()){
+                $this->loadCategoryList($model);
+            }
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -195,7 +223,7 @@ class NewsController extends BaseController
     public function actionDelete(int $id): Response
     {
         $model = $this->findModel($id);
-        Yii::$app->image->deleteFile($model->name);
+        Yii::$app->image->deleteFile($model->picture->name);
         $model->delete();
 
         return $this->redirect(['index']);

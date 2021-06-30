@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\NewsCategories;
+use common\repositories\CategoryRepository;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -43,7 +44,7 @@ class BaseController extends Controller
      */
     public function loadCategoryList(Model $model)
     {
-        if (isset(Yii::$app->request->post()['News']['rel'])) {
+        if (!empty(Yii::$app->request->post()['News']['rel'])) {
             $rel = Yii::$app->request->post()['News']['rel'];
 
             $this->deleteCategoryList($model);
@@ -77,6 +78,7 @@ class BaseController extends Controller
     public function setCategoryList(Model $model)
     {
         $categories = $model->categories;
+        $categoryRepository = new CategoryRepository();
 
         if (!empty($categories)) {
             foreach ($categories as $category) {
@@ -85,7 +87,7 @@ class BaseController extends Controller
 
             foreach ($categories as $category) {
                 if ($category->category->parent_id != 0 && !in_array($category->category->parent_id, $categoryItems)) {
-                    $parents = $category->category->getAllParents($category->category->parent_id);
+                    $parents = $categoryRepository->getAllParents($category->category->parent_id);
                     foreach ($parents as $parent) {
                         $categoryItems[] = $parent->id;
                     }

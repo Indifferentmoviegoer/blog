@@ -6,7 +6,6 @@ use yii\web\ForbiddenHttpException;
 
 /* @var $news News */
 $this->title = $news->name;
-$path = env('APP_URL');
 
 if (Yii::$app->user->isGuest && $news->forbidden == 1) {
     throw new ForbiddenHttpException();
@@ -16,7 +15,7 @@ if (Yii::$app->user->isGuest && $news->forbidden == 1) {
     <h1><?= $news->name ?></h1>
     <p><?= $news->published_at ?></p>
     <br>
-    <img src="<?= $path . $news->picture->name ?>" alt="">
+    <img src="<?= $news->picture->name ?>" width="600px" alt="">
     <p><img src="/img/eye.png" width="50px" alt=""> <?= $news->count_views ?></p>
     <br>
 

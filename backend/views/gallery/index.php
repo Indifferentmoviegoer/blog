@@ -31,8 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'name',
                             'value' => function ($data) {
-                                $path = env('APP_URL');
-                                return '<img src="' . $path . $data->name . '"  width="240px" alt="">';
+                                return '<img src="' . $data->name . '"  width="240px" alt="">';
                             },
                             'format' => 'raw'
                         ],

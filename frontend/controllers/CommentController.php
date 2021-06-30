@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\Comment;
+use common\repositories\CommentRepository;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -23,6 +24,7 @@ class CommentController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $request = Yii::$app->request;
+        $commentRepository = new CommentRepository();
 
         if (!$request->isPost) {
             throw new BadRequestHttpException();
@@ -31,10 +33,7 @@ class CommentController extends Controller
         $model = new Comment();
         $preModeration = true;
 
-        $user = Comment::find()
-            ->where(['user_id' => Yii::$app->user->identity->getId()])
-            ->andWhere(['moderation' => true])
-            ->count();
+        $user = $commentRepository->checkModeration();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->identity->getId();
@@ -63,29 +62,21 @@ class CommentController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $request = Yii::$app->request;
+        $commentRepository = new CommentRepository();
 
         if (!$request->isPost || !isset(Yii::$app->request->post()['length'])) {
             throw new BadRequestHttpException();
         }
 
-        $pictureID = Yii::$app->request->post()['picture_id'];
-        $newsID = Yii::$app->request->post()['news_id'];
+        $pictureID = isset(Yii::$app->request->post()['picture_id']) ? Yii::$app->request->post()['picture_id'] : null;
+        $newsID = isset(Yii::$app->request->post()['news_id']) ? Yii::$app->request->post()['news_id'] : null;
 
         $length = Yii::$app->request->post()['length'];
         if (!empty($newsID)) {
-            $comments = Comment::find()
-                ->where(['news_id' => $newsID])
-                ->andWhere(['moderation' => true])
-                ->orderBy('created_at desc')
-                ->all();
+            $comments = $commentRepository->getNewsComments($newsID);
         } elseif (!empty($pictureID)) {
-            $comments = Comment::find()
-                ->where(['picture_id' => $pictureID])
-                ->andWhere(['moderation' => true])
-                ->orderBy('created_at desc')
-                ->all();
+            $comments = $commentRepository->getGalleryComments($pictureID);
         }
-
 
         foreach ($comments as $comment) {
             $comment->user_id = $comment->user->username;

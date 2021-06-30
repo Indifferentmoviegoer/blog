@@ -39,6 +39,7 @@ class News extends ActiveRecord
             [['id', 'picture_id', 'count_views'], 'integer'],
             [['forbidden'], 'boolean'],
             [['name', 'desc', 'text', 'published_at'], 'string'],
+            [['name', 'desc', 'text', 'published_at'], 'required'],
         ];
     }
 
@@ -68,7 +69,6 @@ class News extends ActiveRecord
         return $this->hasOne(Picture::class, ['id' => 'picture_id']);
     }
 
-
     /**
      * @return mixed
      */
@@ -84,7 +84,4 @@ class News extends ActiveRecord
     {
         return $this->hasMany(NewsCategories::class, ['news_id' => 'id']);
     }
-
-
-
 }

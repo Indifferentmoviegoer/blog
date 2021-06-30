@@ -9,8 +9,8 @@ use yii\widgets\DetailView;
 /* @var $model common\models\News */
 /* @var $newsRepository NewsRepository */
 
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'News', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Новости', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 YiiAsset::register($this);
 ?>

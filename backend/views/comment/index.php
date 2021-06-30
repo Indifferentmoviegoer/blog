@@ -43,10 +43,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                         ],
                         [
+                            'attribute' => 'picture_id',
+                            'value' => function ($data) {
+                                if (empty($data->picture->name)) {
+                                    return "Изображения не существует";
+                                }
+
+                                return '<img src="' . $data->picture->name . '"  width="240px" alt="">';
+                            },
+                            'format' => 'raw'
+                        ],
+                        [
                             'attribute' => 'news_id',
                             'value' => function ($data) {
                                 if (empty($data->news->name)) {
-                                    return "Новость удалена";
+                                    return "Новости не существует";
                                 }
 
                                 return $data->news->name . ' ' .

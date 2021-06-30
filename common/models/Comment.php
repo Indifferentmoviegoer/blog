@@ -34,7 +34,10 @@ class Comment extends ActiveRecord
     {
         return [
             [['id', 'user_id', 'news_id', 'picture_id'], 'integer'],
-            [['text', 'created_at'], 'string'],
+            ['created_at', 'string'],
+            ['text', 'string', 'min' => 5],
+            ['text', 'string', 'max' => 255],
+            ['text', 'required'],
             ['moderation', 'boolean'],
         ];
     }
@@ -69,5 +72,13 @@ class Comment extends ActiveRecord
     public function getNews(): ActiveQuery
     {
         return $this->hasOne(News::class, ['id' => 'news_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getPicture(): ActiveQuery
+    {
+        return $this->hasOne(Gallery::class, ['id' => 'picture_id']);
     }
 }

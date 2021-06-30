@@ -6,6 +6,7 @@ use common\models\Gallery;
 use DateTime;
 use Yii;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 class GalleryRepository
 {
@@ -84,5 +85,13 @@ class GalleryRepository
         }
 
         return false;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getList(): array
+    {
+        return ArrayHelper::map(Gallery::find()->all(), 'id', 'name');
     }
 }
