@@ -114,8 +114,12 @@ class CategoryRepository
         for ($i = 0; $i < count($arrItems[$parentId]); $i++) {
             $result[] = [
                 'label' => $arrItems[$parentId][$i]['name'],
-                'url' => Url::to(['category', 'id' => $arrItems[$parentId][$i]['id']]),
+                'url' => '#',
                 'items' => static::viewMenuItems($arrItems[$parentId][$i]['id']),
+                'options' => [
+                    'class' => 'category-item',
+                    'data-id' => $arrItems[$parentId][$i]['id'],
+                ],
             ];
         }
         return $result;

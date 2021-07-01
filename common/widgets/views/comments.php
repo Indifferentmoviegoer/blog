@@ -18,10 +18,12 @@ use yii\widgets\ActiveForm;
             <div class="news-detail">
                 <div class="container">
                     <div class="comment-item">
-                        <img src="/img/profile.jpeg" width="50px" alt="">
-                        <p><?= empty($comment->user->username) ? "Пользователь удален" : $comment->user->username ?></p>
-                        <p><?= $comment->text ?></p>
-                        <p><?= $comment->created_at ?></p>
+                        <div class="comment">
+                            <img src="/img/profile.jpeg" width="50px" alt="">
+                            <p><?= empty($comment->user->username) ? "Пользователь удален" : $comment->user->username ?></p>
+                            <p><?= $comment->text ?></p>
+                            <p><?= $comment->created_at ?></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,12 +49,13 @@ use yii\widgets\ActiveForm;
             'validateOnSubmit' => true,
         ]
     ); ?>
-    <?= $form->field($model, 'text')->textarea() ?>
+    <?= $form->field($model, 'text')->textarea(['id' => 'text-comment']) ?>
     <?php if ($type == 1): ?>
         <?= $form->field($model, 'news_id')->hiddenInput(['value' => $id])->label(false) ?>
     <?php elseif ($type == 2): ?>
         <?= $form->field($model, 'picture_id')->hiddenInput(['value' => $id])->label(false) ?>
     <?php endif; ?>
+    <?= $form->field($model, 'user_id')->hiddenInput(['value' => Yii::$app->user->identity->getId()])->label(false) ?>
     <div class="form-group">
         <?= Html::submitButton('Отправить', ['class' => 'btn btn-success']) ?>
     </div>

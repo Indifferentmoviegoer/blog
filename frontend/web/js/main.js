@@ -14,10 +14,12 @@ function getComments(item) {
     result.innerHTML = '\
         <div class="news-detail">\
             <div class="container">\
-                <img src="/img/profile.jpeg" width="50px" alt="">\
-                <p>' + item.user_id + '</p>\
-                <p>' + item.text + '</p>\
-                <p>' + item.created_at + '</p>\
+                <div class="comment">\
+                    <img src="/img/profile.jpeg" width="50px" alt="">\
+                    <p>' + item.user_id + '</p>\
+                    <p>' + item.text + '</p>\
+                    <p>' + item.created_at + '</p>\
+                </div>\
             </div>\
         </div>\
         <br>';
@@ -29,7 +31,7 @@ $('#commentForm').on('beforeSubmit', function () {
     let data;
     data = $(this).serialize();
     $.ajax({
-        url: '/comment/create',
+        url: '/v1/comment/create',
         type: 'POST',
         data: data,
         success: function (res) {
@@ -42,7 +44,7 @@ $('#commentForm').on('beforeSubmit', function () {
                 alert('Комментарий успешно добавлен!');
             }
 
-            document.getElementById('comment-text').value = '';
+            document.getElementById('text-comment').value = '';
         },
         error: function () {
             alert('Произошла ошибка при добавлении комментария!');
@@ -56,12 +58,16 @@ $(function () {
     $(".show-comment").on("click", function () {
         let news_id = $(this).data('news_id');
         let picture_id = $(this).data('picture_id');
-        let length = document.getElementsByClassName("comment").length;
+        let length = document.querySelectorAll('.comment').length;
         $.ajax({
-            url: '/comment/upload',
+            url: '/v1/comment/upload',
             type: 'POST',
             data: {news_id: news_id, picture_id: picture_id, length: length},
             success: function (res) {
+                if(res.error){
+                    alert(res.error);
+                    return;
+                }
                 const showComment = document.querySelector('.show-comment');
                 if (showComment) {
                     showComment.remove();
@@ -75,6 +81,68 @@ $(function () {
             },
             error: function () {
                 alert('Комментариев не найдено!');
+            }
+        });
+
+        return false;
+    });
+});
+
+$(function() {
+    $("#text-comment").keypress(function (e) {
+        if(e.keyCode === 13) {
+            $("#commentForm").submit();
+            e.preventDefault();
+        }
+
+        if(e.ctrlKey && e.keyCode === 13){
+            document.getElementById('text-comment').value += "\r\n";
+        }
+    });
+});
+
+function getDataNews(item, index) {
+    return {
+        id: item.id,
+        i: index,
+        picture_id: item.picture_id,
+        name: item.name,
+        desc: item.desc,
+        published_at: item.published_at,
+        category: item.text,
+    }
+}
+
+$(function () {
+    $(".category-item").on("click", function () {
+        let id = $(this).data('id');
+        $.ajax({
+            url: '/v1/news/category',
+            type: 'GET',
+            data: {id: id},
+            success: function (res) {
+                if(res.error){
+                    alert(res.error);
+                    return;
+                }
+
+                let news = document.querySelectorAll('.news-items');
+
+                news.forEach(function(elem){
+                    elem.parentNode.removeChild(elem);
+                });
+
+                var templateProductItem = document.getElementById('template-product-item').innerHTML,
+                    compiled = _.template(templateProductItem),
+                    html = res.data.map(function(item, index) {
+                        return compiled(getDataNews(item, index));
+                    }).join('');
+
+                $('#news-elements').append(html);
+
+            },
+            error: function () {
+                alert('Новостей не найдено!');
             }
         });
 

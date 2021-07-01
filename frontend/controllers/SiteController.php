@@ -104,49 +104,24 @@ class SiteController extends Controller
     }
 
     /**
-     * @param $id
-     *
-     * @return string
-     */
-    public function actionCategory($id): string
-    {
-        $catIds = NewsCategories::find()->where(['category_id' => $id])->all();
-        $ids = $this->arrayListNews($catIds);
-
-        $categoryRepository = new CategoryRepository();
-        $newsRepository = new NewsRepository();
-
-        $menu = $categoryRepository::viewMenuItems();
-
-        $allNews = $newsRepository->getCategoryNews($ids);
-        $pages = new Pagination(['totalCount' => $allNews->count(), 'pageSize' => 20]);
-        $news = $allNews->offset($pages->offset)->limit($pages->limit)->all();
-
-        return $this->render('news', ['news' => $news, 'pages' => $pages, 'menu' => $menu, 'newsRepository' => $newsRepository]);
-    }
-
-    /**
      * @param $items
      *
-     * @return array|string[]
+     * @return array
      */
     public function arrayListNews($items): array
     {
-        if (!empty($items)) {
-            foreach ($items as $item) {
-                $arrayList[] = $item->news_id;
-            }
-            return $arrayList;
-        } else {
-            return ['message' => 'Ничего не найдено!'];
+        foreach ($items as $item) {
+            $arrayList[] = $item->news_id;
         }
+
+        return $arrayList;
     }
 
     /**
      * @param int $id
      *
      * @return string
-     * @throws NotFoundHttpException
+     * @throws NotFoundHttpException|ForbiddenHttpException
      */
     public function actionDetail(int $id): string
     {
