@@ -104,13 +104,23 @@ $(function() {
 function getDataNews(item, index) {
     return {
         id: item.id,
-        i: index,
+        index: index,
         picture_id: item.picture_id,
         name: item.name,
         desc: item.desc,
         published_at: item.published_at,
         category: item.text,
+        category_id: item.forbidden,
+        count: item.count_views,
     }
+}
+
+function getNews(i, res) {
+    let result = document.createElement('div');
+
+    result.innerHTML = '<button class="paginate-newssss" data-id="' + res + '" data-page="' + i + '">' + i + '</button>';
+
+    return result;
 }
 
 $(function () {
@@ -127,12 +137,65 @@ $(function () {
                 }
 
                 let news = document.querySelectorAll('.news-items');
+                news.forEach(function(elem){
+                    elem.parentNode.removeChild(elem);
+                });
+
+                var templateNewsItem = document.getElementById('template-news-item').innerHTML,
+                    compiled = _.template(templateNewsItem),
+                    html = res.data.map(function(item, index) {
+                        return compiled(getDataNews(item, index));
+                    }).join('');
+
+                $('#news-elements').append(html);
+
+                let list = document.getElementById('paginate-n');
+
+                let pagin = document.querySelectorAll('.paginate-newssss');
+                pagin.forEach(function(elem){
+                    elem.parentNode.removeChild(elem);
+                });
+
+                for (let i = 1; i <= res.data[0]['count_views']; i++) {
+                    let div = getNews(i, res.data[0]['forbidden']);
+                    list.append(div);
+                }
+
+            },
+            error: function () {
+                alert('Новостей не найдено!');
+            }
+        });
+
+        return false;
+    });
+});
+
+let ul = document.querySelector('#paginate-n');
+li = document.querySelectorAll('.paginate-newssss');
+
+ul.addEventListener('click', function(event){
+    if(event.target && event.target.tagName === 'BUTTON'){
+
+        let id = $(event.target).data('id');
+        let page = $(event.target).data('page');
+        $.ajax({
+            url: '/v1/news/category',
+            type: 'GET',
+            data: {id: id, page:page},
+            success: function (res) {
+                if(res.error){
+                    alert(res.error);
+                    return;
+                }
+
+                let news = document.querySelectorAll('.news-items');
 
                 news.forEach(function(elem){
                     elem.parentNode.removeChild(elem);
                 });
 
-                var templateProductItem = document.getElementById('template-product-item').innerHTML,
+                var templateProductItem = document.getElementById('template-news-item').innerHTML,
                     compiled = _.template(templateProductItem),
                     html = res.data.map(function(item, index) {
                         return compiled(getDataNews(item, index));
@@ -146,6 +209,39 @@ $(function () {
             }
         });
 
-        return false;
+
+    }
+    return false;
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    $.ajax({
+        url: '/v1/news/get-all',
+        type: 'GET',
+        success: function (res) {
+            if(res.error){
+                alert(res.error);
+                return;
+            }
+
+            let news = document.querySelectorAll('.news-items');
+
+            news.forEach(function(elem){
+                elem.parentNode.removeChild(elem);
+            });
+
+            var templateProductItem = document.getElementById('template-news-item').innerHTML,
+                compiled = _.template(templateProductItem),
+                html = res.data.map(function(item, index) {
+                    return compiled(getDataNews(item, index));
+                }).join('');
+
+            $('#news-elements').append(html);
+
+        },
+        error: function () {
+            alert('Новостей не найдено!');
+        }
     });
 });
+

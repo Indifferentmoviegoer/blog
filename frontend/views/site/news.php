@@ -1,7 +1,6 @@
 <?php
 
 use common\repositories\NewsRepository;
-use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\widgets\Menu;
 
@@ -28,11 +27,11 @@ $this->title = 'Новости';
     <h1>Новости</h1>
     <div id="news-elements"></div>
 
-    <script id="template-product-item" type="text/template">
+    <script id="template-news-item" type="text/template">
         <div class="news-items">
-            <div class="news news-block <%= !((i % 2) == 0) ? 'right-news' : 'left-news' %>">
+            <div class="news news-block <%= !((index % 2) == 0) ? 'right-news' : 'left-news' %>">
                 <div class="row">
-                    <% if (!((i % 2) == 0)) { %>
+                    <% if (!((index % 2) == 0)) { %>
                     <div class="col-lg-6">
                         <img src="<%= picture_id %>"
                              width="100%"
@@ -65,7 +64,7 @@ $this->title = 'Новости';
                             </a>
                         </div>
                     </div>
-                    <% if ((i % 2) == 0) { %>
+                    <% if ((index % 2) == 0) { %>
                     <div class="col-lg-6">
                         <img src="<%= picture_id %>"
                              width="100%"
@@ -77,6 +76,8 @@ $this->title = 'Новости';
             </div>
         </div>
     </script>
+
+<div id="paginate-n"></div>
 
 
 </div>
