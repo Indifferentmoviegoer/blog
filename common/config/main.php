@@ -37,12 +37,6 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'request' => [
-            'parsers' => [
-                'application/json' => yii\web\JsonParser::class,
-                'asArray' => true
-            ]
-        ],
         'assetManager' => [
             'linkAssets' => false
         ],

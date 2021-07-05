@@ -26,7 +26,8 @@
         "kartik-v/yii2-widget-select2": "@dev",
         "kartik-v/yii2-widget-sidenav": "*",
       "ext-json": "*",
-        "yiisoft/yii2-imagine": "^2.3"
+        "yiisoft/yii2-imagine": "^2.3",
+        "zircote/swagger-php": "^3.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

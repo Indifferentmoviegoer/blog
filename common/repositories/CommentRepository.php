@@ -3,7 +3,6 @@
 namespace common\repositories;
 
 use common\models\Comment;
-use Yii;
 
 /**
  * Class CommentRepository
@@ -40,12 +39,14 @@ class CommentRepository
     }
 
     /**
+     * @param $id
+     *
      * @return bool
      */
-    public function checkModeration(): bool
+    public function checkModeration($id): bool
     {
         $count = Comment::find()
-            ->where(['user_id' => Yii::$app->user->identity->getId()])
+            ->where(['user_id' => $id])
             ->andWhere(['moderation' => true])
             ->count();
 

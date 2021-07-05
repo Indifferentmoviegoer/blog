@@ -216,7 +216,7 @@ ul.addEventListener('click', function(event){
 
 document.addEventListener("DOMContentLoaded", () => {
     $.ajax({
-        url: '/v1/news/get-all',
+        url: '/v1/news/all-paginate',
         type: 'GET',
         success: function (res) {
             if(res.error){
@@ -225,18 +225,29 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             let news = document.querySelectorAll('.news-items');
-
             news.forEach(function(elem){
                 elem.parentNode.removeChild(elem);
             });
 
-            var templateProductItem = document.getElementById('template-news-item').innerHTML,
-                compiled = _.template(templateProductItem),
+            var templateNewsItem = document.getElementById('template-news-item').innerHTML,
+                compiled = _.template(templateNewsItem),
                 html = res.data.map(function(item, index) {
                     return compiled(getDataNews(item, index));
                 }).join('');
 
             $('#news-elements').append(html);
+
+            let list = document.getElementById('paginate-n');
+
+            let pagin = document.querySelectorAll('.paginate-newssss');
+            pagin.forEach(function(elem){
+                elem.parentNode.removeChild(elem);
+            });
+
+            for (let i = 1; i <= res.data[0]['count_views']; i++) {
+                let div = getNews(i, res.data[0]['forbidden']);
+                list.append(div);
+            }
 
         },
         error: function () {
