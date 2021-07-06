@@ -2,70 +2,16 @@
 
 namespace frontend\modules\v1\controllers;
 
-use common\models\News;
 use common\models\NewsCategories;
 use common\repositories\NewsRepository;
-use frontend\modules\v1\traits\ControllerTrait;
-use yii\rest\Controller;
 
 /**
  * Class NewsController
  * @package frontend\modules\v1\controllers
  */
-class NewsController extends Controller
+class NewsController extends CommonController
 {
-    use ControllerTrait;
-
     /**
-     * @return array
-     *
-     * @OA\Get (
-     *     path="/v1/news/get-all",
-     *     summary="Подгрузка новостей",
-     *     description="Подгрузка новостей на вкладке news",
-     *     tags={"Новости"},
-     *     @OA\Response(
-     *          response=200,
-     *          description="ОК",
-     *          @OA\JsonContent(
-     *              @OA\Property(
-     *                  property="data",
-     *                  type="array",
-     *                  @OA\Items(
-     *                      @OA\Property(property="id", type="string", example="1"),
-     *                      @OA\Property(property="picture_id", type="string", example="/img/uploads/picture.jpg"),
-     *                      @OA\Property(property="name", type="string", example="Австралийскую мышь Гульда, которую считали вымершей в 19 веке"),
-     *                      @OA\Property(property="desc", type="string", example="Оказалось, что мышь джунгари, живущая на острове в заливе Шарк Бэй"),
-     *                      @OA\Property(property="text", type="string", example="Список категорий"),
-     *                      @OA\Property(property="published_at", type="string", example="2021-06-30 14:00:53"),
-     *                      @OA\Property(property="forbidden", type="string", example="0"),
-     *                      @OA\Property(property="count_views", type="string", example="3"),
-     *                  ),
-     *              ),
-     *          ),
-     *     ),
-     * )
-     */
-    public function actionGetAll(): array
-    {
-        $news = News::find()->orderBy(['published_at' => SORT_DESC])->all();
-        $newsRepository = new NewsRepository();
-
-        foreach ($news as $item) {
-            $item->picture_id = $item->picture->name;
-            $item->text = $newsRepository->categoryList($item);
-        }
-
-        return [
-            'data' => $news,
-        ];
-    }
-
-    /**
-     * @param int $page
-     *
-     * @return array|string[]
-     *
      * @OA\Get (
      *     path="/v1/news/all-paginate",
      *     summary="Подгрузка новостей постранично",
@@ -91,21 +37,16 @@ class NewsController extends Controller
      *          @OA\JsonContent(
      *              @OA\Property(
      *                  property="data",
-     *                  type="array",
-     *                  @OA\Items(
-     *                      @OA\Property(property="id", type="string", example="1"),
-     *                      @OA\Property(property="picture_id", type="string", example="/img/uploads/picture.jpg"),
-     *                      @OA\Property(property="name", type="string", example="Австралийскую мышь Гульда, которую считали вымершей в 19 веке"),
-     *                      @OA\Property(property="desc", type="string", example="Оказалось, что мышь джунгари, живущая на острове в заливе Шарк Бэй"),
-     *                      @OA\Property(property="text", type="string", example="Список категорий"),
-     *                      @OA\Property(property="published_at", type="string", example="2021-06-30 14:00:53"),
-     *                      @OA\Property(property="forbidden", type="string", example="0"),
-     *                      @OA\Property(property="count_views", type="string", example="3"),
-     *                  ),
+     *                  ref="#/components/schemas/NewsArray"
      *              ),
      *          ),
      *     ),
      * )
+     *
+     * @param int $page
+     *
+     * @return array|string[]
+     *
      */
     public function actionAllPaginate(int $page = 1): array
     {
@@ -113,35 +54,30 @@ class NewsController extends Controller
             return ['error' => 'Ничего не найдено!'];
         }
 
-        $allNews = News::find()->orderBy(['published_at' => SORT_DESC])->all();
         $newsRepository = new NewsRepository();
+        $news = $newsRepository->getAllNews();
 
-        $news = array_slice($allNews, ($page - 1) * 20, 20);
-        for ($i = 1; !empty(array_slice($allNews, ($i - 1) * 20, 20)); $i++) {
+        $sliceNews = array_slice($news, ($page - 1) * 20, 20);
+        for ($i = 1; !empty(array_slice($news, ($i - 1) * 20, 20)); $i++) {
             $pages = $i;
         }
 
-        foreach ($news as $item) {
+        foreach ($sliceNews as $item) {
             $item->picture_id = $item->picture->name;
             $item->text = $newsRepository->categoryList($item);
             $item->count_views = $pages;
         }
 
-        if (empty($news)) {
+        if (empty($sliceNews)) {
             return ['error' => 'Ничего не найдено!'];
         }
 
         return [
-            'data' => $news,
+            'data' => $sliceNews,
         ];
     }
 
     /**
-     * @param int $id
-     * @param int $page
-     *
-     * @return array|string[]
-     *
      * @OA\Get (
      *     path="/v1/news/category",
      *     summary="Подгрузка новостей постранично по категориям",
@@ -167,21 +103,16 @@ class NewsController extends Controller
      *          @OA\JsonContent(
      *              @OA\Property(
      *                  property="data",
-     *                  type="array",
-     *                  @OA\Items(
-     *                      @OA\Property(property="id", type="string", example="1"),
-     *                      @OA\Property(property="picture_id", type="string", example="/img/uploads/picture.jpg"),
-     *                      @OA\Property(property="name", type="string", example="Австралийскую мышь Гульда, которую считали вымершей в 19 веке"),
-     *                      @OA\Property(property="desc", type="string", example="Оказалось, что мышь джунгари, живущая на острове в заливе Шарк Бэй"),
-     *                      @OA\Property(property="text", type="string", example="Список категорий"),
-     *                      @OA\Property(property="published_at", type="string", example="2021-06-30 14:00:53"),
-     *                      @OA\Property(property="forbidden", type="string", example="0"),
-     *                      @OA\Property(property="count_views", type="string", example="3"),
-     *                  ),
+     *                  ref="#/components/schemas/NewsArray"
      *              ),
      *          ),
      *     ),
      * )
+     *
+     * @param int $id
+     * @param int $page
+     *
+     * @return array|string[]
      */
     public function actionCategory(int $id = 0, int $page = 1): array
     {
@@ -192,19 +123,19 @@ class NewsController extends Controller
         $newsRepository = new NewsRepository();
 
         if ($id == 0) {
-            $allNews = News::find()->orderBy(['published_at' => SORT_DESC])->all();
+            $news = $newsRepository->getAllNews();
         } else {
-            $catIds = NewsCategories::find()->where(['category_id' => $id])->all();
-            $ids = $this->arrayListNews($catIds);
-            $allNews = $newsRepository->getCategoryNews($ids)->all();
+            $categories = NewsCategories::find()->where(['category_id' => $id])->all();
+            $ids = $this->arrayListNews($categories);
+            $news = $newsRepository->getCategoryNews($ids)->all();
         }
 
-        $news = array_slice($allNews, ($page - 1) * 20, 20);
-        for ($i = 1; !empty(array_slice($allNews, ($i - 1) * 20, 20)); $i++) {
+        $sliceNews = array_slice($news, ($page - 1) * 20, 20);
+        for ($i = 1; !empty(array_slice($news, ($i - 1) * 20, 20)); $i++) {
             $pages = $i;
         }
 
-        foreach ($news as $item) {
+        foreach ($sliceNews as $item) {
             $item->picture_id = $item->picture->name;
             $item->text = $newsRepository->categoryList($item);
             if ($id != 0) {
@@ -213,12 +144,12 @@ class NewsController extends Controller
             $item->count_views = $pages;
         }
 
-        if (empty($news)) {
+        if (empty($sliceNews)) {
             return ['error' => 'Ничего не найдено!'];
         }
 
         return [
-            'data' => $news,
+            'data' => $sliceNews,
         ];
     }
 

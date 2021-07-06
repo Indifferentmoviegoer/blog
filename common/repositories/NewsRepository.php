@@ -182,4 +182,12 @@ class NewsRepository
             $model->rel = $categoryItems;
         }
     }
+
+    /**
+     * @return array
+     */
+    public function getAllNews(): array
+    {
+        return News::find()->orderBy(['published_at' => SORT_DESC])->all();
+    }
 }

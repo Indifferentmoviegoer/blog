@@ -4,32 +4,15 @@ namespace frontend\modules\v1\controllers;
 
 use common\models\Comment;
 use common\repositories\CommentRepository;
-use frontend\modules\v1\traits\ControllerTrait;
 use Yii;
-use yii\rest\Controller;
 
 /**
  * Class CommentController
  * @package frontend\modules\v1\controllers
  */
-class CommentController extends Controller
+class CommentController extends CommonController
 {
-    use ControllerTrait;
-
     /**
-     * @OA\Schema(
-     *   schema="Comment",
-     *   @OA\Property(property="news_id", type="string", example="1"),
-     *   @OA\Property(property="picture_id", type="string", example="0"),
-     *   @OA\Property(property="user_id", type="string", example="1"),
-     * )
-     */
-
-    /**
-     * @return array
-     *
-     * @OA\Info(title="Новостной блог", version="1")
-     *
      * @OA\Post (
      *     path="/v1/comment/create",
      *     summary="Создание комментария",
@@ -51,19 +34,14 @@ class CommentController extends Controller
      *          @OA\JsonContent(
      *              @OA\Property(
      *                  property="data",
-     *                  type="array",
-     *                  @OA\Items(
-     *                      @OA\Property(property="id", type="string", example="1"),
-     *                      @OA\Property(property="user_id", type="string", example="admin"),
-     *                      @OA\Property(property="text", type="string", example="Текст комментария"),
-     *                      @OA\Property(property="moderation", type="string", example="1"),
-     *                      @OA\Property(property="created_at", type="string", example="2021-06-22 11:20:03"),
-     *                      @OA\Property(property="news_id", type="string", example="9"),
-     *                  ),
+     *                  ref="#/components/schemas/CommentArray"
      *              ),
      *          ),
      *     ),
      * )
+     *
+     * @return array
+     *
      */
     public function actionCreate(): array
     {
@@ -86,8 +64,6 @@ class CommentController extends Controller
     }
 
     /**
-     * @return array
-     *
      * @OA\Post (
      *     path="/v1/comment/upload",
      *     summary="Подгрузка комментариев",
@@ -108,19 +84,14 @@ class CommentController extends Controller
      *          @OA\JsonContent(
      *              @OA\Property(
      *                  property="data",
-     *                  type="array",
-     *                  @OA\Items(
-     *                      @OA\Property(property="id", type="string", example="1"),
-     *                      @OA\Property(property="user_id", type="string", example="admin"),
-     *                      @OA\Property(property="text", type="string", example="Текст комментария"),
-     *                      @OA\Property(property="moderation", type="string", example="1"),
-     *                      @OA\Property(property="created_at", type="string", example="2021-06-22 11:20:03"),
-     *                      @OA\Property(property="news_id", type="string", example="9"),
-     *                  ),
+     *                  ref="#/components/schemas/CommentArray"
      *              ),
      *          ),
      *     ),
      * )
+     *
+     * @return array
+     *
      */
     public function actionUpload(): array
     {

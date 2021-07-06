@@ -41,6 +41,7 @@ $('#commentForm').on('beforeSubmit', function () {
                 let list = document.getElementById('new-comment');
                 let div = getComments(res.data);
                 list.prepend(div);
+
                 alert('Комментарий успешно добавлен!');
             }
 
@@ -68,6 +69,7 @@ $(function () {
                     alert(res.error);
                     return;
                 }
+
                 const showComment = document.querySelector('.show-comment');
                 if (showComment) {
                     showComment.remove();
@@ -117,8 +119,7 @@ function getDataNews(item, index) {
 
 function getNews(i, res) {
     let result = document.createElement('div');
-
-    result.innerHTML = '<button class="paginate-newssss" data-id="' + res + '" data-page="' + i + '">' + i + '</button>';
+    result.innerHTML = '<button class="paginate-news" data-id="' + res + '" data-page="' + i + '">' + i + '</button>';
 
     return result;
 }
@@ -141,21 +142,20 @@ $(function () {
                     elem.parentNode.removeChild(elem);
                 });
 
-                var templateNewsItem = document.getElementById('template-news-item').innerHTML,
+                let templateNewsItem = document.getElementById('template-news-item').innerHTML,
                     compiled = _.template(templateNewsItem),
-                    html = res.data.map(function(item, index) {
+                    html = res.data.map(function (item, index) {
                         return compiled(getDataNews(item, index));
                     }).join('');
-
                 $('#news-elements').append(html);
 
-                let list = document.getElementById('paginate-n');
 
-                let pagin = document.querySelectorAll('.paginate-newssss');
+                let pagin = document.querySelectorAll('.paginate-news');
                 pagin.forEach(function(elem){
                     elem.parentNode.removeChild(elem);
                 });
 
+                let list = document.getElementById('paginate-n');
                 for (let i = 1; i <= res.data[0]['count_views']; i++) {
                     let div = getNews(i, res.data[0]['forbidden']);
                     list.append(div);
@@ -171,10 +171,9 @@ $(function () {
     });
 });
 
-let ul = document.querySelector('#paginate-n');
-li = document.querySelectorAll('.paginate-newssss');
+let pagination = document.querySelector('#paginate-n');
 
-ul.addEventListener('click', function(event){
+pagination.addEventListener('click', function(event){
     if(event.target && event.target.tagName === 'BUTTON'){
 
         let id = $(event.target).data('id');
@@ -190,17 +189,15 @@ ul.addEventListener('click', function(event){
                 }
 
                 let news = document.querySelectorAll('.news-items');
-
                 news.forEach(function(elem){
                     elem.parentNode.removeChild(elem);
                 });
 
-                var templateProductItem = document.getElementById('template-news-item').innerHTML,
+                let templateProductItem = document.getElementById('template-news-item').innerHTML,
                     compiled = _.template(templateProductItem),
                     html = res.data.map(function(item, index) {
                         return compiled(getDataNews(item, index));
                     }).join('');
-
                 $('#news-elements').append(html);
 
             },
@@ -208,8 +205,6 @@ ul.addEventListener('click', function(event){
                 alert('Новостей не найдено!');
             }
         });
-
-
     }
     return false;
 });
@@ -229,23 +224,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 elem.parentNode.removeChild(elem);
             });
 
-            var templateNewsItem = document.getElementById('template-news-item').innerHTML,
+            let templateNewsItem = document.getElementById('template-news-item').innerHTML,
                 compiled = _.template(templateNewsItem),
                 html = res.data.map(function(item, index) {
                     return compiled(getDataNews(item, index));
                 }).join('');
-
             $('#news-elements').append(html);
 
             let list = document.getElementById('paginate-n');
-
-            let pagin = document.querySelectorAll('.paginate-newssss');
+            let pagin = document.querySelectorAll('.paginate-news');
             pagin.forEach(function(elem){
                 elem.parentNode.removeChild(elem);
             });
 
-            for (let i = 1; i <= res.data[0]['count_views']; i++) {
-                let div = getNews(i, res.data[0]['forbidden']);
+            for (let i = 1; i <= res.data[0].count_views; i++) {
+                let div = getNews(i, res.data[0].forbidden);
                 list.append(div);
             }
 
