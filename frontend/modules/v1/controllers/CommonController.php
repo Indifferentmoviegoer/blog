@@ -2,6 +2,7 @@
 
 namespace frontend\modules\v1\controllers;
 
+use common\repositories\CommentRepository;
 use yii\rest\Controller;
 
 /**
@@ -9,9 +10,10 @@ use yii\rest\Controller;
  *
  * @OA\Schema(
  *   schema="Comment",
- *   @OA\Property(property="news_id", type="string", example="1"),
+ *   @OA\Property(property="news_id", type="string", example="9"),
  *   @OA\Property(property="picture_id", type="string", example="0"),
- *   @OA\Property(property="user_id", type="string", example="1"),
+ *   @OA\Property(property="user_id", type="string", example="31"),
+ *   @OA\Property(property="text", type="string", example="Hello"),
  * ),
  *
  * @OA\Schema(
@@ -60,7 +62,7 @@ class CommonController extends Controller
      */
     public function getError(array $body)
     {
-        if (empty($body['picture_id']) && empty($body['news_id']) || empty($body['length'])) {
+        if (empty($body['picture_id']) && empty($body['news_id'])) {
             return ['error' => 'Ошибка! Отсутствуют необходимые параметры'];
         }
 
@@ -82,5 +84,22 @@ class CommonController extends Controller
         } else {
             return ['error' => 'Ничего не найдено!'];
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getComments($body): array
+    {
+        $commentRepository = new CommentRepository();
+        $comments = empty($body['picture_id'])
+            ? $commentRepository->getNewsComments($body['news_id'])
+            : $commentRepository->getGalleryComments($body['picture_id']);
+
+        foreach ($comments as $comment) {
+            $comment->user_id = $comment->user->username;
+        }
+
+        return $comments;
     }
 }

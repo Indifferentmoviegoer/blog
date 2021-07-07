@@ -5,6 +5,10 @@ namespace frontend\modules\v1\controllers;
 use common\models\Comment;
 use common\repositories\CommentRepository;
 use Yii;
+use yii\filters\auth\CompositeAuth;
+use yii\filters\auth\HttpBasicAuth;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\QueryParamAuth;
 
 /**
  * Class CommentController
@@ -73,7 +77,7 @@ class CommentController extends CommonController
      *          required=true,
      *          description="Передаваемые параметры",
      *          @OA\JsonContent(
-     *              @OA\Property(property="news_id", type="string", example="1"),
+     *              @OA\Property(property="news_id", type="string", example="9"),
      *              @OA\Property(property="picture_id", type="string", example="0"),
      *              @OA\Property(property="length", type="string", example="20"),
      *          ),
@@ -97,23 +101,27 @@ class CommentController extends CommonController
     {
         $body = Yii::$app->request->post();
         $error = $this->getError($body);
-        if($error){
+        if ($error) {
             return $error;
         }
 
-        $commentRepository = new CommentRepository();
-        $comments = empty($body['picture_id'])
-            ? $commentRepository->getNewsComments($body['news_id'])
-            : $commentRepository->getGalleryComments($body['picture_id']);
-
-        foreach ($comments as $comment) {
-            $comment->user_id = $comment->user->username;
-        }
-
-        $comments = array_slice($comments, $body['length']);
+        $comments = array_slice($this->getComments($body), $body['length']);
 
         return [
             'data' => $comments
+        ];
+    }
+
+    public function actionAll(): array
+    {
+        $body = Yii::$app->request->post();
+        $error = $this->getError($body);
+        if ($error) {
+            return $error;
+        }
+
+        return [
+            'data' => $this->getComments($body),
         ];
     }
 
@@ -126,5 +134,23 @@ class CommentController extends CommonController
             'create' => ['POST'],
             'upload' => ['POST'],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function behaviors(): array
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => CompositeAuth::class,
+            'except' => ['upload', 'all'],
+            'authMethods' => [
+                HttpBasicAuth::class,
+                HttpBearerAuth::class,
+                QueryParamAuth::class,
+            ],
+        ];
+        return $behaviors;
     }
 }

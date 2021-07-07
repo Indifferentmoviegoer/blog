@@ -5,7 +5,6 @@ namespace common\models;
 use Throwable;
 use Yii;
 use yii\base\Exception;
-use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -80,11 +79,10 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * {@inheritdoc}
-     * @throws NotSupportedException
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['auth_key' => $token, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
