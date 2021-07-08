@@ -13,75 +13,85 @@ class NewsController extends CommonController
 {
     /**
      * @OA\Get (
-     *     path="/v1/news/all-paginate",
-     *     summary="Подгрузка новостей постранично",
-     *     description="Подгрузка новостей на вкладке news",
+     *     path="/v1/news/all",
+     *     summary="Новости",
+     *     description="Список новостей",
      *     tags={"Новости"},
-     *     @OA\Parameter (
-     *          description="id категории",
-     *          in="path",
-     *          name="id",
-     *          example="1",
-     *          @OA\Schema(type="integer"),
-     *     ),
-     *     @OA\Parameter (
-     *          description="Номер страницы пагинации",
-     *          in="path",
-     *          name="page",
-     *          example="1",
-     *          @OA\Schema(type="integer"),
-     *     ),
      *     @OA\Response(
      *          response=200,
      *          description="ОК",
      *          @OA\JsonContent(
-     *              @OA\Property(
-     *                  property="data",
-     *                  ref="#/components/schemas/NewsArray"
-     *              ),
+     *              ref="#/components/schemas/NewsArray",
      *          ),
      *     ),
      * )
      *
-     * @param int $page
-     *
      * @return array|string[]
-     *
      */
-    public function actionAllPaginate(int $page = 1): array
+    public function actionAll(): array
     {
-        if ($page == 0) {
-            return ['error' => 'Ничего не найдено!'];
-        }
-
         $newsRepository = new NewsRepository();
         $news = $newsRepository->getAllNews();
 
-        $sliceNews = array_slice($news, ($page - 1) * 20, 20);
-        for ($i = 1; !empty(array_slice($news, ($i - 1) * 20, 20)); $i++) {
-            $pages = $i;
-        }
-
-        foreach ($sliceNews as $item) {
+        foreach ($news as $item) {
             $item->picture_id = $item->picture->name;
             $item->text = $newsRepository->categoryList($item);
-            $item->count_views = $pages;
-        }
-
-        if (empty($sliceNews)) {
-            return ['error' => 'Ничего не найдено!'];
         }
 
         return [
-            'data' => $sliceNews,
+            'data' => $news,
         ];
     }
 
     /**
      * @OA\Get (
-     *     path="/v1/news/category",
-     *     summary="Подгрузка новостей постранично по категориям",
-     *     description="Подгрузка новостей на вкладке news",
+     *     path="/v1/news/category?id={id}",
+     *     summary="Новости по категориям",
+     *     description="Список новостей по категориям",
+     *     tags={"Новости"},
+     *     @OA\Parameter (
+     *          description="id категории",
+     *          in="path",
+     *          name="id",
+     *          example="1",
+     *          required=true,
+     *          @OA\Schema(type="integer"),
+     *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="ОК",
+     *          @OA\JsonContent(
+     *              ref="#/components/schemas/NewsArray",
+     *          ),
+     *     ),
+     * )
+     *
+     * @param int $id
+     *
+     * @return array|string[]
+     */
+    public function actionCategory(int $id): array
+    {
+        $newsRepository = new NewsRepository();
+        $categories = NewsCategories::find()->where(['category_id' => $id])->all();
+        $ids = $this->arrayListNews($categories);
+        $news = $newsRepository->getCategoryNews($ids)->all();
+
+        foreach ($news as $item) {
+            $item->picture_id = $item->picture->name;
+            $item->text = $newsRepository->categoryList($item);
+        }
+
+        return [
+            'data' => $news,
+        ];
+    }
+
+    /**
+     * @OA\Get (
+     *     path="/v1/news/paginate?id={id}&page={page}",
+     *     summary="Новости постранично",
+     *     description="Список новостей с пагинация",
      *     tags={"Новости"},
      *     @OA\Parameter (
      *          description="id категории",
@@ -101,10 +111,7 @@ class NewsController extends CommonController
      *          response=200,
      *          description="ОК",
      *          @OA\JsonContent(
-     *              @OA\Property(
-     *                  property="data",
-     *                  ref="#/components/schemas/NewsArray"
-     *              ),
+     *              ref="#/components/schemas/NewsArray",
      *          ),
      *     ),
      * )
@@ -114,7 +121,7 @@ class NewsController extends CommonController
      *
      * @return array|string[]
      */
-    public function actionCategory(int $id = 0, int $page = 1): array
+    public function actionPaginate(int $id = 0, int $page = 1): array
     {
         if ($page == 0) {
             return ['error' => 'Ничего не найдено!'];
@@ -159,9 +166,9 @@ class NewsController extends CommonController
     protected function verbs(): array
     {
         return [
-            'get-all' => ['GET'],
+            'all' => ['GET'],
+            'paginate' => ['GET'],
             'category' => ['GET'],
-            'all-paginate' => ['GET'],
         ];
     }
 }

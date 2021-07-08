@@ -56,6 +56,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'picture_id')->hiddenInput(['value' => $id])->label(false) ?>
     <?php endif; ?>
     <?= $form->field($model, 'user_id')->hiddenInput(['value' => Yii::$app->user->identity->getId()])->label(false) ?>
+    <?= $form->field($model, 'token')->hiddenInput(['value' => Yii::$app->user->identity->getAuthKey()])->label(false) ?>
     <div class="form-group">
         <?= Html::submitButton('Отправить', ['class' => 'btn btn-success']) ?>
     </div>

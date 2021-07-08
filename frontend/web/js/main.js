@@ -30,10 +30,15 @@ function getComments(item) {
 $('#commentForm').on('beforeSubmit', function () {
     let data;
     data = $(this).serialize();
+    dataObject = $(this).serializeArray();
     $.ajax({
         url: '/v1/comment/create',
+        headers: {
+            'Authorization': 'Bearer '+ getFormData(dataObject)['Comment[token]'],
+        },
         type: 'POST',
         data: data,
+
         success: function (res) {
             if (!res.moderation) {
                 alert('Комментарий отправлен на премодерацию!');
@@ -54,6 +59,27 @@ $('#commentForm').on('beforeSubmit', function () {
 
     return false;
 });
+
+function getFormData(data){
+    let dataObject = {};
+
+    $.map(data, function(n, i){
+        dataObject[n['name']] = n['value'];
+    });
+
+    return dataObject;
+}
+
+function getQueryString(formData){
+    var pairs = [];
+    for (var [key, value] of formData.entries()) {
+        if(encodeURIComponent(key)==="token"){
+            pairs.push(encodeURIComponent(value));
+        }
+
+    }
+    return  pairs.join('&');
+}
 
 $(function () {
     $(".show-comment").on("click", function () {
@@ -128,7 +154,7 @@ $(function () {
     $(".category-item").on("click", function () {
         let id = $(this).data('id');
         $.ajax({
-            url: '/v1/news/category',
+            url: '/v1/news/paginate',
             type: 'GET',
             data: {id: id},
             success: function (res) {
@@ -179,7 +205,7 @@ pagination.addEventListener('click', function(event){
         let id = $(event.target).data('id');
         let page = $(event.target).data('page');
         $.ajax({
-            url: '/v1/news/category',
+            url: '/v1/news/paginate',
             type: 'GET',
             data: {id: id, page:page},
             success: function (res) {
@@ -211,7 +237,7 @@ pagination.addEventListener('click', function(event){
 
 document.addEventListener("DOMContentLoaded", () => {
     $.ajax({
-        url: '/v1/news/all-paginate',
+        url: '/v1/news/paginate',
         type: 'GET',
         success: function (res) {
             if(res.error){
