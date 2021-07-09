@@ -65,6 +65,7 @@ class CommentController extends CommonController
      *     summary="Создание комментария",
      *     description="Создание комментария в блоке комментариев",
      *     tags={"Комментарии"},
+     *     security={{"Bearer":{ }}},
      *     @OA\RequestBody(
      *          required=true,
      *          description="Передаваемые параметры",
@@ -95,8 +96,11 @@ class CommentController extends CommonController
         $commentRepository = new CommentRepository();
         $model = new Comment();
 
-        $token = Yii::$app->request->post()['Comment']['token'];
-        $id = Yii::$app->request->post()['Comment']['user_id'];
+        if (empty($token = Yii::$app->request->post()['Comment']['token'])
+            || empty($id = Yii::$app->request->post()['Comment']['user_id'])) {
+            return ['error' => 'Ничего не найдено!'];
+        }
+
         $user = User::find()->where(['auth_key' => $token])->one();
         if ($user->id != $id) {
             return ['error' => 'Ничего не найдено!'];

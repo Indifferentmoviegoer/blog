@@ -14,8 +14,8 @@ class NewsController extends CommonController
     /**
      * @OA\Get (
      *     path="/v1/news/all",
-     *     summary="Новости",
-     *     description="Список новостей",
+     *     summary="Список новостей",
+     *     description="Список всех новостей",
      *     tags={"Новости"},
      *     @OA\Response(
      *          response=200,
@@ -98,6 +98,7 @@ class NewsController extends CommonController
      *          in="path",
      *          name="id",
      *          example="1",
+     *          required=true,
      *          @OA\Schema(type="integer"),
      *     ),
      *     @OA\Parameter (
@@ -105,6 +106,7 @@ class NewsController extends CommonController
      *          in="path",
      *          name="page",
      *          example="1",
+     *          required=true,
      *          @OA\Schema(type="integer"),
      *     ),
      *     @OA\Response(
